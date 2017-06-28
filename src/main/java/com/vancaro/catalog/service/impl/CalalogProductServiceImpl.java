@@ -1,5 +1,6 @@
 package com.vancaro.catalog.service.impl;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -9,9 +10,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vancaro.annotation.LanguageAnnotation;
 import com.vancaro.catalog.dao.CatalogProductBundledLinkMapper;
 import com.vancaro.catalog.dao.CatalogProductEntityDiscountMapper;
 import com.vancaro.catalog.dao.CatalogProductEntityImageMapper;
+import com.vancaro.catalog.dao.CatalogProductEntityLanguageMapper;
 import com.vancaro.catalog.dao.CatalogProductEntityMapper;
 import com.vancaro.catalog.dao.CatalogProductEntityVideoMapper;
 import com.vancaro.catalog.dao.CatalogProductGroupSellEntityMapper;
@@ -22,6 +26,7 @@ import com.vancaro.catalog.entity.CatalogProductBundledLink;
 import com.vancaro.catalog.entity.CatalogProductEntity;
 import com.vancaro.catalog.entity.CatalogProductEntityDiscount;
 import com.vancaro.catalog.entity.CatalogProductEntityImage;
+import com.vancaro.catalog.entity.CatalogProductEntityLanguage;
 import com.vancaro.catalog.entity.CatalogProductEntityVideo;
 import com.vancaro.catalog.entity.CatalogProductGroupSell;
 import com.vancaro.catalog.entity.CatalogProductGroupSellLinkProduct;
@@ -38,6 +43,8 @@ import com.vancaro.dao.RedisDao;
 @Service(group="calalogProductService", version="1.0")
 public class CalalogProductServiceImpl implements CalalogProductService {
 
+	@Autowired
+	CatalogProductEntityLanguageMapper catalogProductEntityLanguageMapper;
 	@Autowired
     private CatalogProductEntityMapper catalogProductEntityMapper;
 	@Autowired
@@ -67,24 +74,49 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @pram {productId:1,storeId:1,languageId:1,currencyId:1}
 	 */
 	public String getCatalogProductInfoByParamJson(String paramJson) {
-		
-
 		JSONObject resultObj = JsonUtil.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = this.checkCatalogProductParameter(resultObj, paramJson);
-		
 		if(!VancaroConstants.VANCARO_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}
-		
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
 		
+		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId);
+		int currencyId = paramObj.getInt("currencyId");
+		int storeId = paramObj.getInt("storeId");
+		if(!VancaroConstants.VANCARO_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
+		}else{
+			return this.getCurrencyProduct(resultStr, currencyId,storeId);
+		}
+	}
+	
+
+	public String getCurrencyProduct(String resultStr,int currencyId,int storeId){
+		if(currencyId==1){
+			return resultStr;
+		}else{
+			JSONObject resultObj = JSONObject.fromObject(resultStr);
+			return resultObj.toString();
+		}
+	}
+	
+	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId){
 		String resultStr =  redisDao.getValue(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
 		if(resultStr!=null){
 			return resultStr;
 		}
+		//查看是否存在 English
+		String resultStrEn = redisDao.getValue(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+1);
+		logger.info(resultStrEn);
+		if(resultStrEn!=null){
+			String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
+			redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			return resultStrLanguage;
+		} 
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
@@ -93,6 +125,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			 redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
 			 return resultObj.toString();
 		}
+
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
@@ -109,10 +142,36 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
 		
 		resultObj.put("product", jsonProduct);
-		redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
-		return resultObj.toString();  
+		redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
+		if(languageId == 1){
+			return resultObj.toString();  
+		}else{
+			String resultStrLanguage = this.getLanguageByJosnProduct(resultObj.toString(), productId, languageId);
+			redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			return resultStrLanguage;
+		}
 	}
 
+	
+	public String getLanguageByJosnProduct(String englishProductJson,int productId,int  languageId){
+		JSONObject resultObj = JSONObject.fromObject(englishProductJson);
+		JSONObject productObj = resultObj.getJSONObject("product");
+		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(productId,languageId);
+		if(catalogProductEntityLanguage!=null){
+			JSONObject jsonProductLang = JSONObject.fromObject(catalogProductEntityLanguage);  
+			Class<CatalogProductEntityLanguage> clz = CatalogProductEntityLanguage.class;
+			Field[] fields = clz.getDeclaredFields();  
+	        for(Field field : fields){  
+	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
+	            if(fieldHasAnno){  
+	                //输出注解属性   
+	                System.out.println(field.getName());  
+	                productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
+	            }  
+	        }  
+		}
+		return resultObj.toString();
+	}
 	
 	public JSONObject checkCatalogProductParameter(JSONObject resultObj,String paramJson){
 		logger.info(paramJson);
