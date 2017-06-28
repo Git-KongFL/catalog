@@ -18,7 +18,6 @@ import com.vancaro.catalog.dao.CatalogProductGroupSellEntityMapper;
 import com.vancaro.catalog.dao.CatalogProductGroupSellLinkProductMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecValueMapper;
-import com.vancaro.catalog.dao.RedisDao;
 import com.vancaro.catalog.entity.CatalogProductBundledLink;
 import com.vancaro.catalog.entity.CatalogProductEntity;
 import com.vancaro.catalog.entity.CatalogProductEntityDiscount;
@@ -29,8 +28,12 @@ import com.vancaro.catalog.entity.CatalogProductGroupSellLinkProduct;
 import com.vancaro.catalog.entity.CatalogProductSpec;
 import com.vancaro.catalog.entity.CatalogProductSpecValue;
 import com.vancaro.catalog.service.CalalogProductService;
+import com.vancaro.constants.RedisConstants;
+import com.vancaro.constants.VancaroConstants;
 import com.vancaro.util.JsonDateValueProcessor;
 import com.vancaro.util.JsonUtil;
+import com.vancaro.dao.RedisDao;
+
 
 @Service(group="calalogProductService", version="1.0")
 public class CalalogProductServiceImpl implements CalalogProductService {
@@ -58,24 +61,37 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	
 
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
-	
-	public String getCatalogProductById(int id ) {
-		try{
-			String resultStr =  redisDao.getValue("product"+id);
-			logger.info(resultStr);
-			if(resultStr!=null){
-				return resultStr;
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
+	/*
+	 * (non-Javadoc)
+	 * @see com.vancaro.catalog.service.CalalogProductService#getCatalogProductByParamJson(java.lang.String)
+	 * @pram {productId:1,storeId:1,languageId:1,currencyId:1}
+	 */
+	public String getCatalogProductInfoByParamJson(String paramJson) {
+		
+
+		JSONObject resultObj = JsonUtil.createJSONObject();
+		JSONObject paramObj = new  JSONObject();
+		paramObj = this.checkCatalogProductParameter(resultObj, paramJson);
+		
+		if(!VancaroConstants.VANCARO_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
 		}
 		
-		JSONObject resultObj = JsonUtil.createJSONObject();
-		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(id);
+		int productId = paramObj.getInt("productId");
+		int languageId = paramObj.getInt("languageId");
+		
+		String resultStr =  redisDao.getValue(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId);
+		logger.info(resultStr);
+		if(resultStr!=null){
+			return resultStr;
+		}
+		 
+		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
 		if(catalogProductEntity==null){
-			return JsonUtil.modifyJSONObject(resultObj,10001, "商品不存在！").toString();
+			 JsonUtil.modifyJSONObject(resultObj,VancaroConstants.VANCARO_CODE_FAIL_10002, VancaroConstants.VANCARO_CODE_FAIL_10002_MESSAGE).toString();
+			 redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
+			 return resultObj.toString();
 		}
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
@@ -93,15 +109,23 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
 		
 		resultObj.put("product", jsonProduct);
-		try{
-			redisDao.setKey("product"+id,resultObj.toString());
-		}catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-		}
+		redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
 		return resultObj.toString();  
 	}
 
+	
+	public JSONObject checkCatalogProductParameter(JSONObject resultObj,String paramJson){
+		logger.info(paramJson);
+		JSONObject paramObj = new JSONObject();
+		try{
+			paramObj = JSONObject.fromObject(paramJson);
+		}catch (Exception e) {
+			JsonUtil.modifyJSONObject(resultObj,VancaroConstants.VANCARO_CODE_FAIL_10001, VancaroConstants.VANCARO_CODE_FAIL_10001_MESSAGE).toString();
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		}
+		return paramObj;
+	}
 	/**
 	  * 添加商品规格
 	  * @param jsonProduct
