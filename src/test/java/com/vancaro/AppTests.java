@@ -26,9 +26,6 @@ import com.vancaro.catalog.service.CalalogProductService;
 public class AppTests {
 
 	public static Logger logger= LoggerFactory.getLogger(AppTests.class);
-	@Test
-	public void contextLoads() {
-	}
 	@Autowired
 	CalalogProductService calalogProductService;
 	@Autowired
@@ -36,8 +33,9 @@ public class AppTests {
 	
 	@Test
 	public void testProduct(){ 
-		// paramJson = {productId:'1',storeId:'1',languageId:'1',currencyId:'1'}
-		String resout = calalogProductService.getCatalogProductInfoByParamJson("{productId:'1',storeId:'1',languageId:'1',currencyId:'1'}");
+		String paramJson = "{productId:'2',storeId:'1',languageId:'1',currencyId:'1'}" ;
+		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+		System.out.println(resout);
 		logger.info(resout);
 	}
 	@Test

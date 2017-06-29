@@ -22,6 +22,8 @@ import com.vancaro.catalog.dao.CatalogProductGroupSellEntityMapper;
 import com.vancaro.catalog.dao.CatalogProductGroupSellLinkProductMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecValueMapper;
+import com.vancaro.catalog.dao.CatalogProductAttributeValueMapper;
+import com.vancaro.catalog.entity.CatalogProductAttributeValue;
 import com.vancaro.catalog.entity.CatalogProductBundledLink;
 import com.vancaro.catalog.entity.CatalogProductEntity;
 import com.vancaro.catalog.entity.CatalogProductEntityDiscount;
@@ -64,6 +66,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	@Autowired
 	CatalogProductEntityVideoMapper catalogProductEntityVideoMapper;
 	@Autowired
+	CatalogProductAttributeValueMapper catalogProductAttributeValueMapper;
+	@Autowired
 	RedisDao redisDao;
 	
 
@@ -104,6 +108,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId){
+		
 		String resultStr =  redisDao.getValue(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
 		if(resultStr!=null){
@@ -140,6 +145,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductImage(jsonProduct,jsonConfig);
 		//添加商品视频
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
+		//添加商品自定义属性
+		this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		
 		resultObj.put("product", jsonProduct);
 		redisDao.setKey(RedisConstants.VANCARO_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
@@ -185,6 +192,17 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 		return paramObj;
 	}
+	
+	/**
+	  * 添加商品自定义属性
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductAttributeValue(JSONObject jsonProduct,JsonConfig config) {
+			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
+			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
+			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues);
+	}
+	
 	/**
 	  * 添加商品规格
 	  * @param jsonProduct
