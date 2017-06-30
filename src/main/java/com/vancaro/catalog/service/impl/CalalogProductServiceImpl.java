@@ -20,6 +20,7 @@ import com.vancaro.catalog.dao.CatalogProductEntityMapper;
 import com.vancaro.catalog.dao.CatalogProductEntityVideoMapper;
 import com.vancaro.catalog.dao.CatalogProductGroupSellEntityMapper;
 import com.vancaro.catalog.dao.CatalogProductGroupSellLinkProductMapper;
+import com.vancaro.catalog.dao.CatalogProductSkuMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecMapper;
 import com.vancaro.catalog.dao.CatalogProductSpecValueMapper;
 import com.vancaro.catalog.dao.CatalogProductAttributeValueMapper;
@@ -32,6 +33,7 @@ import com.vancaro.catalog.entity.CatalogProductEntityLanguage;
 import com.vancaro.catalog.entity.CatalogProductEntityVideo;
 import com.vancaro.catalog.entity.CatalogProductGroupSell;
 import com.vancaro.catalog.entity.CatalogProductGroupSellLinkProduct;
+import com.vancaro.catalog.entity.CatalogProductSku;
 import com.vancaro.catalog.entity.CatalogProductSpec;
 import com.vancaro.catalog.entity.CatalogProductSpecValue;
 import com.vancaro.catalog.service.CalalogProductService;
@@ -68,6 +70,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	@Autowired
 	CatalogProductAttributeValueMapper catalogProductAttributeValueMapper;
 	@Autowired
+	CatalogProductSkuMapper catalogProductSkuMapper;
+	
+	@Autowired
 	RedisDao redisDao;
 	
 
@@ -96,8 +101,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			return this.getCurrencyProduct(resultStr, currencyId,storeId);
 		}
 	}
-	
-
+		
+	/**
+	 *  商品信息汇率转换
+	 * @param resultStr
+	 * @param currencyId
+	 * @param storeId
+	 * @return
+	 */
 	public String getCurrencyProduct(String resultStr,int currencyId,int storeId){
 		if(currencyId==1){
 			return resultStr;
@@ -159,7 +170,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 	}
 
-	
+	/** 
+	  *  英语商品信息 翻译对应的语言
+	  * @param resultObj productId languageId
+	  */
 	public String getLanguageByJosnProduct(String englishProductJson,int productId,int  languageId){
 		JSONObject resultObj = JSONObject.fromObject(englishProductJson);
 		JSONObject productObj = resultObj.getJSONObject("product");
@@ -179,7 +193,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 		return resultObj.toString();
 	}
-	
+	/** 
+	  *  判断json字符串是否合法
+	  * @param resultObj
+	  */
 	public JSONObject checkCatalogProductParameter(JSONObject resultObj,String paramJson){
 		logger.info(paramJson);
 		JSONObject paramObj = new JSONObject();
@@ -194,6 +211,17 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	/**
+	 * 添加商品SKU
+	 * @param jsonProduct
+	 * @param config
+	 */
+	public void addCatalogProductSku(JSONObject jsonProduct,JsonConfig config) {
+		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"));
+		JSONArray jsonCatalogProductSkus = JSONArray.fromObject(catalogProductSkus);
+		jsonProduct.put("catalogProductSkus", jsonCatalogProductSkus);
+	}
+	
+	/**
 	  * 添加商品自定义属性
 	  * @param jsonProduct
 	  */
@@ -204,7 +232,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	/**
-	  * 添加商品规格
+	  * 添加商品视频
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductVideo(JSONObject jsonProduct,JsonConfig config) {
@@ -213,7 +241,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			jsonProduct.put("catalogProductEntityVideos", jsonCatalogProductEntityVideos);
 	}
 	/**
-	  * 添加商品规格
+	  * 添加商品图片
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductImage(JSONObject jsonProduct,JsonConfig config) {
