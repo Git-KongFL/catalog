@@ -172,7 +172,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
 	            if(fieldHasAnno){  
 	                //输出注解属性   
-	                System.out.println(field.getName());  
+	            	logger.info(field.getName());   
 	                productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
 	            }  
 	        }  

@@ -7,6 +7,11 @@ package com.vancaro;
 *
 */
 
+import java.io.IOException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,6 +24,8 @@ import com.vancaro.dao.RedisDao;
 
 import net.sf.json.JSONObject;
 
+import com.vancaro.catalog.dao.CatalogProductEntityMapper;
+import com.vancaro.catalog.entity.CatalogProductEntity;
 import com.vancaro.catalog.service.CalalogProductService;
 
 @RunWith(SpringRunner.class)
@@ -30,6 +37,8 @@ public class AppTests {
 	CalalogProductService calalogProductService;
 	@Autowired
 	RedisDao redisDao;
+	@Autowired
+	CatalogProductEntityMapper catalogProductEntityMapper;
 	
 	@Test
 	public void testProduct(){ 
@@ -45,4 +54,14 @@ public class AppTests {
 		logger.info(redisDao.getValue("name"));
 		logger.info(redisDao.getValue("age"));
 	}
+	@Test
+	public void testSolr() throws Exception{
+		HttpSolrClient  clientCatalog = new HttpSolrClient("http://123.57.206.102:8983/solr/catalog_product");;
+		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(2);
+		 SolrInputDocument input = new SolrInputDocument();
+		 input.addField("id", catalogProductEntity.getId(), 1.0f);
+		 input.addField("name", catalogProductEntity.getName());
+		 clientCatalog.add(input);
+		 clientCatalog.commit();
+	} 
 }
