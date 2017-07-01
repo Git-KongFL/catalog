@@ -8,6 +8,7 @@ package com.vancaro;
 */
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -25,7 +26,9 @@ import com.vancaro.dao.RedisDao;
 import net.sf.json.JSONObject;
 
 import com.vancaro.catalog.dao.CatalogProductEntityMapper;
+import com.vancaro.catalog.dao.CatalogProductSpecValueMapper;
 import com.vancaro.catalog.entity.CatalogProductEntity;
+import com.vancaro.catalog.entity.CatalogProductSpecValue;
 import com.vancaro.catalog.service.CalalogProductService;
 
 @RunWith(SpringRunner.class)
@@ -39,10 +42,26 @@ public class AppTests {
 	RedisDao redisDao;
 	@Autowired
 	CatalogProductEntityMapper catalogProductEntityMapper;
+	@Autowired
+	CatalogProductSpecValueMapper catalogProductSpecValueMapper;
+	
+//	@Test
+//	public void testAddProductSpecValue(){
+//		CatalogProductSpecValue catalogProductSpecVaule = new CatalogProductSpecValue();
+//		catalogProductSpecVaule.setId(5);
+//		catalogProductSpecVaule.setValue("10");
+//		catalogProductSpecVaule.setName("color");
+//		catalogProductSpecVaule.setCreateTime(new Date());
+//		catalogProductSpecVaule.setProductSpecId(1);
+//		catalogProductSpecVaule.setStatus(1);
+//		catalogProductSpecVaule.setDeletedStatus(1);
+//		catalogProductSpecValueMapper.addCatalogProductSpecValue(catalogProductSpecVaule);
+//		System.out.println(catalogProductSpecVaule.toString());
+//	}
 	
 	@Test
 	public void testProduct(){ 
-		String paramJson = "{productId:'2',storeId:'1',languageId:'1',currencyId:'1'}" ;
+		String paramJson = "{productId:'2',storeId:'1',languageId:'2',currencyId:'1'}" ;
 		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);

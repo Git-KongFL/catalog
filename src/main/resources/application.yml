@@ -3,7 +3,7 @@ dubbo :
     prot : -1
     name  : dubbo
   application : 
-    name : hello-world-app
+    name : vancaro-dubbo-app
   registry :
     address : zookeeper://127.0.0.1:2181
   packageName : com.vancaro.catalog.service.impl
