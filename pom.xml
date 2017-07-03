@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.vancaro</groupId>
-	<artifactId>vancaro-dubbo-catalog</artifactId>
+	<groupId>com.vankle</groupId>
+	<artifactId>vankle-dubbo-catalog</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>vancaro-dubbo-catalog</name>
-	<description>电商vancaro 产品目录  project for Spring Boot</description>
+	<name>vankle-dubbo-catalog</name>
+	<description>电商vankle 产品目录  project for Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -29,14 +29,14 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.vancaro</groupId>
-			<artifactId>vancaro-dubbo-spring-boot-starter</artifactId>
+			<groupId>com.vankle</groupId>
+			<artifactId>vankle-dubbo-spring-boot-starter</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.vancaro</groupId>
-			<artifactId>vancaro-dubbo-service</artifactId>
+			<groupId>com.vankle</groupId>
+			<artifactId>vankle-dubbo-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

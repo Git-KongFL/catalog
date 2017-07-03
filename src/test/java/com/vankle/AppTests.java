@@ -1,4 +1,4 @@
-package com.vancaro;
+package com.vankle;
 /** 
 *
 * @author 作者 denghaihui
@@ -21,15 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.vancaro.dao.RedisDao;
+import com.vankle.code.dao.RedisDao;
 
 import net.sf.json.JSONObject;
 
-import com.vancaro.catalog.dao.CatalogProductEntityMapper;
-import com.vancaro.catalog.dao.CatalogProductSpecValueMapper;
-import com.vancaro.catalog.entity.CatalogProductEntity;
-import com.vancaro.catalog.entity.CatalogProductSpecValue;
-import com.vancaro.catalog.service.CalalogProductService;
+import com.vankle.catalog.dao.CatalogProductEntityMapper;
+import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
+import com.vankle.catalog.entity.CatalogProductEntity;
+import com.vankle.catalog.entity.CatalogProductSpecValue;
+import com.vankle.catalog.service.CalalogProductService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

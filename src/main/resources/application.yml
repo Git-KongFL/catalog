@@ -3,10 +3,10 @@ dubbo :
     prot : -1
     name  : dubbo
   application : 
-    name : vancaro-dubbo-app
+    name : vankle-dubbo-app
   registry :
     address : zookeeper://127.0.0.1:2181
-  packageName : com.vancaro.catalog.service.impl
+  packageName : com.vankle.catalog.service.impl
   
 server :
   port : 8083  
