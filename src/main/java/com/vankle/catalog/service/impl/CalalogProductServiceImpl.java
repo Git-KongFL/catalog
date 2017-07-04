@@ -87,7 +87,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
-		if(!VankleConstants.vankle_CODE_SUCCESS.equals(resultObj.getString("code"))){
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}
 		int productId = paramObj.getInt("productId");
@@ -96,7 +96,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId);
 		int currencyId = paramObj.getInt("currencyId");
 		int storeId = paramObj.getInt("storeId");
-		if(!VankleConstants.vankle_CODE_SUCCESS.equals(resultObj.getString("code"))){
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}else{
 			return this.getCurrencyProduct(resultStr, currencyId,storeId);
@@ -121,25 +121,25 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId){
 		
-		String resultStr =  redisDao.getValue(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+languageId);
+		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
 		if(resultStr!=null){
 			return resultStr;
 		}
 		//查看是否存在 English
-		String resultStrEn = redisDao.getValue(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+1);
+		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
 		logger.info(resultStrEn);
 		if(resultStrEn!=null){
 			String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
-			redisDao.setKey(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
 			return resultStrLanguage;
 		} 
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
 		if(catalogProductEntity==null){
-			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.vankle_CODE_FAIL_10002, VankleConstants.vankle_CODE_FAIL_10002_MESSAGE).toString();
-			 redisDao.setKey(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
+			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
+			 redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
 			 return resultObj.toString();
 		}
 
@@ -161,12 +161,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		
 		resultObj.put("product", jsonProduct);
-		redisDao.setKey(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
+		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
 		if(languageId == 1){
 			return resultObj.toString();  
 		}else{
 			String resultStrLanguage = this.getLanguageByJosnProduct(resultObj.toString(), productId, languageId);
-			redisDao.setKey(RedisConstants.vankle_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
 			return resultStrLanguage;
 		}
 	}
