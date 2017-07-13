@@ -2,6 +2,7 @@ dubbo :
   protocol : 
     prot : -1
     name  : dubbo
+    port : 20881
   application : 
     name : vankle-dubbo-app
   registry :
@@ -9,7 +10,7 @@ dubbo :
   packageName : com.vankle.catalog.service.impl
   
 server :
-  port : 8083  
+  port : 8086  
 spring: 
   profiles:  
     active: dev  

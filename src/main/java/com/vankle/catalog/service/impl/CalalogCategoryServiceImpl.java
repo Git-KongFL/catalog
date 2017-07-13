@@ -55,7 +55,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	
 	//递归生成类目列表
 	public JSONObject getCategoryByCategoryList(JSONObject obj,List<CatalogCategoryEntity> catalogCategoryEntitys){
-		//System.out.println(obj.toString());
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		if(obj.get("id")==null){
