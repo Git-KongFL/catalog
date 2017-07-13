@@ -29,6 +29,7 @@ import com.vankle.catalog.dao.CatalogProductEntityMapper;
 import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
 import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductSpecValue;
+import com.vankle.catalog.service.CalalogCategoryService;
 import com.vankle.catalog.service.CalalogProductService;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +45,8 @@ public class AppTests {
 	CatalogProductEntityMapper catalogProductEntityMapper;
 	@Autowired
 	CatalogProductSpecValueMapper catalogProductSpecValueMapper;
-	
+	@Autowired
+	CalalogCategoryService calalogCategoryService;
 //	@Test
 //	public void testAddProductSpecValue(){
 //		CatalogProductSpecValue catalogProductSpecVaule = new CatalogProductSpecValue();
@@ -60,27 +62,35 @@ public class AppTests {
 //	}
 	
 	@Test
-	public void testProduct(){ 
-		String paramJson = "{productId:'2',storeId:'1',languageId:'2',currencyId:'1'}" ;
-		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+	public void testCategory(){ 
+		String paramJson = "{storeId:'1'}" ;
+		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
-	@Test
-	public void testRedis(){
-		redisDao.setKey("name","forezp");
-		redisDao.setKey("age","11");
-		logger.info(redisDao.getValue("name"));
-		logger.info(redisDao.getValue("age"));
-	}
-	@Test
-	public void testSolr() throws Exception{
-		HttpSolrClient  clientCatalog = new HttpSolrClient("http://123.57.206.102:8983/solr/catalog_product");;
-		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(2);
-		 SolrInputDocument input = new SolrInputDocument();
-		 input.addField("id", catalogProductEntity.getId(), 1.0f);
-		 input.addField("name", catalogProductEntity.getName());
-		 clientCatalog.add(input);
-		 clientCatalog.commit();
-	} 
+	
+//	@Test
+//	public void testProduct(){ 
+//		String paramJson = "{productId:'2',storeId:'1',languageId:'2',currencyId:'1'}" ;
+//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+//	@Test
+//	public void testRedis(){
+//		redisDao.setKey("name","forezp");
+//		redisDao.setKey("age","11");
+//		logger.info(redisDao.getValue("name"));
+//		logger.info(redisDao.getValue("age"));
+//	}
+//	@Test
+//	public void testSolr() throws Exception{
+//		HttpSolrClient  clientCatalog = new HttpSolrClient("http://123.57.206.102:8983/solr/catalog_product");;
+//		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(2);
+//		 SolrInputDocument input = new SolrInputDocument();
+//		 input.addField("id", catalogProductEntity.getId(), 1.0f);
+//		 input.addField("name", catalogProductEntity.getName());
+//		 clientCatalog.add(input);
+//		 clientCatalog.commit();
+//	} 
 }
