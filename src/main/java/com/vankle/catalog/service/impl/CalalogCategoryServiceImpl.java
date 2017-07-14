@@ -48,7 +48,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 
 		JSONObject categoryObj = new JSONObject();
 		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
-		resultObj.put("data", categoryObj);
+		resultObj.put("data", categoryObj.get("childs"));
 		return resultObj.toString();
 	}
 	
