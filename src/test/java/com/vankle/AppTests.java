@@ -62,13 +62,15 @@ public class AppTests {
 //	}
 	
 	@Test
-	public void testCategory(){ 
-		String paramJson = "{storeId:'1'}" ;
-		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
+	public void testCategoryProduct(){ 
+		String paramJson = "{categoryId:7,languageId:2,step:30,offset:0}" ;
+		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
 	
+	
+
 //	@Test
 //	public void testProduct(){ 
 //		String paramJson = "{productId:'2',storeId:'1',languageId:'2',currencyId:'1'}" ;
