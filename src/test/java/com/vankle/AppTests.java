@@ -8,6 +8,7 @@ package com.vankle;
 */
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.vankle.code.dao.RedisDao;
+import com.vankle.system.service.SystemCurrencyService;
 
 import net.sf.json.JSONObject;
 
@@ -47,6 +49,9 @@ public class AppTests {
 	CatalogProductSpecValueMapper catalogProductSpecValueMapper;
 	@Autowired
 	CalalogCategoryService calalogCategoryService;
+	@Autowired
+	SystemCurrencyService systemCurrencyService;
+	
 //	@Test
 //	public void testAddProductSpecValue(){
 //		CatalogProductSpecValue catalogProductSpecVaule = new CatalogProductSpecValue();
@@ -61,9 +66,21 @@ public class AppTests {
 //		System.out.println(catalogProductSpecVaule.toString());
 //	}
 	
+	
+//	
+//	@Test
+//	public void testCurrency(){ 
+//		BigDecimal out =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(7), 2);
+//		System.out.println(out);
+//		System.out.println();
+//		System.out.println();
+//		logger.info(out.toString());
+//	}
+	
+	
 	@Test
 	public void testCategoryProduct(){ 
-		String paramJson = "{categoryId:7,languageId:2,step:30,offset:0}" ;
+		String paramJson = "{categoryId:7,languageId:2,currencyId:2,step:30,offset:0}" ;
 		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);

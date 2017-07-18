@@ -1,5 +1,6 @@
 package com.vankle.catalog.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +21,12 @@ import com.vankle.code.dao.RedisDao;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.VankleUtils;
+import com.vankle.system.service.SystemCurrencyService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import net.sf.json.util.JSONBuilder;
 
 /**
  * 
@@ -41,6 +44,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 
 	@Autowired
 	CatalogCategoryProductMapper catalogCategoryProductMapper;
+	
+
+	@Autowired
+	SystemCurrencyService systemCurrencyService;
 	
 	@Autowired
 	RedisDao redisDao;
@@ -108,6 +115,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		return obj;
 	}
 
+	
 	/**
 	 * 商品分类列表paramJson
 	 * @param paramJson =  "{categoryId:1,languageId:1,currencyId:1,step:30,offset:0}";
@@ -125,12 +133,14 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int languageId = paramObj.getInt("languageId");
 		int step = paramObj.getInt("step");
 		int offset = paramObj.getInt("offset");
+		int currencyId = paramObj.getInt("currencyId");
+		
 		
 		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+step+offset);
 		
 		logger.info(resultStr);
 		if(resultStr!=null){
-			return resultStr;
+			return this.getCategoryProductByCurrencyId(resultStr, currencyId);
 		} 
 		
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(categoryId);
@@ -143,7 +153,24 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+step+offset, resultObj.toString());
 		
-		return resultObj.toString();
+		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
+	}
+	
+	public String getCategoryProductByCurrencyId(String paramJson,int currencyId){
+		JSONObject resoutObj = JSONObject.fromObject(paramJson);
+		JSONArray  arrayObj =  resoutObj.getJSONObject("data").getJSONArray("rows");
+		if(arrayObj==null||arrayObj.size()==0){
+			return paramJson ;
+		}
+		
+		for(int i=0;i<arrayObj.size();i++){
+			JSONObject obj = arrayObj.getJSONObject(i);
+			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(obj.getString("discountAmount")), currencyId);
+			obj.put("discountAmount", discountAmount);
+			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(obj.getString("sellPrice")), currencyId);
+			obj.put("sellPrice", sellPrice);
+		}
+		return resoutObj.toString();
 	}
 	
 }
