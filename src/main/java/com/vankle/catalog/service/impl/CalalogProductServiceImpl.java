@@ -178,7 +178,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	public String getLanguageByJosnProduct(String englishProductJson,int productId,int  languageId){
 		JSONObject resultObj = JSONObject.fromObject(englishProductJson);
 		JSONObject productObj = resultObj.getJSONObject("product");
-		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(productId,languageId);
+		String spu = productObj.getString("spu");
+		
+		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(spu,languageId);
 		if(catalogProductEntityLanguage!=null){
 			JSONObject jsonProductLang = JSONObject.fromObject(catalogProductEntityLanguage);  
 			Class<CatalogProductEntityLanguage> clz = CatalogProductEntityLanguage.class;
