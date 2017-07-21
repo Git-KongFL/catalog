@@ -20,6 +20,7 @@ import com.vankle.code.constants.VankleConstants;
 import com.vankle.code.dao.RedisDao;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
+import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
 import com.vankle.system.service.SystemCurrencyService;
 
@@ -118,7 +119,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	
 	/**
 	 * 商品分类列表paramJson
-	 * @param paramJson =  "{categoryId:1,languageId:1,currencyId:1,step:30,offset:0}";
+	 * @param paramJson =  "{categoryId:2,languageId:1,currencyId:1,pageIndex:1}";
 	 * @return
 	 */
 	@Override
@@ -131,12 +132,13 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		} 
 		int categoryId = paramObj.getInt("categoryId");
 		int languageId = paramObj.getInt("languageId");
-		int step = paramObj.getInt("step");
-		int offset = paramObj.getInt("offset");
+		int pageIndex = paramObj.getInt("pageIndex");
+		//int offset = paramObj.getInt("offset");
 		int currencyId = paramObj.getInt("currencyId");
+		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
+		int offset = pageSize*(pageIndex-1);
 		
-		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+step+offset);
+		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageSize+offset);
 		
 		logger.info(resultStr);
 		if(resultStr!=null){
@@ -145,20 +147,25 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(categoryId);
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
-				findCatalogCategoryProductList(categoryId,languageId,step,offset);
+				findCatalogCategoryProductList(categoryId,languageId,pageSize,offset);
 		JSONObject dataObj = new JSONObject();
-		dataObj.put("total", total);
-		dataObj.put("rows", JSONArray.fromObject(  catalogCategoryProducts));
-		resultObj.put("data",dataObj);
+
+		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
+		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts));
+		dataObj.put("pageIndex", pageIndex);
+		dataObj.put("pageSize", pageSize);
+		dataObj.put("rowTotal", total);
+		dataObj.put("endPowIndex", pagerUtil.pageCount);
 		
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+step+offset, resultObj.toString());
+		resultObj.put("data",dataObj);
+		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());
 		
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	}
 	
 	public String getCategoryProductByCurrencyId(String paramJson,int currencyId){
 		JSONObject resoutObj = JSONObject.fromObject(paramJson);
-		JSONArray  arrayObj =  resoutObj.getJSONObject("data").getJSONArray("rows");
+		JSONArray  arrayObj =  resoutObj.getJSONObject("data").getJSONArray("dataList");
 		if(arrayObj==null||arrayObj.size()==0){
 			return paramJson ;
 		}

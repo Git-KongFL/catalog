@@ -80,7 +80,7 @@ public class AppTests {
 	
 	@Test
 	public void testCategoryProduct(){ 
-		String paramJson = "{categoryId:7,languageId:2,currencyId:2,step:30,offset:0}" ;
+		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
 		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
@@ -112,4 +112,19 @@ public class AppTests {
 //		 clientCatalog.add(input);
 //		 clientCatalog.commit();
 //	} 
+	
+
+	public static void main(String[] args)
+    {
+		 String str = "e2NhdGVnb3J5SWQ6NyxsYW5ndWFnZUlkOjEsY3VycmVuY3lJZDoxLHN0ZXA6MzAsb2Zmc2V0OjB9IA==";
+		 byte[] bt = null;    
+		   try {    
+		       sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();    
+		       bt = decoder.decodeBuffer( str );    
+		   } catch (IOException e) {    
+		       e.printStackTrace();    
+		   }    
+		   String t = new String(bt);
+		   System.out.println(t);
+    }
 }
