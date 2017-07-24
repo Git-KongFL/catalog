@@ -155,7 +155,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("pageIndex", pageIndex);
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowTotal", total);
-		dataObj.put("endPowIndex", pagerUtil.pageCount);
+		dataObj.put("endRowIndex", pagerUtil.pageCount);
 		
 		resultObj.put("data",dataObj);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());
