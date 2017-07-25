@@ -78,23 +78,23 @@ public class AppTests {
 //	}
 	
 	
-	@Test
-	public void testCategoryProduct(){ 
-		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
-		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
-	
-	
-
 //	@Test
-//	public void testProduct(){ 
-//		String paramJson = "{productId:'2',storeId:'1',languageId:'2',currencyId:'1'}" ;
-//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+//	public void testCategoryProduct(){ 
+//		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
+//		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 //		System.out.println(resout);
 //		logger.info(resout);
 //	}
+//	
+	
+
+	@Test
+	public void testProduct(){ 
+		String paramJson = "{productId:'367',storeId:'1',languageId:'1',currencyId:'1'}" ;
+		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 //	@Test
 //	public void testRedis(){
 //		redisDao.setKey("name","forezp");
@@ -113,18 +113,18 @@ public class AppTests {
 //		 clientCatalog.commit();
 //	} 
 	
-
-	public static void main(String[] args)
-    {
-		 String str = "e2NhdGVnb3J5SWQ6NyxsYW5ndWFnZUlkOjEsY3VycmVuY3lJZDoxLHN0ZXA6MzAsb2Zmc2V0OjB9IA==";
-		 byte[] bt = null;    
-		   try {    
-		       sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();    
-		       bt = decoder.decodeBuffer( str );    
-		   } catch (IOException e) {    
-		       e.printStackTrace();    
-		   }    
-		   String t = new String(bt);
-		   System.out.println(t);
-    }
+//
+//	public static void main(String[] args)
+//    {
+//		 String str = "e2NhdGVnb3J5SWQ6NyxsYW5ndWFnZUlkOjEsY3VycmVuY3lJZDoxLHN0ZXA6MzAsb2Zmc2V0OjB9IA==";
+//		 byte[] bt = null;    
+//		   try {    
+//		       sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();    
+//		       bt = decoder.decodeBuffer( str );    
+//		   } catch (IOException e) {    
+//		       e.printStackTrace();    
+//		   }    
+//		   String t = new String(bt);
+//		   System.out.println(t);
+//    }
 }

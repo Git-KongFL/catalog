@@ -73,6 +73,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	@Autowired
 	CatalogProductSkuMapper catalogProductSkuMapper;
 	
+	
+	
 	@Autowired
 	RedisDao redisDao;
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
@@ -81,7 +83,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	/*
 	 * (non-Javadoc)
 	 * @see com.vankle.catalog.service.CalalogProductService#getCatalogProductByParamJson(java.lang.String)
-	 * @pram {productId:1,storeId:1,languageId:1,currencyId:1}
+	 * @pram {productId:1,languageId:1,currencyId:1}
 	 */
 	public String getCatalogProductInfoByParamJson(String paramJson) {
 		JSONObject resultObj = JsonUtils.createJSONObject();
@@ -92,14 +94,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
-		
-		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId);
 		int currencyId = paramObj.getInt("currencyId");
-		int storeId = paramObj.getInt("storeId");
+		
+		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId);
+		
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}else{
-			return this.getCurrencyProduct(resultStr, currencyId,storeId);
+			return this.getCurrencyProduct(resultStr, currencyId );
 		}
 	}
 		
@@ -110,7 +112,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @param storeId
 	 * @return
 	 */
-	public String getCurrencyProduct(String resultStr,int currencyId,int storeId){
+	public String getCurrencyProduct(String resultStr,int currencyId ){
 		if(currencyId==1){
 			return resultStr;
 		}else{
@@ -119,13 +121,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 	}
 	
-	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId){
+	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
 		
 		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
-		if(resultStr!=null){
-			return resultStr;
-		}
+//		if(resultStr!=null){
+//			return resultStr;
+//		}
 		//查看是否存在 English
 		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
 		logger.info(resultStrEn);
@@ -146,21 +148,24 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
-		
-		//添加捆绑销售资料
-		this.addCatalogProductGroupSell(jsonProduct,jsonConfig);
-		//添加组合商品资料
-		this.addCatalogProductIsBundle(jsonProduct,jsonConfig);
+
+		//添加折扣信息
+		this.addCatalogProductDiscount(jsonProduct,jsonConfig);
 		//添加商品规格
 		this.addCatalogProductSpec(jsonProduct,jsonConfig);
 		//添加商品图片
 		this.addCatalogProductImage(jsonProduct,jsonConfig);
 		//添加商品视频
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
-		//添加商品自定义属性
-		this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
+		//添加捆绑销售资料
+		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId);
 		
-		resultObj.put("product", jsonProduct);
+		//添加商品自定义属性
+		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
+		//		//添加组合商品资料
+		//		this.addCatalogProductIsBundle(jsonProduct,jsonConfig);
+		
+		resultObj.put("data", jsonProduct);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
 		if(languageId == 1){
 			return resultObj.toString();  
@@ -171,13 +176,24 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 	}
 
+	/**
+	  * 添加商品折扣
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductDiscount(JSONObject jsonProduct,JsonConfig config) {
+			CatalogProductEntityDiscount catalogProductEntityDiscount = 
+					catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(jsonProduct.getInt("id"));
+			jsonProduct.put("catalogProductEntityDiscount", JSONObject.fromObject(  catalogProductEntityDiscount,config));
+	}
+	
+	
 	/** 
 	  *  英语商品信息 翻译对应的语言
 	  * @param resultObj productId languageId
 	  */
 	public String getLanguageByJosnProduct(String englishProductJson,int productId,int  languageId){
 		JSONObject resultObj = JSONObject.fromObject(englishProductJson);
-		JSONObject productObj = resultObj.getJSONObject("product");
+		JSONObject productObj = resultObj.getJSONObject("data");
 		String spu = productObj.getString("spu");
 		
 		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(spu,languageId);
@@ -285,11 +301,15 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			}
 		} 
 	}
+	
 	/**
 	 * 添加捆绑销售资料
 	 * @param JSONObject
 	 */
-	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config) {
+	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId) {
+		if(jsonProduct.getInt("type")==1){
+			return;
+		}
 		//判断是捆绑销售groupSellId
 		if(jsonProduct.get("groupSellId") !=null){
 			int groupSellId = jsonProduct.getInt("groupSellId");
@@ -299,13 +319,16 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				List<CatalogProductGroupSellLinkProduct> groupLinkProductList = catalogProductGroupSellLinkProductMapper.findCatalogProductGroupSellLinkProductList(groupSellId);
 				JSONArray jsonArr = new JSONArray();
 				for(CatalogProductGroupSellLinkProduct cSellLinkProduct:groupLinkProductList){
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("product_id", cSellLinkProduct.getProductId());
-					CatalogProductEntityImage catalogProductEntityImage = catalogProductEntityImageMapper.findCatalogProductEntityImageByProductId(cSellLinkProduct.getProductId());
-					if(catalogProductEntityImage!=null){
-						jsonObj.put("remote_url", catalogProductEntityImage.getRemoteUrl());
+					CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(cSellLinkProduct.getProductId());
+					if(catalogProductEntity.getType()==1){
+						JSONObject paramObj = new JSONObject();
+						paramObj.put("productId", cSellLinkProduct.getProductId());
+						paramObj.put("languageId", languageId);
+						paramObj.put("currencyId", currencyId);
+						String resout = this.getCatalogProductInfoByParamJson(paramObj.toString());
+						JSONObject resoutJson = JSONObject.fromObject(resout);
+						jsonArr.add(resoutJson.get("data"));
 					}
-					jsonArr.add(jsonObj);
 				}
 				jsonCatalogProductGroupSell.put("list", jsonArr);
 				jsonProduct.put("catalogProductGroupSell", jsonCatalogProductGroupSell);
