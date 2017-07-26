@@ -78,23 +78,24 @@ public class AppTests {
 //	}
 	
 	
+//	@Test
+//	public void testCategoryProduct(){ 
+//		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
+//		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+	
+	
+
 	@Test
-	public void testCategoryProduct(){ 
-		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
-		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
+	public void testProduct(){ 
+		String paramJson = "{productId:'368',languageId:'1',currencyId:'1'}" ;
+		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
 	
-	
-
-//	@Test
-//	public void testProduct(){ 
-//		String paramJson = "{productId:'367',storeId:'1',languageId:'1',currencyId:'1'}" ;
-//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
 //	@Test
 //	public void testRedis(){
 //		redisDao.setKey("name","forezp");

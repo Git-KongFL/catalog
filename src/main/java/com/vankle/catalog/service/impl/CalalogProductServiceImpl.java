@@ -20,6 +20,7 @@ import com.vankle.catalog.dao.CatalogProductEntityMapper;
 import com.vankle.catalog.dao.CatalogProductEntityVideoMapper;
 import com.vankle.catalog.dao.CatalogProductGroupSellEntityMapper;
 import com.vankle.catalog.dao.CatalogProductGroupSellLinkProductMapper;
+import com.vankle.catalog.dao.CatalogProductRecommendedMapper;
 import com.vankle.catalog.dao.CatalogProductSkuMapper;
 import com.vankle.catalog.dao.CatalogProductSpecMapper;
 import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
@@ -30,6 +31,7 @@ import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductEntityDiscount;
 import com.vankle.catalog.entity.CatalogProductEntityImage;
 import com.vankle.catalog.entity.CatalogProductEntityLanguage;
+import com.vankle.catalog.entity.CatalogProductRecommended;
 import com.vankle.catalog.entity.CatalogProductEntityVideo;
 import com.vankle.catalog.entity.CatalogProductGroupSell;
 import com.vankle.catalog.entity.CatalogProductGroupSellLinkProduct;
@@ -72,6 +74,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogProductAttributeValueMapper catalogProductAttributeValueMapper;
 	@Autowired
 	CatalogProductSkuMapper catalogProductSkuMapper;
+	@Autowired
+	CatalogProductRecommendedMapper catalogProductRecommendedMapper;
 	
 	
 	
@@ -125,9 +129,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
-//		if(resultStr!=null){
-//			return resultStr;
-//		}
+		if(resultStr!=null){
+			return resultStr;
+		}
 		//查看是否存在 English
 		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
 		logger.info(resultStrEn);
@@ -159,6 +163,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
 		//添加捆绑销售资料
 		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId);
+		//添加商品推荐商品
+		this.addCatalogProductRecommended(jsonProduct,jsonConfig);
+		
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
@@ -336,4 +343,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 	}
 
+	/**
+	 * 添加捆绑销售资料
+	 * @param JSONObject
+	 */
+	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config) {
+		List<CatalogProductRecommended> catalogProductRecommendeds =  catalogProductRecommendedMapper.findCatalogProductRecommendedList(jsonProduct.getInt("id"));
+		jsonProduct.put("catalogProductRecommendeds", JSONArray.fromObject(catalogProductRecommendeds,config));
+	}
+	
+	
 }
