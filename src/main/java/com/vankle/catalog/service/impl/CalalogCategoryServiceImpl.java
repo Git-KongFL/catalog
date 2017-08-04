@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
 import com.vankle.catalog.dao.CatalogCategoryProductMapper;
@@ -23,6 +24,7 @@ import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
 import com.vankle.system.service.SystemCurrencyService;
+import com.vankle.system.service.SystemService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -49,6 +51,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 
 	@Autowired
 	SystemCurrencyService systemCurrencyService;
+	
+	
+	@Reference(group = "systemService", version = "1.0")
+	private SystemService systemService;
 	
 	@Autowired
 	RedisDao redisDao;

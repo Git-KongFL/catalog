@@ -1,10 +1,13 @@
 package com.vankle.catalog.service.impl;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import net.sf.json.JSONArray;
+
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 
 import org.slf4j.Logger;
@@ -44,12 +47,14 @@ import com.vankle.code.constants.VankleConstants;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.VankleUtils;
+import com.vankle.system.service.SystemCurrencyService;
+import com.vankle.system.service.SystemService;
 import com.vankle.code.dao.RedisDao;
 
 
 @Service(group="calalogProductService", version="1.0")
-public class CalalogProductServiceImpl implements CalalogProductService {
-
+public class CalalogProductServiceImpl implements CalalogProductService {	
+	
 	@Autowired
 	CatalogProductEntityLanguageMapper catalogProductEntityLanguageMapper;
 	@Autowired
@@ -76,7 +81,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogProductSkuMapper catalogProductSkuMapper;
 	@Autowired
 	CatalogProductRecommendedMapper catalogProductRecommendedMapper;
+	@Autowired
+	SystemCurrencyService systemCurrencyService;
 	
+	
+	@Reference(group = "systemService", version = "1.0")
+	private SystemService systemService;
 	
 	
 	@Autowired
@@ -121,6 +131,19 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			return resultStr;
 		}else{
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
+			JSONObject productObj = resultObj.getJSONObject("data");
+			
+			//商品信息价格换算
+			BigDecimal originalPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("originalPrice")), currencyId);
+			productObj.put("originalPrice", originalPrice);
+			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("sellPrice")), currencyId);
+			productObj.put("sellPrice", sellPrice);
+			
+			//商品折扣信息价格换算
+			JSONObject catalogProductEntityDiscount = productObj.getJSONObject("catalogProductEntityDiscount");
+			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
+			catalogProductEntityDiscount.put("discountAmount", discountAmount);
+			 
 			return resultObj.toString();
 		}
 	}
@@ -153,6 +176,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
 
+		
+		//
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
+		
 		//添加折扣信息
 		this.addCatalogProductDiscount(jsonProduct,jsonConfig);
 		//添加商品规格
