@@ -90,7 +90,7 @@ public class AppTests {
 
 	@Test
 	public void testProduct(){ 
-		String paramJson = "{productId:365,languageId:1,currencyId:1}" ;
+		String paramJson = "{productId:365,languageId:1,currencyId:1,storeId:1}" ;
 		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);

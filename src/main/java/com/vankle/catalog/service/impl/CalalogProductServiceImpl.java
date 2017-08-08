@@ -2,6 +2,8 @@ package com.vankle.catalog.service.impl;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -9,7 +11,7 @@ import net.sf.json.JSONArray;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
-
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,8 @@ import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
-import com.vankle.code.util.VankleUtils;
+import com.vankle.code.util.ListUtils;
+import com.vankle.code.util.VankleUtils; 
 import com.vankle.system.service.SystemCurrencyService;
 import com.vankle.system.service.SystemService;
 import com.vankle.code.dao.RedisDao;
@@ -109,7 +112,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
 		int currencyId = paramObj.getInt("currencyId");
-		
+		Object requestType = paramObj.get("requestType");
+		resultObj.put("requestType", requestType);
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId);
 		
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
@@ -175,7 +179,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
-
+		jsonProduct.put("requestType", resultObj.get("requestType"));
 		
 		//
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
@@ -293,49 +297,81 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config) {
-		if(jsonProduct.getInt("isBundle")==0){ 
+//		if(jsonProduct.getInt("isBundle")==0){
+//			
+//			
+			List<List<String>> nameList = new ArrayList<List<String>>();
 			List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
 			JSONArray jsonArrSpec = new JSONArray();
+			List<String> skuKeyList =  new ArrayList<String>();
 			for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
 				List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId());
 				JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
 				JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
 				jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
 				jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
+
+				List<String> naList = new ArrayList<String>();
+
+				for(CatalogProductSpecValue specValueEntity: catalogProductSpecValues){
+					naList.add(specValueEntity.getName());
+				}
+				nameList.add(naList);
+				skuKeyList.add(catalogProductSpec.getName());
 			}
 			jsonProduct.put("catalogProductSpecList", jsonArrSpec);
-		}
+			List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"));
+			jsonProduct.put("catalogProductSkuList", catalogProductSkus);
+			
+//			List<String> listName = ListUtils.circulate(nameList);
+//			List<JSONObject> skuList = new ArrayList<JSONObject>();
+//			for(String values:listName){
+//
+//				JSONObject skuObj = new JSONObject();
+//				String[] valueArray = values.split(" ");
+//				JSONObject skuKeyObj = new JSONObject();
+//				for(int i=0;i<skuKeyList.size();i++){
+//					skuKeyObj.put(skuKeyList.get(i), valueArray[i]);
+//				}
+//				skuObj.put("key", skuKeyObj);
+//				skuObj.put("skuName", values);
+//				System.out.println(skuObj.toString());
+//				skuList.add(skuObj);
+//			}
+//			jsonProduct.put("skuList", skuList);
+			
+//		}
 	}
-	/**
-	  * 添加组合商品资料
-	  * @param jsonProduct
-	  */
-	public void addCatalogProductIsBundle(JSONObject jsonProduct,JsonConfig config) {
-		if(jsonProduct.getInt("isBundle")==1){
-			List<CatalogProductBundledLink> catalogProductBundledLinks  = catalogProductBundledLinkMapper.findCatalogProductBundledLinkList(jsonProduct.getInt("id"));
-			JSONArray jsonArr = new JSONArray();
-			for(CatalogProductBundledLink catalogProductBundledLink:catalogProductBundledLinks){
-				CatalogProductEntity childCatalogProduct = catalogProductEntityMapper.findCatalogProductEntity(catalogProductBundledLink.getChildProductId());
-				if(childCatalogProduct!=null){
-					CatalogProductEntityDiscount cEntityDiscount = catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(childCatalogProduct.getId());
-					JSONObject cProduct = JSONObject.fromObject(childCatalogProduct, config); //商品
-					JSONObject cProductDiscount = JSONObject.fromObject(cEntityDiscount, config);//商品折扣属性
-					cProduct.put("productDiscount", cProductDiscount);//商品 添加商品折扣属性
-					List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(childCatalogProduct.getId());
-					JSONArray jsonArrSpec = new JSONArray();
-					for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
-						List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId());
-						JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
-						JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
-						jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
-						jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
-					}
-					cProduct.put("catalogProductSpecList", jsonArrSpec); //商品 添加商品规格组
-				}
-				jsonProduct.put("bundleProductList", jsonArr);//组合商品
-			}
-		} 
-	}
+//	/**
+//	  * 添加组合商品资料
+//	  * @param jsonProduct
+//	  */
+//	public void addCatalogProductIsBundle(JSONObject jsonProduct,JsonConfig config) {
+//		if(jsonProduct.getInt("isBundle")==1){
+//			List<CatalogProductBundledLink> catalogProductBundledLinks  = catalogProductBundledLinkMapper.findCatalogProductBundledLinkList(jsonProduct.getInt("id"));
+//			JSONArray jsonArr = new JSONArray();
+//			for(CatalogProductBundledLink catalogProductBundledLink:catalogProductBundledLinks){
+//				CatalogProductEntity childCatalogProduct = catalogProductEntityMapper.findCatalogProductEntity(catalogProductBundledLink.getChildProductId());
+//				if(childCatalogProduct!=null){
+//					CatalogProductEntityDiscount cEntityDiscount = catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(childCatalogProduct.getId());
+//					JSONObject cProduct = JSONObject.fromObject(childCatalogProduct, config); //商品
+//					JSONObject cProductDiscount = JSONObject.fromObject(cEntityDiscount, config);//商品折扣属性
+//					cProduct.put("productDiscount", cProductDiscount);//商品 添加商品折扣属性
+//					List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(childCatalogProduct.getId());
+//					JSONArray jsonArrSpec = new JSONArray();
+//					for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
+//						List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId());
+//						JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
+//						JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
+//						jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
+//						jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
+//					}
+//					cProduct.put("catalogProductSpecList", jsonArrSpec); //商品 添加商品规格组
+//				}
+//				jsonProduct.put("bundleProductList", jsonArr);//组合商品
+//			}
+//		} 
+//	}
 	
 	/**
 	 * 添加捆绑销售资料
@@ -345,6 +381,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		if(jsonProduct.getInt("type")==1){
 			return;
 		}
+		
+		if(jsonProduct.get("requestType")!=null){
+			return;
+		}
+		
 		//判断是捆绑销售groupSellId
 		if(jsonProduct.get("groupSellId") !=null){
 			int groupSellId = jsonProduct.getInt("groupSellId");
@@ -355,11 +396,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				JSONArray jsonArr = new JSONArray();
 				for(CatalogProductGroupSellLinkProduct cSellLinkProduct:groupLinkProductList){
 					CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(cSellLinkProduct.getProductId());
-					if(catalogProductEntity.getType()==1){
+					if(catalogProductEntity.getType()==1||catalogProductEntity.getType()==3){
 						JSONObject paramObj = new JSONObject();
 						paramObj.put("productId", cSellLinkProduct.getProductId());
 						paramObj.put("languageId", languageId);
 						paramObj.put("currencyId", currencyId);
+						paramObj.put("requestType", 1);
 						String resout = this.getCatalogProductInfoByParamJson(paramObj.toString());
 						JSONObject resoutJson = JSONObject.fromObject(resout);
 						jsonArr.add(resoutJson.get("data"));
@@ -372,7 +414,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 
 	/**
-	 * 添加捆绑销售资料
+	 * 添加推荐商品
 	 * @param JSONObject
 	 */
 	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config) {
