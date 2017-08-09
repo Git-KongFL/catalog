@@ -1,205 +1,83 @@
-var result = {
-	"code" : "10000",
-	"msg" : "成功",
-	"data" : {
-		"groupSellId" : 2,
-		"isBundle" : 0,
-		"manageStock" : 0,
-		"storeDefault" : 1,
-		"originalPrice" : 379,
-		"visibility" : 1,
-		"description" : "<p><img src=\"/media/m_d_p_image/nrc0477-dp-image01.jpg\" alt=\"\"/><img src=\"/media/m_d_p_image/nrc0477-dp-image02.jpg\" alt=\"\"/><img src=\"/media/m_d_p_image/nrc0477-dp-image03.jpg\" alt=\"\"/>As Rumi said:”Love is the bridge between you and everything.” Yep, your loved one may be watiing for you opposite to the bridge. In french, the meaning of “AMOUR” is love, we hope this bridge series jewelry can be the witness of your love.<\/p><p><span style=\"font-size: medium;\"><strong><span style=\"font-size: small;\"><br/>About Designer<\/span><\/strong><\/span><\/p><p>YANG , the jewelry designer .On the journey of design, she created many jewelry for hundreds of people, all of the designs are the favorite pieces of her customer. Yang also created some customization pieces which are competing imitation by many famous jewelry brand. Her designs published on the leading jewelry magazine when she was a student in Design Dept. Most of the designs is collected by fashion people, and some jewelry collectors.<\/p><p><strong>Q:&nbsp; Tell us about yourself, including what you do, and how to get the current status of work?<\/strong><\/p><p>YANG:&nbsp;I was an art student background, since childhood I was more sensitive on the good things, so I like to create beauty. Jewelry design really started when I was a college student, in the spare time I also tried to do a part-time jewelry design and drawing work. When I see my first piece worn on my customer, and she was very satisfied with that design ,I thought it must be the time to be a jewelry designer. I love this job so deeply much.<br/>At the beginning of my job, I am a advanced custom jewelry designer, to create the customized jewelry for every customer. This job helps me a lot, my customer shared many stories to me, according to those stories, I can feel the inner perception and different individuals of the uniqueness of each person&#39;s pursuit. This is exactly what I sought---to make the jewelry with story.<\/p><p><strong>Q:&nbsp; Please tell us about your style, what kind of person suitable for wearing your jewelry designs?<\/strong><\/p><p>YANG: My design style can be summed up by one word - Elegance. Everyone pursues unique, I was no exception, I personally prefer relatively elegant, simple, stylish style, and I like to try different elements, such as three-dimensional structure, geometry, totem symbols, etc. I think through the design language , these cold, masculine elements can be transformed into decorative jewelry for elegant women. If I have to give my audience a circle divided into words, Personally, I may feel more suitable for those economic independence, fashion, and the pursuit of texture women.<\/p><p><strong>Q: As a designer, where you draw your inspiration?<\/strong><\/p><p><img src=\"/media/m_d_p_image/xydsp01-m_d_p_image03.jpg\" alt=\"\"/><\/p><p>YANG: I am sensitive for all of the images , so I like to watch videos, see the exhibition, read the works of visual communication. I like things during European Art Nouveau and Art Deco movement. Their natural shape extraction and generalization is superb, curved lines, arc, interspersed, every detail impressed me deeply. Art Deco period is a great impact on contemporary minimalism, their design is more suitable for the modern aesthetic orientation, the geometry of the elements they use is very sexy.<\/p><p><strong>Q: Who is your favorite designer?<\/strong><\/p><p>YANG: I like a lot of designers, I think everyone has a good on the one hand, it can be used as my teacher. My favorite jewelry designer is actually an artist - Salvador Dali, he designed a number of cross-border surrealistic piece of jewelry is very interesting. Look at his design I can feel his artistry is very high, very sensitive, very rich imagination. And he did not neglect the feeling of wearing, but many jewelry designer ignored this point. In addition British designer Stephen Webster is also a brilliant jewelry designer I admired, he is good at to design the mysterious dark elements very elegant and sexy.<\/p><p><strong>Q: What is in the upcoming trend for jewelry design industry?<\/strong><\/p><p>YANG: In my opinion. At the moment of the uniqueness of each individual&#39;s pursuit of more and more significant, so advanced custom jewelry will be gradually integrated into daily wear. This kind of jewelry is very obvious from the property, cause everyone wants to highlight their individuality .So every designer should consider how to do a direct access to the customer&#39;s heart.<\/p>",
-		"sellPrice" : 379,
-		"updateTime" : "2017-08-01 15:37:49",
-		"storeId" : 1,
-		"type" : 3,
-		"metaDescription" : "",
-		"isBackorder" : 0,
-		"metaKeywords" : "",
-		"createTime" : "2017-07-21 13:35:43",
-		"design" : "",
-		"metaTitle" : "",
-		"name" : "Three Colors AMOUR Hollow out Bridge Designer Engagement Ring",
-		"spu" : "NRC0477",
-		"id" : 366,
-		"shortName" : "Three Colors AMOUR Hollow out Bridge Designer Engagement Ring",
-		"deletedStatus" : 1,
-		"status" : 1,
-		"currency" : {
-			"createTime" : null,
-			"name" : "US dollar",
-			"sign" : "$",
-			"updateTime" : null,
-			"id" : 1,
-			"value" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		},
-		"catalogProductEntityDiscount" : {
-			"discountPercentage" : 0.45,
-			"productId" : 366,
-			"createTime" : "",
-			"discountEndTime" : "2017-07-21 13:35:43",
-			"discountStartTime" : "2017-07-21 13:35:43",
-			"discountAmount" : 169,
-			"updateTime" : "",
-			"id" : 365,
-			"storeId" : 1,
-			"deletedStatus" : 0
-		},
-		"catalogProductSpecList" : [{
-					"productId" : 366,
-					"description" : "",
-					"updateTime" : null,
-					"sort" : 0,
-					"storeId" : 1,
-					"type" : 2,
-					"createTime" : null,
-					"name" : "color",
-					"id" : 164,
-					"value" : "1",
-					"deletedStatus" : 0,
-					"status" : 1,
-					"catalogProductSpecValueList" : [{
-								"createTime" : null,
-								"productSpecId" : 164,
-								"name" : "red",
-								"updateTime" : null,
-								"id" : 194,
-								"value" : "1",
-								"deletedStatus" : 0,
-								"status" : 1
-							}]
-				}, {
-					"productId" : 366,
-					"description" : "",
-					"updateTime" : null,
-					"sort" : 0,
-					"storeId" : 1,
-					"type" : 2,
-					"createTime" : null,
-					"name" : "size",
-					"id" : 165,
-					"value" : "2",
-					"deletedStatus" : 0,
-					"status" : 1,
-					"catalogProductSpecValueList" : [{
-								"createTime" : null,
-								"productSpecId" : 165,
-								"name" : "6(U.S.)\\16.45(mm)",
-								"updateTime" : null,
-								"id" : 195,
-								"value" : "1",
-								"deletedStatus" : 0,
-								"status" : 1
-							}, {
-								"createTime" : null,
-								"productSpecId" : 165,
-								"name" : "7(U.S.)\\17.3(mm)",
-								"updateTime" : null,
-								"id" : 196,
-								"value" : "3",
-								"deletedStatus" : 0,
-								"status" : 1
-							}]
-				}],
-		"skuList" : [{
-					"key" : {
-						"color" : "red",
-						"size" : "6(U.S.)\\16.45(mm)"
-					},
-					"skuName" : "red 6(U.S.)\\16.45(mm)"
-				}, {
-					"key" : {
-						"color" : "red",
-						"size" : "7(U.S.)\\17.3(mm)"
-					},
-					"skuName" : "red 7(U.S.)\\17.3(mm)"
-				}],
-		"catalogProductEntityImages" : [{
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-1-0706.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-1-0706.jpg",
-			"updateTime" : null,
-			"id" : 2161,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}, {
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-3-0706.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-3-0706.jpg",
-			"updateTime" : null,
-			"id" : 2162,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}, {
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-2-0706.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-2-0706.jpg",
-			"updateTime" : null,
-			"id" : 2163,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}, {
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-4-0706.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-4-0706.jpg",
-			"updateTime" : null,
-			"id" : 2164,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}, {
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-5-0706.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/n/r/nrc0477-5-0706.jpg",
-			"updateTime" : null,
-			"id" : 2165,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}, {
-			"smallImage" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/x/i/xinbaozhuang001_3_160.jpg",
-			"productId" : 366,
-			"productSpecValueId" : 0,
-			"createTime" : null,
-			"resType" : 1,
-			"remoteUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/x/i/xinbaozhuang001_3_160.jpg",
-			"updateTime" : null,
-			"id" : 2166,
-			"url" : "",
-			"deletedStatus" : 0,
-			"status" : 0
-		}],
-		"catalogProductEntityVideos" : [],
-		"catalogProductGroupSell" : {
-			"createTime" : null,
-			"name" : "",
-			"description" : "",
-			"updateTime" : null,
-			"id" : 2,
-			"storeId" : 0,
-			"deletedStatus" : 0,
-			"list" : []
-		},
-		"catalogProductRecommendeds" : []
-	}
-}
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''SEV004' and  store_id = 1   and  deleted_status = 1  and status =1' at line 1
+### The error may exist in com/vankle/catalog/dao/CatalogProductEntityMapper.java (best guess)
+### The error may involve com.vankle.catalog.dao.CatalogProductEntityMapper.findCatalogProductEntityListBySpu-Inline
+### The error occurred while setting parameters
+### SQL: select   id as id,  store_id as storeId,  store_default as storeDefault,  is_bundle as isBundle,  design as design,  group_sell_id as groupSellId,  spu as spu,  type as type,  name as name,  short_name as shortName,  status as status,  is_backorder as isBackorder,  visibility as visibility,  manage_stock as manageStock,  sell_price as sellPrice,  original_price as originalPrice,  meta_title as metaTitle,  meta_keywords as metaKeywords,  meta_description as metaDescription,  description as description,  deleted_status as deletedStatus,  create_time as createTime,  update_time as updateTime   from catalog_product_entity  where  spu in 'SEV004' and  store_id = ?   and  deleted_status = 1  and status =1
+### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''SEV004' and  store_id = 1   and  deleted_status = 1  and status =1' at line 1
+; bad SQL grammar []; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''SEV004' and  store_id = 1   and  deleted_status = 1  and status =1' at line 1
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:231)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:446)
+	at com.sun.proxy.$Proxy64.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:137)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:75)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy84.findCatalogProductEntityListBySpu(Unknown Source)
+	at com.vankle.cart.service.impl.CartServiceImpl.autoAddPromoItemsWithProducts(CartServiceImpl.java:383)
+	at com.vankle.cart.service.impl.CartServiceImpl.addCartRule(CartServiceImpl.java:342)
+	at com.vankle.cart.service.impl.CartServiceImpl.queryCartShopping(CartServiceImpl.java:318)
+	at com.vankle.AppTests.testQueryCartShopping(AppTests.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:75)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:86)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:84)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:252)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:94)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:191)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''SEV004' and  store_id = 1   and  deleted_status = 1  and status =1' at line 1
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:408)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:943)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2527)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2680)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2501)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1197)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:83)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	... 39 more
+
