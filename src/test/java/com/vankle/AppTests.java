@@ -32,7 +32,9 @@ import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
 import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductSpecValue;
 import com.vankle.catalog.service.CalalogCategoryService;
+import com.vankle.catalog.service.CalalogProductReviewService;
 import com.vankle.catalog.service.CalalogProductService;
+import com.vankle.catalog.service.CalalogSearchService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,7 +52,11 @@ public class AppTests {
 	@Autowired
 	CalalogCategoryService calalogCategoryService;
 	@Autowired
+	CalalogSearchService calalogSearchService;
+	@Autowired
 	SystemCurrencyService systemCurrencyService;
+	@Autowired
+	CalalogProductReviewService calalogProductReviewService;
 	
 //	@Test
 //	public void testAddProductSpecValue(){
@@ -77,10 +83,27 @@ public class AppTests {
 //		logger.info(out.toString());
 //	}
 	
+	@Test
+	public void getCategoryProductReviewByParamJson(){ 
+		String paramJson = "{productId:92,pageIndex:1}" ;
+		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
+
 	
 //	@Test
 //	public void testCategoryProduct(){ 
-//		String paramJson = "{categoryId:7,languageId:2,currencyId:1,pageIndex:1}" ;
+//		String paramJson = "{storeId:1,q:'man',languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
+//		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+	
+//	
+//	@Test
+//	public void testCategoryProduct(){ 
+//		String paramJson = "{storeId:1,categoryId:7,languageId:2,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
 //		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 //		System.out.println(resout);
 //		logger.info(resout);
@@ -88,13 +111,13 @@ public class AppTests {
 	
 	
 
-	@Test
-	public void testProduct(){ 
-		String paramJson = "{productId:365,languageId:1,currencyId:1,storeId:1}" ;
-		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	@Test
+//	public void testProduct(){ 
+//		String paramJson = "{productId:365,languageId:1,currencyId:1,storeId:1}" ;
+//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 	
 //	@Test
 //	public void testRedis(){

@@ -16,6 +16,7 @@ import com.vankle.catalog.dao.CatalogCategoryProductMapper;
 import com.vankle.catalog.entity.CatalogCategoryEntity;
 import com.vankle.catalog.entity.CatalogCategoryProduct;
 import com.vankle.catalog.service.CalalogCategoryService;
+import com.vankle.catalog.service.CalalogSearchService;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
 import com.vankle.code.dao.RedisDao;
@@ -39,12 +40,11 @@ import net.sf.json.util.JSONBuilder;
  * 
  */
 
-@Service(group="calalogCategoryService", version="1.0")
-public class CalalogCategoryServiceImpl implements CalalogCategoryService {
+@Service(group="calalogSearchService", version="1.0")
+public class CalalogSearchServiceImpl implements CalalogSearchService {
 	
 	@Autowired
 	CatalogCategoryEntityMapper catalogCategoryEntityMapper;
-
 	@Autowired
 	CatalogCategoryProductMapper catalogCategoryProductMapper;
 	
@@ -58,85 +58,22 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	
 	@Autowired
 	RedisDao redisDao;
-	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
+	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class);
 	
 	/**
-	 * 店铺商品类目 paramJson
-	 * @param paramJson = {storeId:1}
+	 * 商品分类列表paramJson
+	 * @param paramJson =  {q:'keyword',storeId:1,languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'name',dir:'desc'}} ;
 	 * @return
 	 */
-
 	@Override
-	public String getCatalogCategoryInfoByParamJson(String paramJson){
+	public String getCategorySearchByParamJson(String paramJson) {
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		} 
-		int storeId = paramObj.getInt("storeId");
-		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId);
-		logger.info(resultStr);
-		if(resultStr!=null){
-			return resultStr;
-		}
-		
-		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId);
-		JSONObject categoryObj = new JSONObject();
-		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
-		resultObj.put("data", categoryObj.get("childs"));
-		
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId , resultObj.toString());
-		 
-		return resultObj.toString();
-	}
-	
-	
-	//递归生成类目列表
-	public JSONObject getCategoryByCategoryList(JSONObject obj,List<CatalogCategoryEntity> catalogCategoryEntitys){
-		JsonConfig jsonConfig = new JsonConfig();  
-		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
-		if(obj.get("id")==null){
-			for(CatalogCategoryEntity categoryEntity:catalogCategoryEntitys){
-				if(categoryEntity.getParentCategoryId()==null){
-					obj = JSONObject.fromObject(categoryEntity,jsonConfig); 
-					JSONArray childs = new JSONArray();
-					obj.put("childs", childs);
-					this.getCategoryByCategoryList(obj, catalogCategoryEntitys);
-				}
-			}
-		}else{
-			for(CatalogCategoryEntity categoryEntity:catalogCategoryEntitys){
-				if(categoryEntity.getParentCategoryId()!=null&&obj.getInt("id")==categoryEntity.getParentCategoryId()){
-					JSONObject objChild = JSONObject.fromObject(categoryEntity,jsonConfig); 
-					JSONArray childsObj = new JSONArray();
-					objChild.put("childs", childsObj);
-					JSONArray childs = obj.getJSONArray("childs");
-					childs.add(objChild);
-					obj.put("childs", childs);
-					this.getCategoryByCategoryList(obj.getJSONArray("childs").getJSONObject(childs.size()-1), catalogCategoryEntitys);
-				}
-			}
-		}
-		return obj;
-	}
-
-	
-	/**
-	 * 商品分类列表paramJson  field :name/price/new
-	 * @param paramJson =  "{storeId:1,categoryId:2,languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'name',dir:'desc'}}";
-	 * @return
-	 */
-	@Override
-	public String getCategoryProductInfoByParamJson(String paramJson) {
-		JSONObject resultObj = JsonUtils.createJSONObject();
-		JSONObject paramObj = new  JSONObject();
-		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
-		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
-			return resultObj.toString();
-		} 
-		int categoryId = paramObj.getInt("categoryId");
+		String  q = paramObj.getString("q").replace("'", "");
 		int storeId = paramObj.getInt("storeId");
 		int languageId = paramObj.getInt("languageId");
 		int pageIndex = paramObj.getInt("pageIndex");
@@ -144,7 +81,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
 		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageSize+offset);
+		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ q+languageId+pageSize+offset);
 		
 		logger.info(resultStr);
 		if(resultStr!=null){
@@ -175,9 +112,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			}
 		}
 				
-		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(storeId,categoryId);
+		int total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,q);
+		
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
-				findCatalogCategoryProductList(storeId,categoryId,languageId,pageSize,offset,orderBy);
+				findCatalogSearchProductList(storeId,q,languageId,pageSize,offset,orderBy);
 		JSONObject dataObj = new JSONObject();
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
@@ -191,11 +129,11 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("pageCount", pagerUtil.pageCount); 
 		
 		resultObj.put("data",dataObj);
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());
+		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ q+languageId+pageIndex+offset, resultObj.toString());
 		
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
-	}
-	
+	} 
+	 
 	public String getCategoryProductByCurrencyId(String paramJson,int currencyId){
 		JSONObject resoutObj = JSONObject.fromObject(paramJson);
 		JSONArray  arrayObj =  resoutObj.getJSONObject("data").getJSONArray("dataList");
@@ -211,7 +149,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		}
 		return resoutObj.toString();
 	}
-	
 	
 	
 }
