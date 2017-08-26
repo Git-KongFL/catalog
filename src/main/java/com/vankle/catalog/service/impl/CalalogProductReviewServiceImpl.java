@@ -25,7 +25,7 @@ import net.sf.json.JsonConfig;
 
 /**
  * 
- * 商品类目信息
+ * 商品评论信息
  * @author denghaihui
  * @date 2017-06-26 09:47:03
  * 
@@ -78,8 +78,5 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		 
 		return  resultObj.toString();
 	}
-
- 
- 
 	
 }
