@@ -67,7 +67,7 @@ public class AppTests {
 //		catalogProductSpecVaule.setCreateTime(new Date());
 //		catalogProductSpecVaule.setProductSpecId(1);
 //		catalogProductSpecVaule.setStatus(1);
-//		catalogProductSpecVaule.setDeletedStatus(1);
+//		catalogProductSpecVaule.setDeletedStatus(VankleConstants.VANKLE_DELETED_STATUS_1);
 //		catalogProductSpecValueMapper.addCatalogProductSpecValue(catalogProductSpecVaule);
 //		System.out.println(catalogProductSpecVaule.toString());
 //	}
@@ -83,19 +83,19 @@ public class AppTests {
 //		logger.info(out.toString());
 //	}
 	
-	@Test
-	public void getCategoryProductReviewByParamJson(){ 
-		String paramJson = "{productId:92,pageIndex:1}" ;
-		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	@Test
+//	public void getCategoryProductReviewByParamJson(){ 
+//		String paramJson = "{productId:92,pageIndex:1}" ;
+//		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 
 	
 //	@Test
 //	public void testCategoryProduct(){ 
 //		String paramJson = "{storeId:1,q:'man',languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
-//		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+//		String resout = calalog	Service.getCategorySearchByParamJson(paramJson);
 //		System.out.println(resout);
 //		logger.info(resout);
 //	}
@@ -111,13 +111,13 @@ public class AppTests {
 	
 	
 
-//	@Test
-//	public void testProduct(){ 
-//		String paramJson = "{productId:365,languageId:1,currencyId:1,storeId:1}" ;
-//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+	@Test
+	public void testProduct(){ 
+		String paramJson = "{productId:367,languageId:1,currencyId:1,storeId:1}" ;
+		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 	
 //	@Test
 //	public void testRedis(){
