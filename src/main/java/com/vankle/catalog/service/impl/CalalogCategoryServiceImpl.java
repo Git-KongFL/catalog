@@ -154,20 +154,20 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		if(paramObj.get("orderBy")!=null){
 			
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
-			if("name".equals(orderObject.getString("order"))){
-				if("desc".equals(orderObject.getString("dir"))){
+			if("name".equalsIgnoreCase(orderObject.getString("order"))){
+				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
 					orderBy = " order by  m.name  desc ";
 				}else{
 					orderBy = " order by  m.name  asc ";
 				}
-			}else if("price".equals(orderObject.getString("order"))){
-				if("desc".equals(orderObject.getString("dir"))){
+			}else if("price".equalsIgnoreCase(orderObject.getString("order"))){
+				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
 					orderBy = " order by  m.discountAmount  desc ";
 				}else{
 					orderBy = " order by  m.discountAmount   asc ";
 				}
-			}else if("new".equals(orderObject.getString("order"))){
-				if("desc".equals(orderObject.getString("dir"))){
+			}else if("new".equalsIgnoreCase(orderObject.getString("order"))){
+				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
 					orderBy = " order by  m.createTime  desc ";
 				}else{
 					orderBy = " order by  m.createTime  asc ";
