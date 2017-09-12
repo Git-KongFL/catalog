@@ -35,6 +35,7 @@ import com.vankle.catalog.service.CalalogCategoryService;
 import com.vankle.catalog.service.CalalogProductReviewService;
 import com.vankle.catalog.service.CalalogProductService;
 import com.vankle.catalog.service.CalalogSearchService;
+import com.vankle.catalog.service.CalalogVoteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -57,6 +58,37 @@ public class AppTests {
 	SystemCurrencyService systemCurrencyService;
 	@Autowired
 	CalalogProductReviewService calalogProductReviewService;
+	@Autowired
+	CalalogVoteService calalogVoteService;
+	
+	
+
+//	@Test
+//	public void getCategoryVoteListByParamJson(){ 
+//		String paramJson = "{languageId:1,currencyId:1,storeId:1,pageIndex:1}" ;
+//		String resout = calalogVoteService.getCategoryVoteListByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+//	
+
+//	@Test
+//	public void getCategoryVoteInfoByParamJson(){ 
+//		String paramJson = "{languageId:1,currencyId:1,storeId:1,voteId:1}" ;
+//		String resout = calalogVoteService.getCategoryVoteInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+	
+	
+	@Test
+	public void setCategoryVoteByParamJson(){ 
+		String paramJson = "{languageId:1,currencyId:1,storeId:1,voteId:1,customerId:'cabb5e72a274463e8a2e8d5ac7964843',voteType:1}" ;
+		String resout = calalogVoteService.setCategoryVoteByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
+	
 	
 //	@Test
 //	public void testAddProductSpecValue(){
@@ -110,14 +142,14 @@ public class AppTests {
 //	}
 	
 	
-
-	@Test
-	public void testProduct(){ 
-		String paramJson = "{productId:367,languageId:1,currencyId:1,storeId:1}" ;
-		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//
+//	@Test
+//	public void testProduct(){ 
+//		String paramJson = "{productId:367,languageId:1,currencyId:1,storeId:1}" ;
+//		String resout = calalogProductService.getCatalogProductInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 	
 //	@Test
 //	public void testRedis(){

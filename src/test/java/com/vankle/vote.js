@@ -1,0 +1,51 @@
+var result = {
+	"code" : "10000",
+	"msg" : "成功",
+	"data" : {
+		"dataList" : [{
+			"totalVoteNum" : 0,
+			"description" : "Black Skull Engraved Titanium Steel Promise Ring Band For Men",
+			"listVoteNum" : 0,
+			"operId" : "",
+			"updateTime" : "",
+			"designer" : "Black Skull Engraved Titanium Steel Promise Ring Band For Men",
+			"storeId" : 1,
+			"createTime" : "",
+			"price" : 60,
+			"voteSequence" : 1,
+			"imageUrl" : "https://vancaro-review-image-video.s3.amazonaws.com/product/image/v/r/vrrw0038newimage1003.jpg",
+			"name" : "Black Skull Engraved Titanium Steel Promise Ring Band For Men",
+			"pageVoteNum" : 0,
+			"startTime" : "2017-09-04 22:13:16",
+			"endTime" : "2017-09-20 22:13:21",
+			"id" : 1,
+			"deletedStatus" : 0,
+			"status" : 0
+		}, {
+			"totalVoteNum" : 0,
+			"description" : "Bridge Series ",
+			"listVoteNum" : 0,
+			"operId" : "",
+			"updateTime" : "",
+			"designer" : "Crown Inspired ",
+			"storeId" : 1,
+			"createTime" : "",
+			"price" : 129,
+			"voteSequence" : 1,
+			"imageUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/c/d/cdr099-2-0724.jpg",
+			"name" : "Bridge Series Elegant Crown Inspired ",
+			"pageVoteNum" : 0,
+			"startTime" : "2017-09-11 22:14:45",
+			"endTime" : "2017-09-20 22:14:47",
+			"id" : 2,
+			"deletedStatus" : 0,
+			"status" : 0
+		}],
+		"prePageIndex" : 1,
+		"curPageIndex" : 1,
+		"nextPageIndex" : 1,
+		"pageSize" : 30,
+		"rowsCount" : 2,
+		"pageCount" : 1
+	}
+}

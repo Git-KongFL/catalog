@@ -33,7 +33,7 @@ import net.sf.json.JsonConfig;
 
 /**
  * 
- * 商品评论信息
+ * 投票信息
  * @author denghaihui
  * @date 2017-06-26 09:47:03
  * 
@@ -56,18 +56,11 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}   
-		int productId = paramObj.getInt("productId");
 		int pageIndex = paramObj.getInt("pageIndex"); 
-		int pageSize = 10;// VankleConstants.VANKLE_PAGE_SIZE;
+		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
-		Map<String, Object> pMap = new HashedMap();
-		pMap.put("offset", offset);
-		pMap.put("limit", pageSize);
-		pMap.put("productId", productId);
-		 
-		//
-		List<CatalogVote> catalogCategoryProducts  = 
-				catalogVoteMapper.findCatalogVote(offset,pageSize);
+
+		List<CatalogVote> catalogCategoryProducts  =  catalogVoteMapper.findCatalogVote(pageSize,offset);
 		int total =  catalogVoteMapper.findCatalogVoteCount();
 		 
 		JSONObject dataObj = new JSONObject();
@@ -88,7 +81,7 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 	}
 
 	@Override
-	public String setCategoryVotetByParamJson(String paramJson) {
+	public String setCategoryVoteByParamJson(String paramJson) {
 
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
@@ -120,6 +113,21 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 			catalogVote.setTotalVoteNum(catalogVote.getTotalVoteNum()+1);
 		}
 		catalogVoteMapper.updateCatalogVote(catalogVote);
+		return resultObj.toString();
+	}
+
+	@Override
+	public String getCategoryVoteInfoByParamJson(String paramJson) {
+
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new  JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
+		}   
+		int voteId = paramObj.getInt("voteId");
+		CatalogVote catalogVote = catalogVoteMapper.findCatalogVoteById(voteId);
+		resultObj.put("data", catalogVote);
 		return resultObj.toString();
 	}
 	
