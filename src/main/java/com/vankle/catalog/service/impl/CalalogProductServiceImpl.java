@@ -136,7 +136,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}else{
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
 			JSONObject productObj = resultObj.getJSONObject("data");
-			
+			String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+			productObj.put("currency", JSONObject.fromObject(jsonCurrency));
 			//商品信息价格换算
 			BigDecimal originalPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("originalPrice")), currencyId);
 			productObj.put("originalPrice", originalPrice);

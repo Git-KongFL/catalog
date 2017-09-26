@@ -127,7 +127,8 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		resultObj.put("data",dataObj);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ q+languageId+pageIndex+offset, resultObj.toString());
 		

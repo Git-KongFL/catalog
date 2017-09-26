@@ -182,6 +182,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
+		
 		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
 		dataObj.put("prePageIndex", pagerUtil.previous());
 		dataObj.put("curPageIndex", pageIndex);
@@ -189,6 +190,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
+		
+
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
 		resultObj.put("data",dataObj);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
 import com.vankle.catalog.dao.CatalogProductReviewMapper;
@@ -26,6 +27,7 @@ import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
+import com.vankle.system.service.SystemService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -47,6 +49,9 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 	@Autowired
 	CatalogVoteLogMapper catalogVoteLogMapper;
 	
+	@Reference(group = "systemService", version = "1.0")
+	private SystemService systemService;
+	
 	@Override
 	public String getCategoryVoteListByParamJson(String paramJson) {
 		
@@ -59,6 +64,7 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 		int pageIndex = paramObj.getInt("pageIndex"); 
 		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
+		int currencyId = paramObj.getInt("currencyId");
 
 		List<CatalogVote> catalogCategoryProducts  =  catalogVoteMapper.findCatalogVote(pageSize,offset);
 		int total =  catalogVoteMapper.findCatalogVoteCount();
@@ -74,7 +80,8 @@ public class CalalogVoteServiceImpl implements CalalogVoteService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		resultObj.put("data",dataObj);
 		 
 		return  resultObj.toString();
