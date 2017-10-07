@@ -74,6 +74,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		} 
+		paramObj.put("data", new JSONArray());
 		int storeId = paramObj.getInt("storeId");
 		
 		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId);
@@ -85,7 +86,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId);
 		JSONObject categoryObj = new JSONObject();
 		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
-		resultObj.put("data", categoryObj.get("childs"));
+		if(categoryObj.get("childs")==null)
+			resultObj.put("data", new JSONArray());
+		else
+			resultObj.put("data",categoryObj.get("childs"));
 		
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId , resultObj.toString());
 		 
