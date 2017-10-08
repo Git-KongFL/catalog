@@ -76,14 +76,15 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		} 
 		paramObj.put("data", new JSONArray());
 		int storeId = paramObj.getInt("storeId");
+		int languageId = paramObj.getInt("languageId");
 		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId);
+		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId+languageId);
 		logger.info(resultStr);
 		if(resultStr!=null){
 			return resultStr;
 		}
 		
-		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId);
+		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId,languageId);
 		JSONObject categoryObj = new JSONObject();
 		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
 		if(categoryObj.get("childs")==null)
