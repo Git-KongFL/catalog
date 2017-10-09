@@ -2,7 +2,7 @@ dubbo :
   protocol : 
     prot : -1
     name  : dubbo
-    port : 20883
+    port : 20889
   application : 
     name : vankle-dubbo-app
   registry :
