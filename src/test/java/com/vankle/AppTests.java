@@ -63,12 +63,13 @@ public class AppTests {
 	
 	@Test
 	public void getCatalogCategoryInfoByParamJson(){ 
-		String paramJson = "{languageId:1,currencyId:1,storeId:1}" ;
+		String paramJson = "{\"storeId\":\"1\",\"languageId\":\"1\",\"currencyId\":1}" ;
 		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
-		
+//2017-10-09 11:53:48.579
+//2017-10-09 11:53:46.440
 
 //	@Test
 //	public void getCategoryVoteListByParamJson(){ 
