@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
+import com.vankle.catalog.dao.CatalogProductReviewImageMapper;
 import com.vankle.catalog.dao.CatalogProductReviewMapper;
 import com.vankle.catalog.entity.CatalogCategoryProduct;
 import com.vankle.catalog.entity.CatalogProductReview;
+import com.vankle.catalog.entity.CatalogProductReviewImage;
 import com.vankle.catalog.service.CalalogProductReviewService;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
@@ -36,7 +38,8 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 	 
 	@Autowired
 	CatalogProductReviewMapper catalogProductReviewMapper;
-	
+	@Autowired
+	CatalogProductReviewImageMapper catalogProductReviewImageMapper ;
 	
 	@Override
 	public String getCategoryProductReviewByParamJson(String paramJson) {
@@ -58,15 +61,29 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 			pMap.put("score", paramObj.get("score"));
 		}
 		//
-		List<CatalogProductReview> catalogCategoryProducts  = 
-				catalogProductReviewMapper.listPage(pMap);
+		List<CatalogProductReview> catalogCategoryProducts = catalogProductReviewMapper.listPage(pMap);
 		int total = catalogProductReviewMapper.rows(pMap);
-		 
-		JSONObject dataObj = new JSONObject();
+		
+
 		JsonConfig jsonConfig = new JsonConfig();  
-		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor()); 
+		JSONArray catalogCategoryProductsArray = JSONArray.fromObject(  catalogCategoryProducts,jsonConfig);
+		for(int i=0;i<catalogCategoryProductsArray.size();i++){
+			JSONObject catalogReviewObj = catalogCategoryProductsArray.getJSONObject(i);
+			int imageTotal = catalogReviewObj.getInt("imageTotal");
+			JSONArray imageArray = new JSONArray();
+			if(imageTotal>0){
+				List<CatalogProductReviewImage> imageList = catalogProductReviewImageMapper.findCatalogProductReviewImageList(catalogReviewObj.getInt("id"));
+				for(CatalogProductReviewImage productReviewImage:imageList){
+					imageArray.add(productReviewImage.getImageUrl());
+				}
+			}
+			catalogReviewObj.put("imageArray", imageArray);
+		}
+		
+		JSONObject dataObj = new JSONObject(); 
 		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
-		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
+		dataObj.put("dataList", catalogCategoryProductsArray);
 		dataObj.put("prePageIndex", pagerUtil.previous());
 		dataObj.put("curPageIndex", pageIndex);
 		dataObj.put("nextPageIndex", pagerUtil.next()); 
