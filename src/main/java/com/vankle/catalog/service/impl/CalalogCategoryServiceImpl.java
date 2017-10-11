@@ -71,7 +71,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
-		logger.info("11111111111111111111111112222@@@@@@@@@@:"+paramJson);
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		} 

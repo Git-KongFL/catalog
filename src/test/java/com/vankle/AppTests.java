@@ -62,12 +62,31 @@ public class AppTests {
 	CalalogVoteService calalogVoteService;
 	
 	@Test
-	public void getCatalogCategoryInfoByParamJson(){ 
-		String paramJson = "{\"storeId\":\"1\",\"languageId\":\"1\",\"currencyId\":1}" ;
-		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
+	public void testCategoryProduct(){ 
+		String paramJson = "{'categoryId':'2','pageIndex':1,'orderBy':{'dir':'desc','order':'New'},'storeId':1,'languageId':1,'currencyId':1}" ;
+		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
+	
+	
+//	@Test
+//	public void getCategorySearchByParamJson(){ 
+//		String paramJson = "{storeId:1,q:'man',languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
+//		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+	
+	
+//	@Test
+//	public void getCatalogCategoryInfoByParamJson(){ 
+//		String paramJson = "{\"storeId\":\"1\",\"languageId\":\"1\",\"currencyId\":1}" ;
+//		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
+	
 //2017-10-09 11:53:48.579
 //2017-10-09 11:53:46.440
 
@@ -131,14 +150,7 @@ public class AppTests {
 //		logger.info(resout);
 //	}
 
-	
-//	@Test
-//	public void testCategoryProduct(){ 
-//		String paramJson = "{storeId:1,q:'man',languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
-//		String resout = calalog	Service.getCategorySearchByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+
 	
 	
 //	@Test
