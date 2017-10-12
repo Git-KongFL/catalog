@@ -1,9 +1,10 @@
 package com.vankle.catalog.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.collections.map.HashedMap;import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -24,6 +25,7 @@ import com.vankle.code.util.VankleUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import net.sf.json.util.JSONBuilder;
 
 /**
  * 
@@ -57,9 +59,25 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		pMap.put("offset", offset);
 		pMap.put("limit", pageSize);
 		pMap.put("productId", productId);
-		if(paramObj.get("score")!=null&&(!"".equals(paramObj.get("score").toString()))){
-			pMap.put("score", paramObj.get("score"));
+		
+		//sortScore all 全部 12345 显示星星
+		if(paramObj.get("sortScore")!=null&&(!"".equals(paramObj.get("sortScore").toString()))){
+			if(!"all".equals(paramObj.getString("sortScore")))
+				pMap.put("score", paramObj.get("sortScore"));
 		}
+		
+		//sortType: all 全部 ，1文字， 2图片， 3 视频 
+		if(paramObj.get("sortType")!=null&&(!"".equals(paramObj.get("sortType").toString()))){
+			if(!"all".equals(paramObj.getString("sortType")))
+				pMap.put("resType", paramObj.get("sortType"));
+		}
+		
+	  
+		//sortBy 1 recent 2 helpful, 暂时不做
+//		if(paramObj.get("sortBy")!=null&&(!"".equals(paramObj.get("sortBy").toString()))){
+//			pMap.put("sortBy", paramObj.get("sortBy"));
+//		}
+		
 		//
 		List<CatalogProductReview> catalogCategoryProducts = catalogProductReviewMapper.listPage(pMap);
 		int total = catalogProductReviewMapper.rows(pMap);
@@ -70,12 +88,14 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		JSONArray catalogCategoryProductsArray = JSONArray.fromObject(  catalogCategoryProducts,jsonConfig);
 		for(int i=0;i<catalogCategoryProductsArray.size();i++){
 			JSONObject catalogReviewObj = catalogCategoryProductsArray.getJSONObject(i);
-			int imageTotal = catalogReviewObj.getInt("imageTotal");
+			int resType = catalogReviewObj.getInt("resType");
 			JSONArray imageArray = new JSONArray();
-			if(imageTotal>0){
+			if(resType>1){
 				List<CatalogProductReviewImage> imageList = catalogProductReviewImageMapper.findCatalogProductReviewImageList(catalogReviewObj.getInt("id"));
 				for(CatalogProductReviewImage productReviewImage:imageList){
-					imageArray.add(productReviewImage.getImageUrl());
+					JSONObject imgObj = new JSONObject();
+					imgObj.put("imgUrl", productReviewImage.getImageUrl());
+					imageArray.add(imgObj);
 				}
 			}
 			catalogReviewObj.put("imageArray", imageArray);
@@ -90,9 +110,47 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		
 		resultObj.put("data",dataObj);
 		 
+		Map<Integer,Double> reviewGroup = new HashedMap();
+		reviewGroup.put(5, 0.0);
+		reviewGroup.put(4, 0.0);
+		reviewGroup.put(3, 0.0);
+		reviewGroup.put(2, 0.0);
+		reviewGroup.put(1, 0.0);
+		
+		Double scoreTotal = 0.0;
+		List<Map> reviewGroupBy = catalogProductReviewMapper.listGroupByScore(pMap);
+		for(Map map: reviewGroupBy){
+			reviewGroup.put(Integer.parseInt(  map.get("score").toString()),Double.parseDouble(   map.get("total").toString()));
+			scoreTotal += Integer.parseInt(  map.get("total").toString());
+		}
+
+		DecimalFormat df = new DecimalFormat("#.00");
+		JSONObject positiveRatingObj = new JSONObject();
+		
+		double positiveRating =  reviewGroup.get(5)+reviewGroup.get(4) ;
+		if(scoreTotal!=0&&scoreTotal!=positiveRating){
+			positiveRatingObj.put("positiveRating", df.format( (positiveRating/scoreTotal)*100));
+		}else{
+			positiveRatingObj.put("positiveRating",100);
+		}
+		 
+		JSONArray scoreArray = new JSONArray();
+		for(int i=5;i>0;i--){
+			JSONObject obj = new JSONObject();
+			obj.put("score", i);
+			if(reviewGroup.get(i)!=0)
+				obj.put("percent", df.format( (reviewGroup.get(i)/scoreTotal)*100));
+			else
+				obj.put("percent", 0);
+			obj.put("total", reviewGroup.get(i));
+			scoreArray.add(obj);
+		}
+		positiveRatingObj.put("scoreArray", scoreArray);
+		
+		resultObj.put("positiveRatingObj", positiveRatingObj);
+		
 		return  resultObj.toString();
 	}
 	

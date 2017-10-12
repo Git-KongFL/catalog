@@ -4,11 +4,67 @@ var dd = {
 	"data" : {
 		"dataList" : [{
 			"productId" : 333,
+			"orderId" : "100100992",
+			"orderCreateTime" : "2015-07-21 09:00:19",
+			"orderItemId" : "104025",
+			"resType" : 2,
+			"description" : "Great price and some product. This is my 2nd purchase. Love them",
+			"updateTime" : "",
+			"storeId" : 1,
+			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
+			"customerName" : "Ruth Brown",
+			"score" : 5,
+			"createTime" : "2015-07-23 14:48:03",
+			"customerId" : "6d9295b172b24ff8abe6b9f960c6288c",
+			"spu" : "CDR011",
+			"id" : 83,
+			"numOfLike" : 10,
+			"deletedStatus" : 1,
+			"status" : 2,
+			"imageArray" : [{
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}]
+		}, {
+			"productId" : 333,
+			"orderId" : "100100679",
+			"orderCreateTime" : "2015-07-17 13:54:19",
+			"orderItemId" : "71478",
+			"resType" : 2,
+			"description" : "I love the product ...services are awsome and fast ...beautiful merchandise. ..very happy\r\n",
+			"updateTime" : "",
+			"storeId" : 1,
+			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
+			"customerName" : "jacqueline serrano",
+			"score" : 5,
+			"createTime" : "2015-07-21 18:24:06",
+			"customerId" : "6d9295b172b24ff8abe6b9f960c6288c",
+			"spu" : "CDR011\r\n",
+			"id" : 82,
+			"numOfLike" : 10,
+			"deletedStatus" : 1,
+			"status" : 2,
+			"imageArray" : [{
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}, {
+				"imgUrl" : "http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"
+			}]
+		}, {
+			"productId" : 333,
 			"orderId" : "100066089",
 			"orderCreateTime" : "2015-01-14 04:09:30",
 			"orderItemId" : "71478",
+			"resType" : 0,
 			"description" : "It was great very professional and the delivery was on time! Ordered my ring on the 15th and received it on the 19th! The only thing that upset me about the ring was that it was not engraved on the inside with the company name how",
-			"imageTotal" : 5,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -21,19 +77,14 @@ var dd = {
 			"numOfLike" : 10,
 			"deletedStatus" : 1,
 			"status" : 2,
-			"imageArray" : [
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"]
+			"imageArray" : []
 		}, {
 			"productId" : 333,
 			"orderId" : "100100679",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "103675",
+			"resType" : 1,
 			"description" : "I love the product ...services are awsome and fast ...beautiful merchandise. ..very happy",
-			"imageTotal" : 4,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -46,18 +97,14 @@ var dd = {
 			"numOfLike" : 10,
 			"deletedStatus" : 1,
 			"status" : 2,
-			"imageArray" : [
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg",
-					"http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"]
+			"imageArray" : []
 		}, {
 			"productId" : 333,
 			"orderId" : "100100992",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "104025",
+			"resType" : 1,
 			"description" : "Great price and some product. This is my 2nd purchase. Love them",
-			"imageTotal" : 1,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -70,14 +117,14 @@ var dd = {
 			"numOfLike" : 10,
 			"deletedStatus" : 1,
 			"status" : 2,
-			"imageArray" : ["http://www.vancaro.com/media/catalog/product/cache/1/small_image/135x/9df78eab33525d08d6e5fb8d27136e95/n/r/nrc024220161026-1.jpg"]
+			"imageArray" : []
 		}, {
 			"productId" : 333,
 			"orderId" : "100101562",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "104608",
+			"resType" : 1,
 			"description" : "Their prices are amazing, the ring was perfect my new fiance loved it, and the shipping was very fast, I am very pleased and will do business with them again!!",
-			"imageTotal" : 0,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -96,8 +143,8 @@ var dd = {
 			"orderId" : "100101929",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "104932",
+			"resType" : 1,
 			"description" : "Overall very pleased with eveything, they allow PayPal payment, customer service emailed until delivery. Shipping was sooner than I expected, packaging was great and the ring was beautiful as expected. Very happy with my ring. I even took pictures wish I could share.",
-			"imageTotal" : 0,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -116,8 +163,8 @@ var dd = {
 			"orderId" : "100103033",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "105898",
+			"resType" : 1,
 			"description" : "This company in my opinion is one of the best I've dealt with in a lifetime. I began seeing their products on facebook. Im not a everyday gold wearing person. I got a pink and black wedding set from my fiance. There is no other ring on the market that fits me. The rings are made with perfection and it has got more compliments than any other piece of jewelry ive ever owned. Their customer service goes above and beyond to make you as the customer feel as though your are honestly their #1 customer. I highly recommend VANCARO to everyone. Why blend in when you can Stand out!!! Thanks for fitting my uniqueness!!!",
-			"imageTotal" : 0,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -136,8 +183,8 @@ var dd = {
 			"orderId" : "100104939",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "107680",
+			"resType" : 1,
 			"description" : "Thanks for the ring.\nI ordered it one night and within days it was in.. ",
-			"imageTotal" : 0,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -156,8 +203,8 @@ var dd = {
 			"orderId" : "100066439",
 			"orderCreateTime" : "2015-01-14 04:09:00",
 			"orderItemId" : "71579",
+			"resType" : 1,
 			"description" : "I just got a beautiful engagement ring\nFrom them and I love it. Or came in a timely fashion it fit perfectly and i am very satisfied with the price i just ordered another ring from them also. ",
-			"imageTotal" : 0,
 			"updateTime" : "",
 			"storeId" : 1,
 			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
@@ -171,46 +218,6 @@ var dd = {
 			"deletedStatus" : 1,
 			"status" : 2,
 			"imageArray" : []
-		}, {
-			"productId" : 333,
-			"orderId" : "100105185",
-			"orderCreateTime" : "2015-01-14 04:09:00",
-			"orderItemId" : "107909",
-			"description" : "I am very pleased with the ring and service provided by Vancaro. The ring shipped right away and arrived in 4 days. I was sent emails along the way with shipping updates. Once in my hands, the packaging is superb. There are a lot of extras I wasn't expecting like a cleaning kit, care instructions, gift bag and card. I will definitely be ordering from here again and will be recommending to friends and family. Even my fiance was impressed, and its hard to impress men with jewelry and shopping. 5 stars!",
-			"imageTotal" : 0,
-			"updateTime" : "",
-			"storeId" : 1,
-			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
-			"customerName" : "Janette Wilson",
-			"score" : 5,
-			"createTime" : "2015-01-20 19:57:00",
-			"customerId" : "6d9295b172b24ff8abe6b9f960c6288c",
-			"spu" : "FDJ0001",
-			"id" : 38,
-			"numOfLike" : 10,
-			"deletedStatus" : 1,
-			"status" : 2,
-			"imageArray" : []
-		}, {
-			"productId" : 333,
-			"orderId" : "100102763",
-			"orderCreateTime" : "2015-01-14 04:09:00",
-			"orderItemId" : "105655",
-			"description" : "I a so pleased with my purchase, both wedding band are beautiful! They fit perfectly too. Shipping was extremely fast, they were packaged so beautifully, with a small cleaning set added as well. I gave ordered from this company in the past (maybe a year or so ago) and wasn't as impressed s I am with this purchase. Definitely recommend and will buy from again!",
-			"imageTotal" : 0,
-			"updateTime" : "",
-			"storeId" : 1,
-			"userId" : "6d9295b172b24ff8abe6b9f960c6288c",
-			"customerName" : "Heather Hannay",
-			"score" : 4,
-			"createTime" : "2015-01-20 19:57:00",
-			"customerId" : "6d9295b172b24ff8abe6b9f960c6288c",
-			"spu" : "NRC0002",
-			"id" : 39,
-			"numOfLike" : 10,
-			"deletedStatus" : 1,
-			"status" : 2,
-			"imageArray" : []
 		}],
 		"prePageIndex" : 1,
 		"curPageIndex" : 1,
@@ -218,5 +225,29 @@ var dd = {
 		"pageSize" : 10,
 		"rowsCount" : 54,
 		"pageCount" : 6
+	},
+	"positiveRatingObj" : {
+		"positiveRating" : 100,
+		"scoreArray" : [{
+					"score" : 5,
+					"percent" : "85.19",
+					"total" : 46
+				}, {
+					"score" : 4,
+					"percent" : "14.81",
+					"total" : 8
+				}, {
+					"score" : 3,
+					"percent" : 0,
+					"total" : 0
+				}, {
+					"score" : 2,
+					"percent" : 0,
+					"total" : 0
+				}, {
+					"score" : 1,
+					"percent" : 0,
+					"total" : 0
+				}]
 	}
 }
