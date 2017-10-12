@@ -110,7 +110,6 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		resultObj.put("data",dataObj);
 		 
 		Map<Integer,Double> reviewGroup = new HashedMap();
 		reviewGroup.put(5, 0.0);
@@ -149,8 +148,8 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		}
 		positiveRatingObj.put("scoreArray", scoreArray);
 		
-		resultObj.put("positiveRatingObj", positiveRatingObj);
-		
+		dataObj.put("positiveRatingObj", positiveRatingObj);
+		resultObj.put("data",dataObj);
 		return  resultObj.toString();
 	}
 	
