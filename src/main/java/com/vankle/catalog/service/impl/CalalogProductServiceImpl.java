@@ -385,8 +385,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		if(jsonProduct.get("requestType")!=null){
 			return;
-		}
+		} 
 		
+		jsonProduct.put("catalogProductGroupSell", new JSONObject());
 		//判断是捆绑销售groupSellId
 		if(jsonProduct.get("groupSellId") !=null){
 			int groupSellId = jsonProduct.getInt("groupSellId");
