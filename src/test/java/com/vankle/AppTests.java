@@ -61,13 +61,13 @@ public class AppTests {
 	@Autowired
 	CalalogVoteService calalogVoteService;
 	
-//	@Test
-//	public void testCategoryProduct(){ 
-//		String paramJson = "{'categoryId':'2','pageIndex':1,'orderBy':{'dir':'desc','order':'New'},'storeId':1,'languageId':1,'currencyId':1}" ;
-//		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+	@Test
+	public void testCategoryProduct(){ 
+		String paramJson = "{'categoryId':'2','pageIndex':1,'orderBy':{'dir':'desc','order':'New'},'storeId':1,'languageId':1,'currencyId':1}" ;
+		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 //	
 	
 //	@Test
@@ -144,13 +144,13 @@ public class AppTests {
 	
 	
 	//http://123.57.206.102:8085/catalog/product/review
-	@Test
-	public void getCategoryProductReviewByParamJson(){ 
-		String paramJson = "{productId:333,pageIndex:1}" ;
-		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	@Test
+//	public void getCategoryProductReviewByParamJson(){ 
+//		String paramJson = "{productId:333,pageIndex:1}" ;
+//		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 
 
 	

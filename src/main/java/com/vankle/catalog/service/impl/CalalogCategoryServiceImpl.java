@@ -8,7 +8,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import com.vankle.catalog.entity.CatalogCategoryEntity;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
@@ -199,7 +199,26 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
 		
-
+		//
+		JSONArray sortBar  = new JSONArray();
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("key", "Name");
+		nameObj.put("value", "Name");
+		sortBar.add(nameObj);
+		JSONObject priceObj = new JSONObject();
+		nameObj.put("key", "Price");
+		nameObj.put("value", "Price");
+		sortBar.add(priceObj);
+		JSONObject newObj = new JSONObject();
+		nameObj.put("key", "New");
+		nameObj.put("value", "New");
+		sortBar.add(newObj);
+		dataObj.put("sortBar", sortBar);
+		
+		//categoryId
+		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
+		dataObj.put("currency", catalogCategoryEntity);
+		
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
