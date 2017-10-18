@@ -182,13 +182,38 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 				}
 			}
 		}
+		JSONObject dataObj = new JSONObject();
+		JsonConfig jsonConfig = new JsonConfig();  
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
+		
+		//
+		JSONArray sortBar  = new JSONArray();
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("key", "Name");
+		nameObj.put("value", "Name");
+		sortBar.add(nameObj);
+		JSONObject priceObj = new JSONObject();
+		priceObj.put("key", "Price");
+		priceObj.put("value", "Price");
+		sortBar.add(priceObj);
+		JSONObject newObj = new JSONObject();
+		newObj.put("key", "New");
+		newObj.put("value", "New");
+		sortBar.add(newObj);
+		dataObj.put("sortBar", sortBar);
+		
+		//categoryId
+		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
+		dataObj.put("catalogCategoryEntity", catalogCategoryEntity);
+		
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
+		
 				
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(storeId,categoryId);
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
 				findCatalogCategoryProductList(storeId,categoryId,languageId,pageSize,offset,orderBy);
-		JSONObject dataObj = new JSONObject();
-		JsonConfig jsonConfig = new JsonConfig();  
-		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
+		
 		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
 		
 		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
@@ -199,28 +224,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
 		
-		//
-		JSONArray sortBar  = new JSONArray();
-		JSONObject nameObj = new JSONObject();
-		nameObj.put("key", "Name");
-		nameObj.put("value", "Name");
-		sortBar.add(nameObj);
-		JSONObject priceObj = new JSONObject();
-		nameObj.put("key", "Price");
-		nameObj.put("value", "Price");
-		sortBar.add(priceObj);
-		JSONObject newObj = new JSONObject();
-		nameObj.put("key", "New");
-		nameObj.put("value", "New");
-		sortBar.add(newObj);
-		dataObj.put("sortBar", sortBar);
 		
-		//categoryId
-		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
-		dataObj.put("currency", catalogCategoryEntity);
-		
-		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
-		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
 		resultObj.put("data",dataObj);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());
