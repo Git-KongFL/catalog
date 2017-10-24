@@ -188,15 +188,24 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		JSONArray sortBar  = new JSONArray();
 		JSONObject nameObj = new JSONObject();
 		nameObj.put("key", "Name");
-		nameObj.put("value", "Name");
+		if(languageId==1)
+			nameObj.put("value", "Name");
+		else
+			nameObj.put("value", "名称");
 		sortBar.add(nameObj);
 		JSONObject priceObj = new JSONObject();
 		priceObj.put("key", "Price");
-		priceObj.put("value", "Price");
+		if(languageId==1)
+			priceObj.put("value", "Price");
+		else
+			priceObj.put("value", "价格");
 		sortBar.add(priceObj);
 		JSONObject newObj = new JSONObject();
 		newObj.put("key", "New");
-		newObj.put("value", "New");
+		if(languageId==1)
+			newObj.put("value", "New");
+		else
+			newObj.put("value", "最新");
 		sortBar.add(newObj);
 		dataObj.put("sortBar", sortBar);
 		

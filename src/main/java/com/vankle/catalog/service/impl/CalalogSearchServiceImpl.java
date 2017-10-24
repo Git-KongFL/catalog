@@ -112,11 +112,42 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 			}
 		}
 				
+		
+		
 		int total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q);
 		
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
 				findCatalogSearchProductList(storeId,q,languageId,pageSize,offset,orderBy);
 		JSONObject dataObj = new JSONObject();
+		
+		
+
+
+		JSONArray sortBar  = new JSONArray();
+		JSONObject nameObj = new JSONObject();
+		nameObj.put("key", "Name");
+		if(languageId==1)
+			nameObj.put("value", "Name");
+		else
+			nameObj.put("value", "名称");
+		sortBar.add(nameObj);
+		JSONObject priceObj = new JSONObject();
+		priceObj.put("key", "Price");
+		if(languageId==1)
+			priceObj.put("value", "Price");
+		else
+			priceObj.put("value", "价格");
+		sortBar.add(priceObj);
+		JSONObject newObj = new JSONObject();
+		newObj.put("key", "New");
+		if(languageId==1)
+			newObj.put("value", "New");
+		else
+			newObj.put("value", "最新");
+		sortBar.add(newObj);
+		dataObj.put("sortBar", sortBar);
+		
+		
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
