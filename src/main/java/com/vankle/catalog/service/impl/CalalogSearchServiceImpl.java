@@ -112,7 +112,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 			}
 		}
 				
-		int total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,q);
+		int total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q);
 		
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
 				findCatalogSearchProductList(storeId,q,languageId,pageSize,offset,orderBy);

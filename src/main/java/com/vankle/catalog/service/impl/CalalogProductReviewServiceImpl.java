@@ -152,5 +152,5 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		resultObj.put("data",dataObj);
 		return  resultObj.toString();
 	}
-	
+ 
 }
