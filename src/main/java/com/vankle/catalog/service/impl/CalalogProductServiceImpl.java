@@ -97,9 +97,39 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
 	
 	
+	public String getCatalogProductInfoByItemId(String paramJson) {
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new  JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
+		} 
+		int productId = paramObj.getInt("productId");
+		int storeId = paramObj.getInt("storeId");
+		 
+		String resultStr = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId);
+		
+		logger.info(resultStr);
+		if(resultStr!=null){
+			productId = Integer.parseInt(resultStr);
+		}else{
+			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
+			//判断商品是否存在
+			if(catalogProductEntity==null){
+				 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
+				 return resultObj.toString();
+			}else{
+				productId = catalogProductEntity.getId();
+				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId,productId+"");
+			}
+		}
+		paramObj.put("productId", productId);
+		return this.getCatalogProductInfoByParamJson(paramObj.toString());
+		
+	}
+	
+	 
 	/*
-	 * (non-Javadoc)
-	 * @see com.vankle.catalog.service.CalalogProductService#getCatalogProductByParamJson(java.lang.String)
 	 * @pram {productId:1,languageId:1,currencyId:1}
 	 */
 	public String getCatalogProductInfoByParamJson(String paramJson) {
