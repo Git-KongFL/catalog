@@ -232,9 +232,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
-		//		//添加组合商品资料
-		//		this.addCatalogProductIsBundle(jsonProduct,jsonConfig);
-		
+		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		resultObj.put("data", jsonProduct);
 		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
 		if(languageId == 1){
@@ -328,10 +326,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config) {
-//		if(jsonProduct.getInt("isBundle")==0){
-//			
-//			
-			List<List<String>> nameList = new ArrayList<List<String>>();
+
+		List<List<String>> nameList = new ArrayList<List<String>>();
 			List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
 			JSONArray jsonArrSpec = new JSONArray();
 			List<String> skuKeyList =  new ArrayList<String>();
@@ -354,55 +350,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"));
 			jsonProduct.put("catalogProductSkuList", catalogProductSkus);
 			
-//			List<String> listName = ListUtils.circulate(nameList);
-//			List<JSONObject> skuList = new ArrayList<JSONObject>();
-//			for(String values:listName){
-//
-//				JSONObject skuObj = new JSONObject();
-//				String[] valueArray = values.split(" ");
-//				JSONObject skuKeyObj = new JSONObject();
-//				for(int i=0;i<skuKeyList.size();i++){
-//					skuKeyObj.put(skuKeyList.get(i), valueArray[i]);
-//				}
-//				skuObj.put("key", skuKeyObj);
-//				skuObj.put("skuName", values);
-//				System.out.println(skuObj.toString());
-//				skuList.add(skuObj);
-//			}
-//			jsonProduct.put("skuList", skuList);
-			
-//		}
 	}
-//	/**
-//	  * 添加组合商品资料
-//	  * @param jsonProduct
-//	  */
-//	public void addCatalogProductIsBundle(JSONObject jsonProduct,JsonConfig config) {
-//		if(jsonProduct.getInt("isBundle")==1){
-//			List<CatalogProductBundledLink> catalogProductBundledLinks  = catalogProductBundledLinkMapper.findCatalogProductBundledLinkList(jsonProduct.getInt("id"));
-//			JSONArray jsonArr = new JSONArray();
-//			for(CatalogProductBundledLink catalogProductBundledLink:catalogProductBundledLinks){
-//				CatalogProductEntity childCatalogProduct = catalogProductEntityMapper.findCatalogProductEntity(catalogProductBundledLink.getChildProductId());
-//				if(childCatalogProduct!=null){
-//					CatalogProductEntityDiscount cEntityDiscount = catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(childCatalogProduct.getId());
-//					JSONObject cProduct = JSONObject.fromObject(childCatalogProduct, config); //商品
-//					JSONObject cProductDiscount = JSONObject.fromObject(cEntityDiscount, config);//商品折扣属性
-//					cProduct.put("productDiscount", cProductDiscount);//商品 添加商品折扣属性
-//					List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(childCatalogProduct.getId());
-//					JSONArray jsonArrSpec = new JSONArray();
-//					for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
-//						List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId());
-//						JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
-//						JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
-//						jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
-//						jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
-//					}
-//					cProduct.put("catalogProductSpecList", jsonArrSpec); //商品 添加商品规格组
-//				}
-//				jsonProduct.put("bundleProductList", jsonArr);//组合商品
-//			}
-//		} 
-//	}
 	
 	/**
 	 * 添加捆绑销售资料
