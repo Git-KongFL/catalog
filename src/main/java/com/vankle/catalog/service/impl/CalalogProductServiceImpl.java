@@ -107,8 +107,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int storeId = paramObj.getInt("storeId");
 		 
-		logger.info("VANKLE_REDIS_CATALOG_PRODUCT:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId);
-		String resultStr = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId);
+		logger.info("REDIS_CATALOG_PRODUCT_ID:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId);
+		String resultStr = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId);
 		logger.info(resultStr);
 		if(resultStr!=null){
 			productId = Integer.parseInt(resultStr);
@@ -120,7 +120,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				 return resultObj.toString();
 			}else{
 				productId = catalogProductEntity.getId();
-				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId,productId+"");
+				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId,productId+"");
 			}
 		}
 		paramObj.put("productId", productId);
