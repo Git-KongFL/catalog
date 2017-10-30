@@ -107,8 +107,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int storeId = paramObj.getInt("storeId");
 		 
+		logger.info("VANKLE_REDIS_CATALOG_PRODUCT:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId);
 		String resultStr = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+storeId+productId);
-		
 		logger.info(resultStr);
 		if(resultStr!=null){
 			productId = Integer.parseInt(resultStr);
@@ -124,6 +124,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			}
 		}
 		paramObj.put("productId", productId);
+		logger.info("itemId:"+paramObj.toString());
 		return this.getCatalogProductInfoByParamJson(paramObj.toString());
 		
 	}
@@ -145,7 +146,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		Object requestType = paramObj.get("requestType");
 		resultObj.put("requestType", requestType);
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId);
-		
+
+		logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}else{
@@ -357,6 +359,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @param JSONObject
 	 */
 	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId) {
+		logger.info("addCatalogProductGroupSell:"+jsonProduct.toString());
 		if(jsonProduct.getInt("type")==1){
 			return;
 		}
