@@ -144,9 +144,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int languageId = paramObj.getInt("languageId");
 		int currencyId = paramObj.getInt("currencyId");
 		Object requestType = paramObj.get("requestType");
+		
 		resultObj.put("requestType", requestType);
+		
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId);
-
 		logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
@@ -186,12 +187,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
-		logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-		logger.info(resultStr);
-		if(resultStr!=null){
-			return resultStr;
+		
+		if(resultObj.get("requestType")==null){
+			
+			logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
+			String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
+			logger.info(resultStr);
+			if(resultStr!=null){
+				return resultStr;
+			} 
+			
 		}
+		
 		//查看是否存在 English
 		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
 		logger.info(resultStrEn);
