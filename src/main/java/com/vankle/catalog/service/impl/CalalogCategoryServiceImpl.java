@@ -212,7 +212,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		//categoryId
 		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
 		dataObj.put("catalogCategoryEntity", catalogCategoryEntity);
-		dataObj.put("sortBar", catalogCategoryEntity.getOrderBy());
+		dataObj.put("sortBar", JSONArray.fromObject(catalogCategoryEntity.getOrderBy()) );
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
