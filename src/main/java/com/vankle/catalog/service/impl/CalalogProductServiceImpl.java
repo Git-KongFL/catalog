@@ -188,26 +188,24 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
 		
-		if(resultObj.get("requestType")==null){
-			
-			logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-			String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-			logger.info(resultStr);
-			if(resultStr!=null){
-				return resultStr;
-			} 
-			
-			//查看是否存在 English
-			String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
-			logger.info(resultStrEn);
-			if(resultStrEn!=null){
-				String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
-				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
-				return resultStrLanguage;
-			} 
-			
-		}
 		
+			
+		logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
+		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
+		logger.info(resultStr);
+		if(resultStr!=null){
+			return resultStr;
+		} 
+		
+		//查看是否存在 English
+		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
+		logger.info(resultStrEn);
+		if(resultStrEn!=null){
+			String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
+			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			return resultStrLanguage;
+		} 
+			 
 		
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
@@ -245,14 +243,20 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		resultObj.put("data", jsonProduct);
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
+		if(resultObj.get("requestType")==null){
+			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
+		}
+		
 		if(languageId == 1){
 			return resultObj.toString();  
 		}else{
 			String resultStrLanguage = this.getLanguageByJosnProduct(resultObj.toString(), productId, languageId);
-			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			if(resultObj.get("requestType")==null){
+				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+			}
 			return resultStrLanguage;
 		}
+		
 	}
 
 	/**
