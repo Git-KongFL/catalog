@@ -186,7 +186,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
-		
+		logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
 		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
 		logger.info(resultStr);
 		if(resultStr!=null){
