@@ -197,16 +197,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				return resultStr;
 			} 
 			
+			//查看是否存在 English
+			String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
+			logger.info(resultStrEn);
+			if(resultStrEn!=null){
+				String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
+				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
+				return resultStrLanguage;
+			} 
+			
 		}
 		
-		//查看是否存在 English
-		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
-		logger.info(resultStrEn);
-		if(resultStrEn!=null){
-			String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
-			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
-			return resultStrLanguage;
-		} 
+		
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
