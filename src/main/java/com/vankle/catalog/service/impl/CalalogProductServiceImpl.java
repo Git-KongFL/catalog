@@ -205,8 +205,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
 			return resultStrLanguage;
 		} 
-			 
-		
+			  
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
