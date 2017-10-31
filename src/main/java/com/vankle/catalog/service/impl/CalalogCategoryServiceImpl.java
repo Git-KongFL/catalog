@@ -185,34 +185,34 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		
 		//
-		JSONArray sortBar  = new JSONArray();
-		JSONObject nameObj = new JSONObject();
-		nameObj.put("key", "Name");
-		if(languageId==1)
-			nameObj.put("value", "Name");
-		else
-			nameObj.put("value", "名称");
-		sortBar.add(nameObj);
-		JSONObject priceObj = new JSONObject();
-		priceObj.put("key", "Price");
-		if(languageId==1)
-			priceObj.put("value", "Price");
-		else
-			priceObj.put("value", "价格");
-		sortBar.add(priceObj);
-		JSONObject newObj = new JSONObject();
-		newObj.put("key", "New");
-		if(languageId==1)
-			newObj.put("value", "New");
-		else
-			newObj.put("value", "最新");
-		sortBar.add(newObj);
-		dataObj.put("sortBar", sortBar);
+//		JSONArray sortBar  = new JSONArray();
+//		JSONObject nameObj = new JSONObject();
+//		nameObj.put("key", "Name");
+//		if(languageId==1)
+//			nameObj.put("value", "Name");
+//		else
+//			nameObj.put("value", "名称");
+//		sortBar.add(nameObj);
+//		JSONObject priceObj = new JSONObject();
+//		priceObj.put("key", "Price");
+//		if(languageId==1)
+//			priceObj.put("value", "Price");
+//		else
+//			priceObj.put("value", "价格");
+//		sortBar.add(priceObj);
+//		JSONObject newObj = new JSONObject();
+//		newObj.put("key", "New");
+//		if(languageId==1)
+//			newObj.put("value", "New");
+//		else
+//			newObj.put("value", "最新");
+//		sortBar.add(newObj);
+//		dataObj.put("sortBar", sortBar);
 		
 		//categoryId
 		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
 		dataObj.put("catalogCategoryEntity", catalogCategoryEntity);
-		
+		dataObj.put("sortBar", catalogCategoryEntity.getOrderBy());
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
