@@ -3,20 +3,15 @@ package com.vankle.catalog.service.impl;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.JSONArray;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.dubbo.config.annotation.Service;
- 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vankle.code.annotation.LanguageAnnotation;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.annotation.Service;
+import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
 import com.vankle.catalog.dao.CatalogProductBundledLinkMapper;
 import com.vankle.catalog.dao.CatalogProductEntityDiscountMapper;
 import com.vankle.catalog.dao.CatalogProductEntityImageMapper;
@@ -29,30 +24,31 @@ import com.vankle.catalog.dao.CatalogProductRecommendedMapper;
 import com.vankle.catalog.dao.CatalogProductSkuMapper;
 import com.vankle.catalog.dao.CatalogProductSpecMapper;
 import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
-import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
 import com.vankle.catalog.entity.CatalogProductAttributeValue;
-import com.vankle.catalog.entity.CatalogProductBundledLink;
 import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductEntityDiscount;
 import com.vankle.catalog.entity.CatalogProductEntityImage;
 import com.vankle.catalog.entity.CatalogProductEntityLanguage;
-import com.vankle.catalog.entity.CatalogProductRecommended;
 import com.vankle.catalog.entity.CatalogProductEntityVideo;
 import com.vankle.catalog.entity.CatalogProductGroupSell;
 import com.vankle.catalog.entity.CatalogProductGroupSellLinkProduct;
+import com.vankle.catalog.entity.CatalogProductRecommended;
 import com.vankle.catalog.entity.CatalogProductSku;
 import com.vankle.catalog.entity.CatalogProductSpec;
 import com.vankle.catalog.entity.CatalogProductSpecValue;
 import com.vankle.catalog.service.CalalogProductService;
+import com.vankle.code.annotation.LanguageAnnotation;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
-import com.vankle.code.util.ListUtils;
-import com.vankle.code.util.VankleUtils; 
+import com.vankle.code.util.VankleUtils;
 import com.vankle.system.service.SystemCurrencyService;
 import com.vankle.system.service.SystemService;
-import com.vankle.code.dao.RedisDao;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 
 @Service(group="calalogProductService", version="1.0")
@@ -91,9 +87,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	@Reference(group = "systemService", version = "1.0")
 	private SystemService systemService;
 	
-	
-	@Autowired
-	RedisDao redisDao;
+	 
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
 	
 	
@@ -107,22 +101,16 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int storeId = paramObj.getInt("storeId");
 		 
-		logger.info("REDIS_CATALOG_PRODUCT_ID:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId);
-		String resultStr = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId);
-		logger.info(resultStr);
-		if(resultStr!=null){
-			productId = Integer.parseInt(resultStr);
+		 
+		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
+		//判断商品是否存在
+		if(catalogProductEntity==null){
+			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
+			 return resultObj.toString();
 		}else{
-			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
-			//判断商品是否存在
-			if(catalogProductEntity==null){
-				 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
-				 return resultObj.toString();
-			}else{
-				productId = catalogProductEntity.getId();
-				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT_ID+storeId+productId,productId+"");
-			}
+			productId = catalogProductEntity.getId();
 		}
+		 
 		paramObj.put("productId", productId);
 		logger.info("itemId:"+paramObj.toString());
 		return this.getCatalogProductInfoByParamJson(paramObj.toString());
@@ -187,31 +175,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
-		
-		
-			
-		logger.info("----------------------:"+RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId);
-		logger.info(resultStr);
-		if(resultStr!=null){
-			return resultStr;
-		} 
-		
-		//查看是否存在 English
-		String resultStrEn = redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1);
-		logger.info(resultStrEn);
-		if(resultStrEn!=null){
-			String resultStrLanguage = this.getLanguageByJosnProduct(resultStrEn, productId, languageId);
-			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
-			return resultStrLanguage;
-		} 
-			  
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
 		if(catalogProductEntity==null){
 			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
-			 redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultObj.toString());
 			 return resultObj.toString();
 		}
 
@@ -220,7 +188,6 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
 		jsonProduct.put("requestType", resultObj.get("requestType"));
 		
-		//
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
 		
@@ -242,17 +209,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		resultObj.put("data", jsonProduct);
-		if(resultObj.get("requestType")==null){
-			redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+1,resultObj.toString());
-		}
+		 
 		
 		if(languageId == 1){
 			return resultObj.toString();  
 		}else{
 			String resultStrLanguage = this.getLanguageByJosnProduct(resultObj.toString(), productId, languageId);
-			if(resultObj.get("requestType")==null){
-				redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_PRODUCT+productId+languageId,resultStrLanguage);
-			}
 			return resultStrLanguage;
 		}
 		

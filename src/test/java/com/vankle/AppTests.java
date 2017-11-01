@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.vankle.code.dao.RedisDao;
 import com.vankle.system.service.SystemCurrencyService;
 
 import net.sf.json.JSONObject;
@@ -44,8 +43,6 @@ public class AppTests {
 	public static Logger logger= LoggerFactory.getLogger(AppTests.class);
 	@Autowired
 	CalalogProductService calalogProductService;
-	@Autowired
-	RedisDao redisDao;
 	@Autowired
 	CatalogProductEntityMapper catalogProductEntityMapper;
 	@Autowired

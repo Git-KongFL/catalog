@@ -18,7 +18,6 @@ import com.vankle.catalog.entity.CatalogCategoryProduct;
 import com.vankle.catalog.service.CalalogCategoryService;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
-import com.vankle.code.dao.RedisDao;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
@@ -56,8 +55,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	@Reference(group = "systemService", version = "1.0")
 	private SystemService systemService;
 	
-	@Autowired
-	RedisDao redisDao;
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
 	
 	/**
@@ -78,12 +75,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int storeId = paramObj.getInt("storeId");
 		int languageId = paramObj.getInt("languageId");
 		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId+languageId);
-		logger.info("----------------------:"+resultStr);
-		if(resultStr!=null){
-			return resultStr;
-		}
-		
 		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId,languageId);
 		JSONObject categoryObj = new JSONObject();
 		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
@@ -91,9 +82,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			resultObj.put("data", new JSONArray());
 		else
 			resultObj.put("data",categoryObj.get("childs"));
-		
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY+ storeId , resultObj.toString());
-		 
 		return resultObj.toString();
 	}
 	
@@ -149,13 +137,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int currencyId = paramObj.getInt("currencyId");
 		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
-		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageSize+offset);
-		
-		logger.info(resultStr);
-		if(resultStr!=null){
-			return this.getCategoryProductByCurrencyId(resultStr, currencyId);
-		} 
 		String orderBy = "";
 		if(paramObj.get("orderBy")!=null){
 			
@@ -234,8 +215,6 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		
 		resultObj.put("data",dataObj);
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ categoryId+languageId+pageIndex+offset, resultObj.toString());
-		
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	}
 	

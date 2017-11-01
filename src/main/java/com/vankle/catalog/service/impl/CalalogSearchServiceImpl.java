@@ -19,7 +19,6 @@ import com.vankle.catalog.service.CalalogCategoryService;
 import com.vankle.catalog.service.CalalogSearchService;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
-import com.vankle.code.dao.RedisDao;
 import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
@@ -55,9 +54,6 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 	
 	@Reference(group = "systemService", version = "1.0")
 	private SystemService systemService;
-	
-	@Autowired
-	RedisDao redisDao;
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class);
 	
 	/**
@@ -80,13 +76,8 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		int currencyId = paramObj.getInt("currencyId");
 		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
-		
-		String resultStr =  redisDao.getValue(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ q+languageId+pageSize+offset);
-		
-		logger.info(resultStr);
-		if(resultStr!=null){
-			return this.getCategoryProductByCurrencyId(resultStr, currencyId);
-		} 
+		 
+		  
 		String orderBy = "";
 		if(paramObj.get("orderBy")!=null){
 			
@@ -161,8 +152,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		resultObj.put("data",dataObj);
-		redisDao.setKey(RedisConstants.VANKLE_REDIS_CATALOG_CATEGORY_PRODUCT_LIST+ q+languageId+pageIndex+offset, resultObj.toString());
-		
+		 
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	} 
 	 
