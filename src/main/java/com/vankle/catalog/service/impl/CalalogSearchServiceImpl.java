@@ -52,7 +52,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 	SystemCurrencyService systemCurrencyService;
 	
 	
-	@Reference(group = "systemService", version = "1.0")
+	@Reference(group = "systemService", version = "1.0", timeout = 60000)
 	private SystemService systemService;
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class);
 	
