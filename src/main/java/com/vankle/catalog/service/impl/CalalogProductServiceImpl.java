@@ -84,7 +84,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	SystemCurrencyService systemCurrencyService;
 	
 	
-	@Reference(group = "systemService", version = "1.0", timeout = 60000)
+	@Reference(group = "systemService", version = "1.0", timeout = 6000)
 	private SystemService systemService;
 	
 	 
