@@ -82,6 +82,8 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			resultObj.put("data", new JSONArray());
 		else
 			resultObj.put("data",categoryObj.get("childs"));
+		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityByIdRoot(storeId,languageId);
+		resultObj.put("catalogCategoryEntity", catalogCategoryEntity);
 		return resultObj.toString();
 	}
 	
