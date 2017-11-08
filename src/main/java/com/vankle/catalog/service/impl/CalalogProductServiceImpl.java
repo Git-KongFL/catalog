@@ -353,6 +353,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				JSONArray jsonArr = new JSONArray();
 				for(CatalogProductGroupSellLinkProduct cSellLinkProduct:groupLinkProductList){
 					CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(cSellLinkProduct.getProductId());
+					if(catalogProductEntity==null){
+						continue;
+					}
 					if(catalogProductEntity.getType()==1||catalogProductEntity.getType()==3){
 						JSONObject paramObj = new JSONObject();
 						paramObj.put("productId", cSellLinkProduct.getProductId());
