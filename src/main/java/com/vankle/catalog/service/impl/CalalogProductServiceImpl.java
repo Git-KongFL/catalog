@@ -353,18 +353,17 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				JSONArray jsonArr = new JSONArray();
 				for(CatalogProductGroupSellLinkProduct cSellLinkProduct:groupLinkProductList){
 					CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(cSellLinkProduct.getProductId());
-					if(catalogProductEntity==null){
-						continue;
-					}
-					if(catalogProductEntity.getType()==1||catalogProductEntity.getType()==3){
-						JSONObject paramObj = new JSONObject();
-						paramObj.put("productId", cSellLinkProduct.getProductId());
-						paramObj.put("languageId", languageId);
-						paramObj.put("currencyId", currencyId);
-						paramObj.put("requestType", 1);
-						String resout = this.getCatalogProductInfoByParamJson(paramObj.toString());
-						JSONObject resoutJson = JSONObject.fromObject(resout);
-						jsonArr.add(resoutJson.get("data"));
+					if(catalogProductEntity!=null){
+						if(catalogProductEntity.getType()==1||catalogProductEntity.getType()==3){
+							JSONObject paramObj = new JSONObject();
+							paramObj.put("productId", cSellLinkProduct.getProductId());
+							paramObj.put("languageId", languageId);
+							paramObj.put("currencyId", currencyId);
+							paramObj.put("requestType", 1);
+							String resout = this.getCatalogProductInfoByParamJson(paramObj.toString());
+							JSONObject resoutJson = JSONObject.fromObject(resout);
+							jsonArr.add(resoutJson.get("data"));
+						}
 					}
 				}
 				jsonCatalogProductGroupSell.put("list", jsonArr);
