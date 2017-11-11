@@ -113,6 +113,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		 
 		paramObj.put("productId", productId);
 		logger.info("itemId:"+paramObj.toString());
+		 
 		return this.getCatalogProductInfoByParamJson(paramObj.toString());
 		
 	}
@@ -131,11 +132,23 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
 		int currencyId = paramObj.getInt("currencyId");
+		String countryId = "US";
+		try{
+			countryId = paramObj.getString("prefixion");
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			// TODO: handle exception
+		}
+		if(countryId.split("-").length==2){
+			countryId = countryId.split("-")[1];
+		}
+		
 		Object requestType = paramObj.get("requestType");
 		
 		resultObj.put("requestType", requestType);
 		
-		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId);
+		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId,countryId);
+		System.out.println(resultStr);
 		logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
@@ -174,7 +187,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 	}
 	
-	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId){
+	public String getProductLanguageInfo(JSONObject resultObj, int productId,int languageId,int currencyId,String countryId){
 		 
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
@@ -194,13 +207,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加折扣信息
 		this.addCatalogProductDiscount(jsonProduct,jsonConfig);
 		//添加商品规格
-		this.addCatalogProductSpec(jsonProduct,jsonConfig);
+		this.addCatalogProductSpec(jsonProduct,jsonConfig,  countryId);
 		//添加商品图片
 		this.addCatalogProductImage(jsonProduct,jsonConfig);
 		//添加商品视频
 		this.addCatalogProductVideo(jsonProduct,jsonConfig);
 		//添加捆绑销售资料
-		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId);
+		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		//添加商品推荐商品
 		this.addCatalogProductRecommended(jsonProduct,jsonConfig);
 		
@@ -263,8 +276,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @param jsonProduct
 	 * @param config
 	 */
-	public void addCatalogProductSku(JSONObject jsonProduct,JsonConfig config) {
-		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"));
+	public void addCatalogProductSku(JSONObject jsonProduct,JsonConfig config,String countryId) {
+		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
 		JSONArray jsonCatalogProductSkus = JSONArray.fromObject(catalogProductSkus);
 		jsonProduct.put("catalogProductSkus", jsonCatalogProductSkus);
 	}
@@ -301,14 +314,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * 添加商品规格
 	  * @param jsonProduct
 	  */
-	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config) {
+	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config,String countryId) {
 
 		List<List<String>> nameList = new ArrayList<List<String>>();
 			List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
 			JSONArray jsonArrSpec = new JSONArray();
 			List<String> skuKeyList =  new ArrayList<String>();
 			for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
-				List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId());
+				List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId(),countryId);
 				JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
 				JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
 				jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
@@ -323,7 +336,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				skuKeyList.add(catalogProductSpec.getName());
 			}
 			jsonProduct.put("catalogProductSpecList", jsonArrSpec);
-			List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"));
+			List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
 			jsonProduct.put("catalogProductSkuList", catalogProductSkus);
 			
 	}
@@ -332,7 +345,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * 添加捆绑销售资料
 	 * @param JSONObject
 	 */
-	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId) {
+	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId,String countryId ) {
 		logger.info("addCatalogProductGroupSell:"+jsonProduct.toString());
 		if(jsonProduct.getInt("type")==1){
 			return;
@@ -359,6 +372,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 							paramObj.put("productId", cSellLinkProduct.getProductId());
 							paramObj.put("languageId", languageId);
 							paramObj.put("currencyId", currencyId);
+							paramObj.put("prefixion", countryId);
 							paramObj.put("requestType", 1);
 							String resout = this.getCatalogProductInfoByParamJson(paramObj.toString());
 							JSONObject resoutJson = JSONObject.fromObject(resout);
