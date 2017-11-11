@@ -144,7 +144,7 @@
         <appender-ref ref="FILEWARN" />
         <appender-ref ref="FILEINFO" />
 
-        <!-- 生产环境将请stdou去掉 
-        <appender-ref ref="STDOUT" />-->
+        <!-- 生产环境将请stdou去掉
+        <appender-ref ref="STDOUT" /> -->
     </root>
 </configuration>
