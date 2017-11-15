@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
+import com.vankle.catalog.dao.CatalogCategoryProductMapper;
 import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
 import com.vankle.catalog.dao.CatalogProductBundledLinkMapper;
 import com.vankle.catalog.dao.CatalogProductEntityDiscountMapper;
@@ -24,6 +26,8 @@ import com.vankle.catalog.dao.CatalogProductRecommendedMapper;
 import com.vankle.catalog.dao.CatalogProductSkuMapper;
 import com.vankle.catalog.dao.CatalogProductSpecMapper;
 import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
+import com.vankle.catalog.entity.CatalogCategoryEntity;
+import com.vankle.catalog.entity.CatalogCategoryProduct;
 import com.vankle.catalog.entity.CatalogProductAttributeValue;
 import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductEntityDiscount;
@@ -82,6 +86,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogProductRecommendedMapper catalogProductRecommendedMapper;
 	@Autowired
 	SystemCurrencyService systemCurrencyService;
+	@Autowired
+	CatalogCategoryProductMapper catalogCategoryProductMapper;
+	@Autowired
+	CatalogCategoryEntityMapper catalogCategoryEntityMapper;
 	
 	
 	@Reference(group = "systemService", version = "1.0", timeout = 6000)
@@ -196,6 +204,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			 return resultObj.toString();
 		}
 
+		
+		
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
@@ -204,6 +214,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
 		
+		//添加商品分类
+		this.addCatalogProductCategory(jsonProduct,jsonConfig,languageId);
 		//添加折扣信息
 		this.addCatalogProductDiscount(jsonProduct,jsonConfig);
 		//添加商品规格
@@ -233,6 +245,42 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 	}
 
+
+	/**
+	  * 添加商品折扣
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductCategory(JSONObject jsonProduct,JsonConfig config,int languageId) {
+		
+		List<CatalogCategoryProduct> catalogProductList =
+				catalogCategoryProductMapper.findCatalogCategoryProductListByProduct(jsonProduct.getInt("id"));
+		//JSONArray catalogArray = new JSONArray();
+		jsonProduct.put("category", "");
+		String category = "";
+		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){
+			CatalogCategoryEntity categoryEntity =
+					catalogCategoryEntityMapper.findCatalogCategoryEntityById(catalogCategoryProduct.getCategoryId(), languageId);
+			if(categoryEntity!=null){
+				if(categoryEntity.getLevel()==2){
+					category = categoryEntity.getName();
+				}else if(categoryEntity.getLevel()==3){
+					CatalogCategoryEntity categoryEntity2 =
+							catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryEntity.getParentCategoryId(), languageId);
+					if(categoryEntity2!=null)
+						category = categoryEntity2.getName() + "/" + categoryEntity.getName();
+					else
+						category = categoryEntity.getName();
+				}
+
+				jsonProduct.put("category", category);
+			}
+			break;
+		}
+	}
+	 
+	
+	
+	
 	/**
 	  * 添加商品折扣
 	  * @param jsonProduct
