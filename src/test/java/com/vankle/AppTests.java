@@ -59,30 +59,32 @@ public class AppTests {
 	CalalogVoteService calalogVoteService;
 	
 	
-	
-	@Test
-	public void testCategoryProduct(){ 
-		String paramJson = "{'categoryId':'10','pageIndex':1,'orderBy':{'dir':'desc','order':'New'},'storeId':1,'languageId':1,'currencyId':1}" ;
-		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	
+//	@Test
+//	public void testCategoryProduct(){ 
+//		String paramJson = "{'categoryId':'10','pageIndex':1,'orderBy':{'dir':'desc','order':'New'},'storeId':1,'languageId':1,'currencyId':1}" ;
+//		String resout = calalogCategoryService.getCategoryProductInfoByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 	
 //	@Test
 //	public void testCategoryProduct(){ 
-//		String paramJson = "{'productId':'100111','storeId':1,'languageId':1,'currencyId':1}" ;
+//		String paramJson = "{'productId':'10013','storeId':1,'languageId':1,'currencyId':1}" ;
 //		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
 //		System.out.println(resout);
 //		logger.info(resout);
 //	}
-//	
-//	@Test
-//	public void testCategoryProduct(){ 
-//		String paramJson = "{'productId':'100111','storeId':1,'languageId':1,'currencyId':1}" ;
-//		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+	
+	
+	
+	@Test
+	public void testCategoryProduct(){ 
+		String paramJson = "{'productId':'10013','storeId':1,'languageId':1,'currencyId':1}" ;
+		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 
 	
 //	@Test
