@@ -1,6 +1,8 @@
 package com.vankle.catalog.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -139,16 +141,44 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int currencyId = paramObj.getInt("currencyId");
 		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);
+		
+		List<CatalogCategoryProduct> adpProductList = new ArrayList<CatalogCategoryProduct>();
+		Map<String,String> spuMap = new HashMap<String,String>();
+		String adp = "";
+		if(paramObj.get("adp")!=null){
+			adp = paramObj.get("adp")+"";
+			String[] spus = adp.split(",");
+			for(String spu:spus){
+				spuMap.put(spu, spu);
+				List<CatalogCategoryProduct> spuProductList = catalogCategoryProductMapper.
+						findCatalogCategoryProductListBySpu(spu, storeId, languageId);
+				for(CatalogCategoryProduct catalogCategoryProduct:spuProductList){
+					adpProductList.add(catalogCategoryProduct);
+				}
+			}
+		}
+		
+		String countryId = "";
+		if(paramObj.get("countryId")!=null){
+			try{
+				countryId = paramObj.getString("prefixion");
+				if(countryId.split("-").length==2){
+					countryId = countryId.split("-")[1];
+				}
+			}catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
+		
 		String orderBy = "";
 		if(paramObj.get("orderBy")!=null){
-			
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
-			if("name".equalsIgnoreCase(orderObject.getString("order"))){
-				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.name  desc ";
-				}else{
-					orderBy = " order by  m.name  asc ";
-				}
+			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
+				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
+					orderBy = " order by  m.score  desc ";
+//				}else{
+//					orderBy = " order by  m.name  asc ";
+//				}
 			}else if("price".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
 					orderBy = " order by  m.discountAmount  desc ";
@@ -157,64 +187,69 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 				}
 			}else if("new".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.createTime  desc ";
+					orderBy = " order by  m.sortDate  desc ";
 				}else{
-					orderBy = " order by  m.createTime  asc ";
+					orderBy = " order by  m.sortDate  asc ";
 				}
 			}
+			
+//			if("name".equalsIgnoreCase(orderObject.getString("order"))){
+//				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
+//					orderBy = " order by  m.name  desc ";
+//				}else{
+//					orderBy = " order by  m.name  asc ";
+//				}
+//			}else if("price".equalsIgnoreCase(orderObject.getString("order"))){
+//				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
+//					orderBy = " order by  m.discountAmount  desc ";
+//				}else{
+//					orderBy = " order by  m.discountAmount   asc ";
+//				}
+//			}else if("new".equalsIgnoreCase(orderObject.getString("order"))){
+//				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
+//					orderBy = " order by  m.createTime  desc ";
+//				}else{
+//					orderBy = " order by  m.createTime  asc ";
+//				}
+//			}
 		}
+		
+		
 		JSONObject dataObj = new JSONObject();
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		
-		//
-//		JSONArray sortBar  = new JSONArray();
-//		JSONObject nameObj = new JSONObject();
-//		nameObj.put("key", "Name");
-//		if(languageId==1)
-//			nameObj.put("value", "Name");
-//		else
-//			nameObj.put("value", "名称");
-//		sortBar.add(nameObj);
-//		JSONObject priceObj = new JSONObject();
-//		priceObj.put("key", "Price");
-//		if(languageId==1)
-//			priceObj.put("value", "Price");
-//		else
-//			priceObj.put("value", "价格");
-//		sortBar.add(priceObj);
-//		JSONObject newObj = new JSONObject();
-//		newObj.put("key", "New");
-//		if(languageId==1)
-//			newObj.put("value", "New");
-//		else
-//			newObj.put("value", "最新");
-//		sortBar.add(newObj);
-//		dataObj.put("sortBar", sortBar);
-		
+		 
 		//categoryId
 		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId, languageId);
+		CatalogCategoryEntity catalogCategoryEntityBar = catalogCategoryEntityMapper.findCatalogCategoryEntityByLevel(storeId, languageId);
 		dataObj.put("catalogCategoryEntity", catalogCategoryEntity);
-		dataObj.put("sortBar", JSONArray.fromObject(catalogCategoryEntity.getOrderBy()) );
+		dataObj.put("sortBar", JSONArray.fromObject(catalogCategoryEntityBar.getOrderBy()) );
+	
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		
 				
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(storeId,categoryId);
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
-				findCatalogCategoryProductList(storeId,categoryId,languageId,pageSize,offset,orderBy);
+				findCatalogCategoryProductList(storeId,categoryId,languageId,countryId,pageSize,offset,orderBy);
+		
+		for(CatalogCategoryProduct catalogCategoryProduct:catalogCategoryProducts){
+			if(spuMap.get(catalogCategoryProduct.getSpu()+"")==null){
+				adpProductList.add(catalogCategoryProduct);
+			}
+		}
 		
 		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
 		
-		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
+		dataObj.put("dataList", JSONArray.fromObject(  adpProductList,jsonConfig));
 		dataObj.put("prePageIndex", pagerUtil.previous());
 		dataObj.put("curPageIndex", pageIndex);
 		dataObj.put("nextPageIndex", pagerUtil.next()); 
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		
-		
+
 		
 		resultObj.put("data",dataObj);
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
