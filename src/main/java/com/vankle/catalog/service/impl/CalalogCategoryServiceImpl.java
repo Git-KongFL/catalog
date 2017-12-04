@@ -145,7 +145,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		List<CatalogCategoryProduct> adpProductList = new ArrayList<CatalogCategoryProduct>();
 		Map<String,String> spuMap = new HashMap<String,String>();
 		String adp = "";
-		if(paramObj.get("adp")!=null){
+		if(paramObj.get("adp")!=null&&!paramObj.getString("adp").equals("null")){
 			adp = paramObj.get("adp")+"";
 			String[] spus = adp.split(",");
 			for(String spu:spus){
@@ -159,7 +159,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		}
 		
 		String countryId = "";
-		if(paramObj.get("countryId")!=null){
+		if(paramObj.get("prefixion")!=null){
 			try{
 				countryId = paramObj.getString("prefixion");
 				if(countryId.split("-").length==2){
@@ -170,7 +170,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			}
 		}
 		
-		String orderBy = "";
+		String orderBy = "order by  m.score  desc ";
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
