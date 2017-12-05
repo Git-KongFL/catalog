@@ -162,8 +162,6 @@
         <appender-ref ref="FILEERROR" />
         <appender-ref ref="FILEWARN" />
         <appender-ref ref="FILEINFO" />
-
-		<appender-ref ref="EMAIL"/> 
         <!-- 生产环境将请stdou去掉
         <appender-ref ref="STDOUT" /> -->
     </root>
