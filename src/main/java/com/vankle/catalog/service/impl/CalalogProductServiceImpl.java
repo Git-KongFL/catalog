@@ -141,17 +141,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
 		int currencyId = paramObj.getInt("currencyId");
-		String countryId = "US";
+		String countryId = "us";
 		try{
-			countryId = paramObj.getString("prefixion");
+			if(paramObj.getString("prefixion")!=null){
+				countryId = paramObj.getString("prefixion");
+				if(countryId.split("-").length==2){
+					countryId = countryId.split("-")[1];
+				}
+			}
 		}catch (Exception e) {
 			logger.error(e.getMessage());
 			// TODO: handle exception
-		}
-		if(countryId.split("-").length==2){
-			countryId = countryId.split("-")[1];
-		}
-		
+		} 
 		Object requestType = paramObj.get("requestType");
 		
 		resultObj.put("requestType", requestType);
