@@ -54,7 +54,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	SystemCurrencyService systemCurrencyService;
 	
 	
-	@Reference(group = "systemService", version = "1.0", timeout = 6000)
+	@Reference(group = "systemService", version = "1.0", timeout = 60000)
 	private SystemService systemService;
 	
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 

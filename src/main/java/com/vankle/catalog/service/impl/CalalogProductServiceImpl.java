@@ -92,7 +92,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogCategoryEntityMapper catalogCategoryEntityMapper;
 	
 	
-	@Reference(group = "systemService", version = "1.0", timeout = 6000)
+	@Reference(group = "systemService", version = "1.0", timeout = 60000)
 	private SystemService systemService;
 	
 	 
