@@ -150,7 +150,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				}
 			}
 		}catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.info(e.getMessage());
 			// TODO: handle exception
 		} 
 		Object requestType = paramObj.get("requestType");
