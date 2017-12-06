@@ -141,11 +141,19 @@
 	<!-- 将日志写入数据库 -->
     <appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">  
     	<!-- 此日志文件只记录ERROR级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
+         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">    
+            <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">  
+                <expression>  
+                    <!-- & encoded as &amp; -->  
+                    if(level > WARN &amp;&amp; null != throwable) {  
+                        return true;  
+                    }  
+                    return false;  
+                </expression>    
+            </evaluator>    
+            <onMatch>ACCEPT</onMatch>    
+            <onMismatch>DENY</onMismatch>      
+        </filter> 
         <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">  
             <dataSource class="org.apache.commons.dbcp.BasicDataSource">  
                 <driverClassName>com.mysql.jdbc.Driver</driverClassName>  
