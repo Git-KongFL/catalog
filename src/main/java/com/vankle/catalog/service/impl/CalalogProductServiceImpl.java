@@ -143,7 +143,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		int currencyId = paramObj.getInt("currencyId");
 		String countryId = "us";
 		try{
-			if(paramObj.getString("prefixion")!=null){
+			if(paramObj.get("prefixion")!=null){
 				countryId = paramObj.getString("prefixion");
 				if(countryId.split("-").length==2){
 					countryId = countryId.split("-")[1];
