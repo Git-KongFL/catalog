@@ -365,29 +365,34 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config,String countryId) {
-
-		List<List<String>> nameList = new ArrayList<List<String>>();
-			List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
-			JSONArray jsonArrSpec = new JSONArray();
-			List<String> skuKeyList =  new ArrayList<String>();
-			for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
-				List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId(),countryId);
-				JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
-				JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
-				jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
-				jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
-
-				List<String> naList = new ArrayList<String>();
-
-				for(CatalogProductSpecValue specValueEntity: catalogProductSpecValues){
-					naList.add(specValueEntity.getName());
+			
+		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
+		List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
+		JSONArray jsonArrSpec = new JSONArray(); 
+		for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
+			List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId(),countryId);
+			JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
+			JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
+			for(int i=0;i<jsonArrCatalogProductSpecValue.size();i++){
+				JSONObject specVaue = jsonArrCatalogProductSpecValue.getJSONObject(i);
+				for(CatalogProductSku catalogProductSku:catalogProductSkus){
+					if(catalogProductSku.getSkuName().equals(specVaue.getString("name"))){
+						if(catalogProductSku.getDescription()!=null){
+							specVaue.put("description", catalogProductSku.getDescription());
+						}else{
+							specVaue.put("description", "");
+						}
+						specVaue.put("status", catalogProductSku.getStatus());
+						break;
+					}
 				}
-				nameList.add(naList);
-				skuKeyList.add(catalogProductSpec.getName());
+				
 			}
-			jsonProduct.put("catalogProductSpecList", jsonArrSpec);
-			List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
-			jsonProduct.put("catalogProductSkuList", catalogProductSkus);
+			jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
+			jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
+		}
+		jsonProduct.put("catalogProductSpecList", jsonArrSpec);
+		jsonProduct.put("catalogProductSkuList", catalogProductSkus);
 			
 	}
 	
