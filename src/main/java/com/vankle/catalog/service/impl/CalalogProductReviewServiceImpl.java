@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
+import com.vankle.catalog.dao.CatalogProductEntityMapper;
 import com.vankle.catalog.dao.CatalogProductReviewImageMapper;
 import com.vankle.catalog.dao.CatalogProductReviewMapper;
 import com.vankle.catalog.entity.CatalogCategoryProduct;
+import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductReview;
 import com.vankle.catalog.entity.CatalogProductReviewImage;
 import com.vankle.catalog.service.CalalogProductReviewService;
@@ -41,6 +43,8 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 	@Autowired
 	CatalogProductReviewMapper catalogProductReviewMapper;
 	@Autowired
+    private CatalogProductEntityMapper catalogProductEntityMapper;
+	@Autowired
 	CatalogProductReviewImageMapper catalogProductReviewImageMapper ;
 	
 	@Override
@@ -52,6 +56,15 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 			return resultObj.toString();
 		}   
 		int productId = paramObj.getInt("productId");
+		int storeId = paramObj.getInt("storeId");
+		
+		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
+		//判断商品是否存在
+		if(catalogProductEntity==null){
+		}else{
+			productId = catalogProductEntity.getId();
+		}
+
 		int pageIndex = paramObj.getInt("pageIndex"); 
 		int pageSize = 10;// VankleConstants.VANKLE_PAGE_SIZE;
 		int offset = pageSize*(pageIndex-1);

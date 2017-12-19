@@ -161,13 +161,13 @@ public class AppTests {
 	
 	
 	//http://123.57.206.102:8085/catalog/product/review
-//	@Test
-//	public void getCategoryProductReviewByParamJson(){ 
-//		String paramJson = "{productId:333,pageIndex:1}" ;
-//		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+	@Test
+	public void getCategoryProductReviewByParamJson(){ 
+		String paramJson = "{productId:333,pageIndex:1}" ;
+		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 
 
 	
