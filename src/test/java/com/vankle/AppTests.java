@@ -77,14 +77,14 @@ public class AppTests {
 //	}
 	
 	
-	
-	@Test
-	public void testCategoryProduct(){ 
-		String paramJson = "{'productId':'10231','prefixion':'zh-us','storeId':1,'languageId':1,'currencyId':1}" ;
-		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	
+//	@Test
+//	public void testCategoryProduct(){ 
+//		String paramJson = "{'productId':'10231','prefixion':'zh-us','storeId':1,'languageId':1,'currencyId':1}" ;
+//		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 
 	
 //	@Test
@@ -163,7 +163,7 @@ public class AppTests {
 	//http://123.57.206.102:8085/catalog/product/review
 	@Test
 	public void getCategoryProductReviewByParamJson(){ 
-		String paramJson = "{productId:333,pageIndex:1}" ;
+		String paramJson = "{productId:10267,pageIndex:1,'storeId':1}" ;
 		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
