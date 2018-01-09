@@ -132,6 +132,10 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		reviewGroup.put(1, 0.0);
 		
 		Double scoreTotal = 0.0;
+		
+		 
+		pMap.remove("score");
+		pMap.remove("resType");
 		List<Map> reviewGroupBy = catalogProductReviewMapper.listGroupByScore(pMap);
 		for(Map map: reviewGroupBy){
 			reviewGroup.put(Integer.parseInt(  map.get("score").toString()),Double.parseDouble(   map.get("total").toString()));
