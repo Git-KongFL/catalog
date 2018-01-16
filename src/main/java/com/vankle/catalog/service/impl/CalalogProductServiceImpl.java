@@ -313,7 +313,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	            if(fieldHasAnno){  
 	                //输出注解属性   
 	            	logger.info(field.getName());   
-	                productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
+	            	if(!"".equals(jsonProductLang.getString(field.getName()))){
+	            		productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
+	            	}
 	            }  
 	        }  
 		}
