@@ -369,6 +369,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	public void addCatalogProductSpec(JSONObject jsonProduct,JsonConfig config,String countryId) {
 			
 		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
+		
 		List<CatalogProductSpec> catalogProductSpecList = catalogProductSpecMapper.findCatalogProductSpecList(jsonProduct.getInt("id"));
 		JSONArray jsonArrSpec = new JSONArray(); 
 		for(CatalogProductSpec catalogProductSpec:catalogProductSpecList){
@@ -394,7 +395,16 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
 		}
 		jsonProduct.put("catalogProductSpecList", jsonArrSpec);
-		jsonProduct.put("catalogProductSkuList", catalogProductSkus);
+		
+		List<CatalogProductSku> catalogProductSkuList = new ArrayList<CatalogProductSku>();
+		
+		for(CatalogProductSku catalogProductSku:catalogProductSkus){
+			if(catalogProductSku.getStatus()==1){
+				catalogProductSkuList.add(catalogProductSku);
+			}
+		}
+		
+		jsonProduct.put("catalogProductSkuList", catalogProductSkuList);
 			
 	}
 	
