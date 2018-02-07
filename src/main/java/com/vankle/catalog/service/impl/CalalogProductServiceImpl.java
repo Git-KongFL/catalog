@@ -330,7 +330,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 */
 	public void addCatalogProductSku(JSONObject jsonProduct,JsonConfig config,String countryId) {
 		List<CatalogProductSku> catalogProductSkus = catalogProductSkuMapper.findCatalogProductSkuList(jsonProduct.getInt("id"),countryId);
-		JSONArray jsonCatalogProductSkus = JSONArray.fromObject(catalogProductSkus);
+		JSONArray jsonCatalogProductSkus = new JSONArray();
+		for(CatalogProductSku catalogProductSku:catalogProductSkus){
+			if(catalogProductSku.getStatus()==1)
+				jsonCatalogProductSkus.add(catalogProductSku);
+		}
+		//JSONArray jsonCatalogProductSkus = JSONArray.fromObject(catalogProductSkus);
 		jsonProduct.put("catalogProductSkus", jsonCatalogProductSkus);
 	}
 	
