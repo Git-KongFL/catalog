@@ -67,6 +67,15 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 
 		int pageIndex = paramObj.getInt("pageIndex"); 
 		int pageSize = 10;// VankleConstants.VANKLE_PAGE_SIZE;
+		
+		if(paramObj.get(pageSize)!=null){
+			try{
+				pageSize = paramObj.getInt("pageSize");
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
 		int offset = pageSize*(pageIndex-1);
 		Map<String, Object> pMap = new HashedMap();
 		pMap.put("offset", offset);
