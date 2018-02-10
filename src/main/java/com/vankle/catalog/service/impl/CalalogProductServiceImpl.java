@@ -383,6 +383,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
 			for(int i=0;i<jsonArrCatalogProductSpecValue.size();i++){
 				JSONObject specVaue = jsonArrCatalogProductSpecValue.getJSONObject(i);
+				specVaue.put("description", "");
 				for(CatalogProductSku catalogProductSku:catalogProductSkus){
 					if(catalogProductSku.getSkuName().equals(specVaue.getString("name"))){
 						if(catalogProductSku.getDescription()!=null){
