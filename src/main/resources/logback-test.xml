@@ -22,7 +22,7 @@
         <!--定义日志文件的存储地址 /usr/local/server/log 勿在 LogBack 的配置中使用相对路径-->  
     <property name="LOG_PATH" value="/usr/local/server/log" />  
     <!--设置系统日志目录-->
-    <property name="APPDIR" value="vankle-customer" />
+    <property name="APPDIR" value="vankle-catalog" />
 
     <!-- 日志记录器，日期滚动记录 -->
     <appender name="FILEERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
