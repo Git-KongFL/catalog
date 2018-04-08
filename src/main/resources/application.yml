@@ -13,6 +13,6 @@ server :
   port : 8086  
 spring: 
   profiles:  
-    active: dev  
+    active: test  
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource  
