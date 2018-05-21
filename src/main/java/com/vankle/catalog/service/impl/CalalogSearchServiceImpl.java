@@ -1,6 +1,7 @@
 package com.vankle.catalog.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -133,14 +134,23 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 				logger.error(e.getMessage());
 			}
 		}
+		int total = 0;
+		List<CatalogCategoryProduct> catalogCategoryProducts = new ArrayList<CatalogCategoryProduct>();
+		if(languageId==1) {
+			total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q);
+			catalogCategoryProducts = catalogCategoryProductMapper.
+					findCatalogSearchProductList(storeId,q,languageId,countryId,pageSize,offset,orderBy);
+		}else {
+			total = catalogCategoryProductMapper.findCatalogSearchProductByLanguageIdCount(storeId,languageId,q);
+			catalogCategoryProducts = catalogCategoryProductMapper.
+					findCatalogSearchProductByLanguageIdList(storeId,q,languageId,countryId,pageSize,offset,orderBy);
+		}
 		
-		int total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q);
 		
-		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
-				findCatalogSearchProductList(storeId,q,languageId,countryId,pageSize,offset,orderBy);
-		JSONObject dataObj = new JSONObject();
-		 
-
+		
+		
+		
+		JSONObject dataObj = new JSONObject(); 
 		//categoryId
 		CatalogCategoryEntity catalogCategoryEntityBar = catalogCategoryEntityMapper.findCatalogCategoryEntityByLevel(storeId, languageId);
 		//dataObj.put("catalogCategoryEntity", catalogCategoryEntityBar);
@@ -157,8 +167,8 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
-		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
+//		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+//		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		resultObj.put("data",dataObj);
 		 
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;

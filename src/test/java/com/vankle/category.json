@@ -1,0 +1,49 @@
+{
+	"code" : "10000",
+	"msg" : "成功",
+	"data" : [],
+	"catalogCategoryEntity" : {
+		"templetId" : 4,
+		"level" : 1,
+		"iconMax" : "",
+		"pageTitle" : "[{\"key\":\"Recommend\",\"value\":\"Recommend\"},{\"key\":\"New\",\"value\":\"New\"},{\"key\":\"Price\",\"value\":\"Price\"}]",
+		"description" : "[{\"key\":\"Recommend\",\"value\":\"Recommend\"},{\"key\":\"New\",\"value\":\"New\"},{\"key\":\"Price\",\"value\":\"Price\"}]",
+		"orderBy" : "[{\"key\":\"Recommend\",\"value\":\"Recommend\"},{\"key\":\"New\",\"value\":\"New\"},{\"key\":\"Price\",\"value\":\"Price\"}]",
+		"updateTime" : {
+			"date" : 8,
+			"hours" : 13,
+			"seconds" : 33,
+			"month" : 2,
+			"timezoneOffset" : -480,
+			"year" : 118,
+			"minutes" : 33,
+			"time" : 1520487213000,
+			"day" : 4
+		},
+		"sort" : 16,
+		"pageKeywords" : "Vancaro Promise Rings,Vancaro Jewelry,Vancaro Bridal Set,Vancaro Rings,Vancaro Engagement Rings",
+		"storeId" : 1,
+		"templetLocation" : 0,
+		"urlKey" : "",
+		"iconMin" : "",
+		"createTime" : {
+			"date" : 11,
+			"hours" : 17,
+			"seconds" : 18,
+			"month" : 8,
+			"timezoneOffset" : -480,
+			"year" : 117,
+			"minutes" : 23,
+			"time" : 1505121798000,
+			"day" : 1
+		},
+		"name" : "Vancaro.com",
+		"pageDescription" : "Discover VANCARO unique designer rings, promise rings, engagement rings. Perfect gift choice. Free Shipping! Be stylish & be yourself!",
+		"showType" : 1,
+		"parentCategoryId" : 0,
+		"id" : 295,
+		"iso2" : "",
+		"deletedStatus" : 1,
+		"status" : 1
+	}
+}

@@ -24,6 +24,8 @@ import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
+import com.vankle.system.dao.SystemCountryLanguageMapper;
+import com.vankle.system.entity.SystemCountryLanguage;
 import com.vankle.system.service.SystemCurrencyService;
 import com.vankle.system.service.SystemService;
 
@@ -49,7 +51,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	@Autowired
 	CatalogCategoryProductMapper catalogCategoryProductMapper;
 	
-
+	@Autowired
+	SystemCountryLanguageMapper systemCountryLanguageMapper;
+	
 	@Autowired
 	SystemCurrencyService systemCurrencyService;
 	
@@ -77,7 +81,35 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int storeId = paramObj.getInt("storeId");
 		int languageId = paramObj.getInt("languageId");
 		
-		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityList(storeId,languageId);
+		String iso2 = "US";
+		try {
+			String prefixion = paramObj.getString("prefixion");
+			iso2 = prefixion.substring(3, 5).toUpperCase();
+			List<SystemCountryLanguage>  iso2List = systemCountryLanguageMapper.findSystemCountryList();
+			boolean isoBool = true;
+			for(SystemCountryLanguage country:iso2List) {
+				if(iso2.equalsIgnoreCase(country.getIso2())) {
+					isoBool = false;
+					break;
+				}
+			}
+			if(isoBool) {
+				iso2 = "US";
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		
+		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityByIso2List(storeId,languageId,iso2);
+//		List<CatalogCategoryEntity>  catalogCategoryEntitysNew = new ArrayList<CatalogCategoryEntity>();
+//		for(CatalogCategoryEntity catalogCategoryEntity:catalogCategoryEntitys) {
+//			if(catalogCategoryEntity.getIso2()!=null&&catalogCategoryEntity.getIso2().indexOf(iso2)>=0) {
+//				catalogCategoryEntitysNew.add(catalogCategoryEntity);
+//			}
+//		}
+		
 		JSONObject categoryObj = new JSONObject();
 		categoryObj = this.getCategoryByCategoryList(categoryObj, catalogCategoryEntitys);
 		if(categoryObj.get("childs")==null)

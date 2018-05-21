@@ -70,7 +70,7 @@ public class AppTests {
 	
 //	@Test
 //	public void getCatalogCategoryInfoByParamJson(){ 
-//		String paramJson = "{'productId':'10231','storeId':1,'languageId':1,'currencyId':1}" ;
+//		String paramJson = "{'productId':'10231','storeId':1,'languageId':1,'currencyId':1,'prefixion':'zh-us'}" ;
 //		String resout = calalogCategoryService.getCatalogCategoryInfoByParamJson(paramJson);
 //		System.out.println(resout);
 //		logger.info(resout);	
@@ -87,13 +87,13 @@ public class AppTests {
 //	}
 
 	
-//	@Test
-//	public void getCategorySearchByParamJson(){ 
-//		String paramJson = "{storeId:1,q:'man',languageId:1,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
-//		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
+	@Test
+	public void getCategorySearchByParamJson(){ 
+		String paramJson = "{storeId:1,q:'pierres',languageId:4,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
+		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+		System.out.println(resout);
+		logger.info(resout);
+	}
 	
 	
 //	@Test
@@ -161,13 +161,13 @@ public class AppTests {
 	
 	
 	//http://123.57.206.102:8085/catalog/product/review
-	@Test
-	public void getCategoryProductReviewByParamJson(){ 
-		String paramJson = "{productId:10267,pageIndex:1,'storeId':1}" ;
-		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
-		System.out.println(resout);
-		logger.info(resout);
-	}
+//	@Test
+//	public void getCategoryProductReviewByParamJson(){ 
+//		String paramJson = "{productId:10267,pageIndex:1,'storeId':1}" ;
+//		String resout = calalogProductReviewService.getCategoryProductReviewByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 
 
 	
@@ -209,8 +209,9 @@ public class AppTests {
 //	} 
 	
 //
-//	public static void main(String[] args)
-//    {
+	public static void main(String[] args)
+    {
+		System.out.print("fr-Us".substring(3, 5).toUpperCase());
 //		 String str = "e2NhdGVnb3J5SWQ6NyxsYW5ndWFnZUlkOjEsY3VycmVuY3lJZDoxLHN0ZXA6MzAsb2Zmc2V0OjB9IA==";
 //		 byte[] bt = null;    
 //		   try {    
@@ -221,5 +222,5 @@ public class AppTests {
 //		   }    
 //		   String t = new String(bt);
 //		   System.out.println(t);
-//    }
+    }
 }
