@@ -167,8 +167,8 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount); 
-//		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
-//		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 		resultObj.put("data",dataObj);
 		 
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
