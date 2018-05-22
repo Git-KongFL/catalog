@@ -85,6 +85,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
 				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
 					orderBy = " order by  m.score  desc ";
+					orderBy = "";
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
