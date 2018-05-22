@@ -79,13 +79,12 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		int offset = pageSize*(pageIndex-1);
 		 
 		  
-		String orderBy = " ";
+		String orderBy = "order by  m.score  desc ";
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
 				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.score  desc ";
-					orderBy = "";
+					orderBy = " order by  m.score  desc "; 
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
