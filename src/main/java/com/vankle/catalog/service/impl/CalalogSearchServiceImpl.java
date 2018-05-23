@@ -70,7 +70,16 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		} 
-		String  q = paramObj.getString("q").replace("'", "");
+		String  q = paramObj.getString("q").trim();
+		String[] qArr = q.split(" ");
+		String  searchKeyword = "";
+		for(String keyword:qArr) {
+			if(!"".equals(keyword.trim())) {
+				searchKeyword += " +"+keyword;
+			}
+		}
+		q = searchKeyword; 
+		
 		int storeId = paramObj.getInt("storeId");
 		int languageId = paramObj.getInt("languageId");
 		int pageIndex = paramObj.getInt("pageIndex");

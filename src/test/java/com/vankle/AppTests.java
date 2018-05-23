@@ -211,7 +211,20 @@ public class AppTests {
 //
 	public static void main(String[] args)
     {
-		System.out.print("fr-Us".substring(3, 5).toUpperCase());
+		//System.out.print("fr-Us".substring(3, 5).toUpperCase());
+		System.out.println("fr Us".replace(" ", " +"));
+		
+		
+		String  q = " skull  ring   s";
+		String[] qArr = q.split(" ");
+		String  searchKeyword = "";
+		for(String keyword:qArr) {
+			if(!"".equals(keyword.trim())) {
+				searchKeyword += " +"+keyword;
+			}
+		}
+		q = searchKeyword; 
+		System.out.println(searchKeyword);
 //		 String str = "e2NhdGVnb3J5SWQ6NyxsYW5ndWFnZUlkOjEsY3VycmVuY3lJZDoxLHN0ZXA6MzAsb2Zmc2V0OjB9IA==";
 //		 byte[] bt = null;    
 //		   try {    
