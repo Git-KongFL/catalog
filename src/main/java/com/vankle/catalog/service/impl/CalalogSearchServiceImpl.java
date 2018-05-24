@@ -71,6 +71,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 			return resultObj.toString();
 		} 
 		String  q = paramObj.getString("q").trim();
+		String  spu = paramObj.getString("q").trim();
 		String[] qArr = q.split(" ");
 		String  searchKeyword = "";
 		for(String keyword:qArr) {
@@ -146,13 +147,13 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		int total = 0;
 		List<CatalogCategoryProduct> catalogCategoryProducts = new ArrayList<CatalogCategoryProduct>();
 		if(languageId==1) {
-			total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q);
+			total = catalogCategoryProductMapper.findCatalogSearchProductCount(storeId,languageId,q,spu);
 			catalogCategoryProducts = catalogCategoryProductMapper.
-					findCatalogSearchProductList(storeId,q,languageId,countryId,pageSize,offset,orderBy);
+					findCatalogSearchProductList(storeId,q,spu,languageId,countryId,pageSize,offset,orderBy);
 		}else {
-			total = catalogCategoryProductMapper.findCatalogSearchProductByLanguageIdCount(storeId,languageId,q);
+			total = catalogCategoryProductMapper.findCatalogSearchProductByLanguageIdCount(storeId,languageId,q,spu);
 			catalogCategoryProducts = catalogCategoryProductMapper.
-					findCatalogSearchProductByLanguageIdList(storeId,q,languageId,countryId,pageSize,offset,orderBy);
+					findCatalogSearchProductByLanguageIdList(storeId,q,spu,languageId,countryId,pageSize,offset,orderBy);
 		}
 		
 		
