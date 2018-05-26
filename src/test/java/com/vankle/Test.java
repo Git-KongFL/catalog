@@ -19,20 +19,27 @@ public class Test {
 
 	public static void main(String[] args)
     {
-        File file = new File( "/Users/denghaihui/Downloads/2017-7-19-item-ok.csv");
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
-            String s = null;
-            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-            	String[] strArr = s.split(",");
-                System.out.println(strArr.length);
-                
-         
-            }
-            br.close();    
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+		
+		
+		String  spu = "Man's".trim().replaceAll("'", "\\\\\\\'");
+		
+		System.out.println(spu);
+		
+		
+//        File file = new File( "/Users/denghaihui/Downloads/2017-7-19-item-ok.csv");
+//        try{
+//            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+//            String s = null;
+//            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+//            	String[] strArr = s.split(",");
+//                System.out.println(strArr.length);
+//                
+//         
+//            }
+//            br.close();    
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
         
 //        System.out.println(list1);
 //        System.out.println(list2);
