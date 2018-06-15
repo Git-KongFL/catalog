@@ -76,7 +76,7 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		String  searchKeyword = "";
 		for(String keyword:qArr) {
 			if(!"".equals(keyword.trim())) {
-				searchKeyword += " +"+keyword;
+				searchKeyword += "+"+keyword;
 			}
 		}
 		q = searchKeyword; 
