@@ -6,7 +6,7 @@ dubbo :
   application : 
     name : vankle-dubbo-app
   registry :
-    address : zookeeper://172.17.9.254:2181
+    address : zookeeper://127.0.0.1:2181
   packageName : com.vankle.catalog.service.impl
   
 server :
