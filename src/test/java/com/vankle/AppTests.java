@@ -77,23 +77,23 @@ public class AppTests {
 //	}
 	
 	
-//	
-//	@Test
-//	public void testCategoryProduct(){ 
-//		String paramJson = "{'productId':'10231','prefixion':'zh-us','storeId':1,'languageId':1,'currencyId':1}" ;
-//		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
-//		System.out.println(resout);
-//		logger.info(resout);
-//	}
-
 	
 	@Test
-	public void getCategorySearchByParamJson(){ 
-		String paramJson = "{storeId:1,q:'pierres',languageId:4,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
-		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+	public void testCategoryProduct(){ 
+		String paramJson = "{'productId':'10335','prefixion':'en-us','storeId':1,'languageId':1,'currencyId':1}" ;
+		String resout = calalogProductService.getCatalogProductInfoByItemId(paramJson);
 		System.out.println(resout);
 		logger.info(resout);
 	}
+
+	
+//	@Test
+//	public void getCategorySearchByParamJson(){ 
+//		String paramJson = "{storeId:1,q:'pierres',languageId:4,currencyId:1,pageIndex:1,orderBy:{order:'price',dir:'desc'}}" ;
+//		String resout = calalogSearchService.getCategorySearchByParamJson(paramJson);
+//		System.out.println(resout);
+//		logger.info(resout);
+//	}
 	
 	
 //	@Test
