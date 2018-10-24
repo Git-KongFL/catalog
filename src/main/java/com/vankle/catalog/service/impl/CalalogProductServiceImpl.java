@@ -158,7 +158,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		resultObj.put("requestType", requestType);
 		
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId,countryId);
-		System.out.println(resultStr);
+		//System.out.println(resultStr);
 		logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
