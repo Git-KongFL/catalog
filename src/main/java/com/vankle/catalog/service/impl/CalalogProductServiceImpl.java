@@ -381,6 +381,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			List<CatalogProductSpecValue> catalogProductSpecValues = catalogProductSpecValueMapper.findCatalogProductSpecValueList(catalogProductSpec.getId(),countryId);
 			JSONObject jsonCatalogProductSpec = JSONObject.fromObject(catalogProductSpec); //商品规格
 			JSONArray jsonArrCatalogProductSpecValue = JSONArray.fromObject(catalogProductSpecValues);//商品规格值
+			JSONArray jsonArrCatalogProductSpecValueNew = new JSONArray();
 			for(int i=0;i<jsonArrCatalogProductSpecValue.size();i++){
 				JSONObject specVaue = jsonArrCatalogProductSpecValue.getJSONObject(i);
 				specVaue.put("description", "");
@@ -395,9 +396,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 						break;
 					}
 				}
+				if(specVaue.get("status")!=null&&"1".equals(  specVaue.getString("status"))) {
+					jsonArrCatalogProductSpecValueNew.add(specVaue);
+				}
 				
 			}
-			jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
+			jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValueNew);//商品规格 添加商品规格值
+			//jsonCatalogProductSpec.put("catalogProductSpecValueList", jsonArrCatalogProductSpecValue);//商品规格 添加商品规格值
 			jsonArrSpec.add(jsonCatalogProductSpec);//商品规格组
 		}
 		jsonProduct.put("catalogProductSpecList", jsonArrSpec);
