@@ -303,6 +303,53 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		}
 		return resoutObj.toString();
 	}
+
+
+	@Override
+	public String getCategoryPositionProductInfoByParamJson(String paramJson) {
+
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new  JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
+		} 
+		int positionType = paramObj.getInt("positionType"); 
+		int languageId = paramObj.getInt("languageId"); 
+		int currencyId = paramObj.getInt("currencyId"); 
+		
+		List<CatalogCategoryProduct> adpProductList = new ArrayList<CatalogCategoryProduct>();
+		 
+		String countryId = "";
+		if(paramObj.get("prefixion")!=null){
+			try{
+				countryId = paramObj.getString("prefixion");
+				if(countryId.split("-").length==2){
+					countryId = countryId.split("-")[1];
+				}
+			}catch (Exception e) {
+				logger.error(e.getMessage());
+			}
+		}
+		
+		 
+		JSONObject dataObj = new JSONObject();
+		JsonConfig jsonConfig = new JsonConfig();  
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
+		
+	 
+		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
+		
+				 
+		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
+				findCatalogPositionProductList(languageId,positionType ); 
+		
+		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
+		resultObj.put("data",dataObj);
+		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
+	
+	}
 	
 	
 	

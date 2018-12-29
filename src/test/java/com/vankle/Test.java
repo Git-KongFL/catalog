@@ -19,11 +19,26 @@ public class Test {
 
 	public static void main(String[] args)
     {
+		String selectSql = "  select  "
+				+ " a.id as id, " /**  商品类目关联ID  */ 
+				+ " b.item_id as productId, " /**  商品ID  */
+				+ " b.spu as spu, " /**  spu */ 
+				+ " b.sell_price as sellPrice, "
+				+ " b.create_time as createTime, "
+				+ " ifnull(e.`name`,b.`name`) as name ,"
+				+ " b.is_backorder as isBackorder ,"  
+				+ " ifnull(c.discount_percentage,1)*100 as discountPercentage, " 
+				+ " ifnull(c.discount_amount,b.sell_price) as discountAmount, "
+				+ " ( select small_image from catalog_product_entity_image  where   deleted_status = 1 and  product_id =  a.product_id order by position limit 1 ) as  remoteUrl   " 
+				+ " from catalog_product_position a " 
+				+ " left join  catalog_product_entity  b on a.product_id = b.id " 
+				+ " left join  catalog_product_entity_discount c  on a.product_id = c.product_id "   
+				+ " left join  ( select * from catalog_product_entity_language where language_id =  #{languageId}  ) e  on a.product_id = e.product_id " //  
+				+ " where  a.position_type =  #{positionType}  and  b.status = 1     ";
 		
+		//String  spu = "Man's".trim().replaceAll("'", "\\\\\\\'");
 		
-		String  spu = "Man's".trim().replaceAll("'", "\\\\\\\'");
-		
-		System.out.println(spu);
+		System.out.println(selectSql);
 		
 		
 //        File file = new File( "/Users/denghaihui/Downloads/2017-7-19-item-ok.csv");
