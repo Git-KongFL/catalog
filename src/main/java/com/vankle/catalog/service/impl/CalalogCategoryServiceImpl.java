@@ -15,8 +15,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
 import com.vankle.catalog.dao.CatalogCategoryProductMapper;
+import com.vankle.catalog.dao.CatalogProductSkuMapper;
 import com.vankle.catalog.entity.CatalogCategoryEntity;
 import com.vankle.catalog.entity.CatalogCategoryProduct;
+import com.vankle.catalog.entity.CatalogProductSku;
 import com.vankle.catalog.service.CalalogCategoryService;
 import com.vankle.code.constants.RedisConstants;
 import com.vankle.code.constants.VankleConstants;
@@ -53,6 +55,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	
 	@Autowired
 	SystemCountryLanguageMapper systemCountryLanguageMapper;
+	
+	@Autowired
+	CatalogProductSkuMapper catalogProductSkuMapper;
 	
 	@Autowired
 	SystemCurrencyService systemCurrencyService;
@@ -345,7 +350,15 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
 				findCatalogPositionProductList(languageId,positionType ); 
 		
-		dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
+		JSONArray array = new JSONArray();
+		for(CatalogCategoryProduct catalogCategoryProduct:catalogCategoryProducts) {
+			JSONObject jsonObject = JSONObject.fromObject(catalogCategoryProduct,jsonConfig);
+			List<CatalogProductSku> catalogProductSkuList = catalogProductSkuMapper.findCatalogProductSkuList(catalogCategoryProduct.getProductId(), "US");
+			jsonObject.put("skuList", catalogProductSkuList);
+			array.add(jsonObject);
+		}
+		dataObj.put("dataList", array );
+		//dataObj.put("dataList", JSONArray.fromObject(  catalogCategoryProducts,jsonConfig));
 		resultObj.put("data",dataObj);
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	
