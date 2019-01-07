@@ -353,7 +353,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		JSONArray array = new JSONArray();
 		for(CatalogCategoryProduct catalogCategoryProduct:catalogCategoryProducts) {
 			JSONObject jsonObject = JSONObject.fromObject(catalogCategoryProduct,jsonConfig);
-			List<CatalogProductSku> catalogProductSkuList = catalogProductSkuMapper.findCatalogProductSkuList(catalogCategoryProduct.getProductId(), "US");
+			List<CatalogProductSku> catalogProductSkuList = catalogProductSkuMapper.findCatalogProductSkuList(catalogCategoryProduct.getId(), "US");
 			jsonObject.put("skuList", catalogProductSkuList);
 			array.add(jsonObject);
 		}
