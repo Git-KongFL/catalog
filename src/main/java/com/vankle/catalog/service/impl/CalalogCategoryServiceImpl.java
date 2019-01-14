@@ -206,8 +206,21 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 				logger.error(e.getMessage());
 			}
 		}
+
+		String coutryIdsort = " ";
+		if("us".equals(countryId)) {
+			coutryIdsort = " m.us  desc,";
+		}else if("fr".equals(countryId)) {
+			coutryIdsort = " m.fr  desc,";
+		}else if("ca".equals(countryId)) {
+			coutryIdsort = " m.ca  desc,";
+		}else if("gb".equals(countryId)) {
+			coutryIdsort = " m.gb  desc,";
+		}else if("de".equals(countryId)) {
+			coutryIdsort = " m.de  desc,";
+		}
+		 
 		
-		String coutryIdsort = " m."+countryId+" desc,";
 		
 		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
 		if(paramObj.get("orderBy")!=null){
