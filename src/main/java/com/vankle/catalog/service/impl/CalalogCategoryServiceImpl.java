@@ -195,7 +195,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			}
 		}
 		
-		String countryId = "";
+		String countryId = "us";
 		if(paramObj.get("prefixion")!=null){
 			try{
 				countryId = paramObj.getString("prefixion");
@@ -207,26 +207,28 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			}
 		}
 		
-		String orderBy = "order by  m.score  desc ";
+		String coutryIdsort = " m."+countryId+" desc,";
+		
+		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
 				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.score  desc ";
+					orderBy = " order by "+coutryIdsort+" m.score  desc ";
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
 			}else if("price".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.discountAmount  desc ";
+					orderBy = " order by "+coutryIdsort+" m.discountAmount  desc ";
 				}else{
-					orderBy = " order by  m.discountAmount   asc ";
+					orderBy = " order by "+coutryIdsort+" m.discountAmount   asc ";
 				}
 			}else if("new".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by  m.sortDate  desc ";
+					orderBy = " order by "+coutryIdsort+" m.sortDate  desc ";
 				}else{
-					orderBy = " order by  m.sortDate  asc ";
+					orderBy = " order by "+coutryIdsort+" m.sortDate  asc ";
 				}
 			}
 			
