@@ -337,6 +337,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		int positionType = paramObj.getInt("positionType"); 
 		int languageId = paramObj.getInt("languageId"); 
 		int currencyId = paramObj.getInt("currencyId"); 
+		int storeId = paramObj.getInt("storeId"); 
 		
 		List<CatalogCategoryProduct> adpProductList = new ArrayList<CatalogCategoryProduct>();
 		 
@@ -363,7 +364,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 				 
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper.
-				findCatalogPositionProductList(languageId,positionType ); 
+				findCatalogPositionProductList(languageId,positionType ,storeId); 
 		
 		JSONArray array = new JSONArray();
 		for(CatalogCategoryProduct catalogCategoryProduct:catalogCategoryProducts) {
