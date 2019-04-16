@@ -137,13 +137,27 @@
     <logger name="org.hibernate" level="WARN" />
 
     <logger name="org.apache.tomcat.util.net.NioEndpoint" level="WARN" />
+    
+    
+      <appender name="DBCLASSICMYSQLPOOL" class="ch.qos.logback.classic.db.DBAppender">  
+        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">  
+            <dataSource class="org.apache.commons.dbcp.BasicDataSource">  
+                <driverClassName>com.mysql.jdbc.Driver</driverClassName>  
+                <url>jdbc:mysql://172.20.11.79:3306/vancaro?characterEncoding=UTF-8</url>  
+                <username>root</username>  
+                <password>2UE1HmbhXmdo1C1</password>  
+            </dataSource>  
+        </connectionSource>  
+    </appender> 
+    
     <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
   <root level="INFO">
+        <appender-ref ref="DBCLASSICMYSQLPOOL" />
         <appender-ref ref="FILEERROR" />
         <appender-ref ref="FILEWARN" />
         <appender-ref ref="FILEINFO" />
 
-        <!-- 生产环境将请stdou去掉
-        <appender-ref ref="STDOUT" /> -->
+        <!-- 生产环境将请stdou去掉-->
+        <appender-ref ref="STDOUT" /> 
     </root>
 </configuration>
