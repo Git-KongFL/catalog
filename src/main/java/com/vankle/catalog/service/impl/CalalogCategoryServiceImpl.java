@@ -254,7 +254,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 					orderBy = " order by  m.name  asc ";
 				}
 			}
-			
+			logger.info("=======:"+orderObject);
 			logger.info("==============================================================:"+orderBy);
 			
 //			if("name".equalsIgnoreCase(orderObject.getString("order"))){
