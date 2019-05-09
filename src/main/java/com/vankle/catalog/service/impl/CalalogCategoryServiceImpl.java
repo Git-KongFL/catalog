@@ -220,12 +220,12 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			coutryIdsort = " m.de  desc,";
 		}
 		 
-		
+		if(storeId!=1) {
+			coutryIdsort = "";
+		}
 		
 		
 		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
-		 
-		
 		
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
