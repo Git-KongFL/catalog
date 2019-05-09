@@ -159,7 +159,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId,countryId);
 		//System.out.println(resultStr);
-		logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
+		//logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}else{
@@ -424,7 +424,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @param JSONObject
 	 */
 	public void addCatalogProductGroupSell(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId,String countryId ) {
-		logger.info("addCatalogProductGroupSell:"+jsonProduct.toString());
+		//logger.info("addCatalogProductGroupSell:"+jsonProduct.toString());
 		if(jsonProduct.getInt("type")==1){
 			return;
 		}
