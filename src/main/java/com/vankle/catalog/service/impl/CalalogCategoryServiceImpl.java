@@ -224,14 +224,16 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		
 		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
-		if(storeId!=1) {
-			orderBy = " order by  m.name  desc  ";
-		}
+		 
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
 				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by "+coutryIdsort+" m.score  desc ";
+				orderBy = " order by "+coutryIdsort+" m.score  desc ";
+				if(storeId!=1) {
+					orderBy = " order by  m.name  desc  ";
+				}
+				
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
