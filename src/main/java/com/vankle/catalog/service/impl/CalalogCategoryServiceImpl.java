@@ -225,15 +225,13 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
 		 
+		
+		
 		if(paramObj.get("orderBy")!=null){
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if("Recommend".equalsIgnoreCase(orderObject.getString("order"))){
 				//if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-				orderBy = " order by "+coutryIdsort+" m.score  desc ";
-				if(storeId!=1) {
-					orderBy = " order by  m.name  desc  ";
-				}
-				
+					orderBy = " order by "+coutryIdsort+" m.score  desc ";
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
@@ -256,7 +254,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 					orderBy = " order by  m.name  asc ";
 				}
 			}
-			logger.info("=======:"+orderObject);
+			logger.info("=======:"+orderBy);
 			logger.info("==============================================================:"+orderBy);
 			
 //			if("name".equalsIgnoreCase(orderObject.getString("order"))){
