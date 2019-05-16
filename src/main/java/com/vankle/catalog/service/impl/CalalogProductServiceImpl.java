@@ -236,7 +236,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		resultObj.put("data", jsonProduct);
-		 
+		
+		logger.info("jsonProduct:"+jsonProduct.toString());
 		
 		if(languageId == 1){
 			return resultObj.toString();  
