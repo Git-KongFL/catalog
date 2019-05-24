@@ -185,13 +185,18 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		if(paramObj.get("adp")!=null&&!paramObj.getString("adp").equals("null")){
 			adp = paramObj.get("adp")+"";
 			String[] spus = adp.split(",");
+			String spusIn = "";
 			for(String spu:spus){
 				spuMap.put(spu, spu);
-				List<CatalogCategoryProduct> spuProductList = catalogCategoryProductMapper.
-						findCatalogCategoryProductListBySpu(spu, storeId, languageId);
-				for(CatalogCategoryProduct catalogCategoryProduct:spuProductList){
-					adpProductList.add(catalogCategoryProduct);
-				}
+				spusIn += "'" +spu+"',";
+			}
+			if(spusIn.indexOf(",")>=0) {
+				spusIn = spusIn.substring(0,spusIn.length()-1);
+			}
+			List<CatalogCategoryProduct> spuProductList = catalogCategoryProductMapper.
+					findCatalogCategoryProductListByInSpus(spusIn, storeId, languageId);
+			for(CatalogCategoryProduct catalogCategoryProduct:spuProductList){
+				adpProductList.add(catalogCategoryProduct);
 			}
 		}
 		
