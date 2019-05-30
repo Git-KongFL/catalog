@@ -182,7 +182,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		CatalogCategoryEntity catalogCategoryEntity = catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryId,languageId);
 		
-		if(catalogCategoryEntity.getShowType()==1) {
+		if(catalogCategoryEntity.getShowType()==2) {
 			PagerUtil pagerUtil = new PagerUtil(pageIndex,0,pageSize);
 			JSONObject dataObj = new JSONObject();
 			JSONArray dataList  = new JSONArray();
