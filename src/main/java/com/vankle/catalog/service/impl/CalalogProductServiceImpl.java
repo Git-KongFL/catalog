@@ -237,7 +237,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		resultObj.put("data", jsonProduct);
 		
-		logger.info("jsonProduct:"+jsonProduct.toString());
+		//logger.info("jsonProduct:"+jsonProduct.toString());
 		
 		if(languageId == 1){
 			return resultObj.toString();  
@@ -313,7 +313,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
 	            if(fieldHasAnno){  
 	                //输出注解属性   
-	            	logger.info(field.getName());   
+	            	//logger.info(field.getName());   
 	            	if(!"".equals(jsonProductLang.getString(field.getName()))){
 	            		productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
 	            	}
