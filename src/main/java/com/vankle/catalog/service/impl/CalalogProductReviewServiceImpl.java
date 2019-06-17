@@ -1,6 +1,7 @@
 package com.vankle.catalog.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.vankle.code.util.JsonDateValueProcessor;
 import com.vankle.code.util.JsonUtils;
 import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
+import com.vankle.sales.entity.SalesOrderEntity;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -46,6 +48,62 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
     private CatalogProductEntityMapper catalogProductEntityMapper;
 	@Autowired
 	CatalogProductReviewImageMapper catalogProductReviewImageMapper ;
+	
+	
+	
+	@Override
+	public String addCategoryProductReview(String paramJson) {
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
+			return resultObj.toString();
+		} 	  
+		int storeId = paramObj.getInt("storeId");
+		//SalesOrderEntity salesOrderEntity = salesOrderEntityMapper.findSalesOrderEntity(orderId);
+		
+		if(paramObj.get("reviewArray")!=null){
+			JSONArray reviewArray = paramObj.getJSONArray("reviewArray");
+			for(int i =0 ; i< reviewArray.size(); i++){
+				JSONObject  reviewObj = reviewArray.getJSONObject(i);
+				int itemId  = reviewObj.getInt("itemId");
+
+				CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(itemId, storeId);
+				
+				CatalogProductReview catalogProductReview = new CatalogProductReview();
+				catalogProductReview.setCreateTime(new Date());
+				catalogProductReview.setCustomerId(null);
+				catalogProductReview.setCustomerName(reviewObj.getString("customerName"));
+				catalogProductReview.setDescription(reviewObj.getString("description"));
+				catalogProductReview.setDeletedStatus(1);
+				catalogProductReview.setOrderCreateTime(new Date());
+				catalogProductReview.setOrderItemId(null);
+				catalogProductReview.setOrderId(null);
+				//catalogProductReview.setProductId(reviewObj.getInt("productId"));
+				catalogProductReview.setProductId(catalogProductEntity.getId());
+				catalogProductReview.setScore(reviewObj.getInt("score"));
+				catalogProductReview.setStoreId(null);
+				catalogProductReview.setUserId(null);
+				catalogProductReview.setStatus(0);
+				catalogProductReviewMapper.addCatalogProductReview(catalogProductReview);
+				if(reviewObj.get("imageArray")!=null){
+					JSONArray imageArray = reviewObj.getJSONArray("imageArray");
+					for(int j=0 ;j<imageArray.size();j++){
+						JSONObject imageObj = imageArray.getJSONObject(j);
+						CatalogProductReviewImage entity = new CatalogProductReviewImage();
+						entity.setCreateTime(new Date());
+						entity.setDeletedStatus(1);
+						entity.setImageUrl(imageObj.getString("imageUrl"));
+						entity.setPosition(j);
+						entity.setProductReviewId(catalogProductReview.getId());
+						catalogProductReviewImageMapper.addCatalogProductReviewImage(entity);
+					}
+				} 
+			}
+		}
+		return resultObj.toString();
+	}
+
 	
 	@Override
 	public String getCategoryProductReviewByParamJson(String paramJson) {
