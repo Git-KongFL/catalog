@@ -242,9 +242,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			coutryIdsort = " m.de  desc,";
 		}
 		 
-		if(storeId!=1) {
-			coutryIdsort = "";
-		}
+//		if(storeId!=1) {
+//			coutryIdsort = "";
+//		}
 		
 		
 		String orderBy = "order by "+coutryIdsort+" m.score  desc ";
