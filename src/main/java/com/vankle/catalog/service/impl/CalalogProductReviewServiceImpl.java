@@ -141,6 +141,9 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		pMap.put("offset", offset);
 		pMap.put("limit", pageSize);
 		pMap.put("productId", productId);
+		pMap.put("status", 1);
+		
+		
 		
 		//sortScore all 全部 12345 显示星星
 		if(paramObj.get("sortScore")!=null&&(!"".equals(paramObj.get("sortScore").toString()))){
