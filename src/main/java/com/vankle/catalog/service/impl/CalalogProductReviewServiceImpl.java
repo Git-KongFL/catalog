@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;import org.omg.CORBA.INTERNAL;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -73,8 +75,8 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 				CatalogProductReview catalogProductReview = new CatalogProductReview();
 				catalogProductReview.setCreateTime(new Date());
 				catalogProductReview.setCustomerId(null);
-				catalogProductReview.setCustomerName(reviewObj.getString("customerName"));
-				catalogProductReview.setDescription(reviewObj.getString("description"));
+				catalogProductReview.setCustomerName(StringEscapeUtils.escapeHtml(reviewObj.getString("customerName")) );
+				catalogProductReview.setDescription(StringEscapeUtils.escapeHtml(reviewObj.getString("description")) );
 				catalogProductReview.setDeletedStatus(1);
 				catalogProductReview.setOrderCreateTime(new Date());
 				catalogProductReview.setOrderItemId(null);
@@ -236,5 +238,9 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		resultObj.put("data",dataObj);
 		return  resultObj.toString();
 	}
- 
+	public static void main(String[] args) {
+		String HTMLText="<p>java<br/>test</p>";
+		System.out.println(StringEscapeUtils.escapeHtml(HTMLText));
+	}
+
 }
