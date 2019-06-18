@@ -83,7 +83,7 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 				catalogProductReview.setProductId(catalogProductEntity.getId());
 				catalogProductReview.setScore(reviewObj.getInt("score"));
 				catalogProductReview.setStoreId(storeId);
-				catalogProductReview.setUserId(null);
+				catalogProductReview.setUserId(itemId+"");
 				catalogProductReview.setStatus(0);
 				catalogProductReviewMapper.addCatalogProductReview(catalogProductReview);
 				if(reviewObj.get("imageArray")!=null){
