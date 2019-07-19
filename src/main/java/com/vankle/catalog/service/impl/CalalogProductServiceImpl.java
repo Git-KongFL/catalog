@@ -188,6 +188,27 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("sellPrice")), currencyId);
 			productObj.put("sellPrice", sellPrice);
 			
+			String  customizedDesc = productObj.getString("customizedDesc");
+			if(customizedDesc.indexOf(",")>=0) {
+				String[]  priceArr = customizedDesc.split(",");
+				String customizedDescCur = "";
+				for(String price:priceArr) {
+					try {
+						BigDecimal priceCur =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(price), currencyId);
+						customizedDescCur += priceCur+",";
+					}catch (Exception e) {
+						customizedDescCur += "0,";
+						e.printStackTrace();
+						// TODO: handle exception
+					} 
+				}
+				if(customizedDescCur.indexOf(",")>=0) {
+					customizedDescCur = customizedDescCur.substring(0,customizedDescCur.length()-1);
+				}
+				productObj.put("customizedDesc", customizedDescCur);
+			}
+			
+			
 			//商品折扣信息价格换算
 			JSONObject catalogProductEntityDiscount = productObj.getJSONObject("catalogProductEntityDiscount");
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
@@ -205,7 +226,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
 			 return resultObj.toString();
 		}
-
+		
 		
 		
 		JsonConfig jsonConfig = new JsonConfig();  
