@@ -205,7 +205,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				if(customizedDescCur.indexOf(",")>=0) {
 					customizedDescCur = customizedDescCur.substring(0,customizedDescCur.length()-1);
 				}
-				productObj.put("customizedDesc", customizedDescCur);
+				productObj.put("customizedDesc_cur", customizedDescCur);
 			}
 			
 			
