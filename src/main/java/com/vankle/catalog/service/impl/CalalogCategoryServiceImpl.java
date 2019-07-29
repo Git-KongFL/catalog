@@ -332,8 +332,11 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		for(int i=0;i<arrayObj.size();i++){
 			JSONObject obj = arrayObj.getJSONObject(i);
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(obj.getString("discountAmount")), currencyId);
+
+			obj.put("baseDiscountAmount", obj.getString("discountAmount")); 
 			obj.put("discountAmount", discountAmount);
 			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(obj.getString("sellPrice")), currencyId);
+			obj.put("baseSellPrice", obj.getString("sellPrice")); 
 			obj.put("sellPrice", sellPrice);
 		}
 		return resoutObj.toString();

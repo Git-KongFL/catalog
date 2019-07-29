@@ -186,6 +186,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			BigDecimal originalPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("originalPrice")), currencyId);
 			productObj.put("originalPrice", originalPrice);
 			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("sellPrice")), currencyId);
+			productObj.put("baseSellPrice",productObj.getString("sellPrice")); 
 			productObj.put("sellPrice", sellPrice);
 			
 			String  customizedDesc = productObj.getString("customizedDesc");
@@ -213,7 +214,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			JSONObject catalogProductEntityDiscount = productObj.getJSONObject("catalogProductEntityDiscount");
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
-			 
+			catalogProductEntityDiscount.put("baseDiscountAmount", catalogProductEntityDiscount.getString("discountAmount")); 
 			return resultObj.toString();
 		}
 	}
