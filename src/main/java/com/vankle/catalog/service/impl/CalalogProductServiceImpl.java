@@ -212,9 +212,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			
 			//商品折扣信息价格换算
 			JSONObject catalogProductEntityDiscount = productObj.getJSONObject("catalogProductEntityDiscount");
+			catalogProductEntityDiscount.put("baseDiscountAmount", catalogProductEntityDiscount.getString("discountAmount")); 
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
-			catalogProductEntityDiscount.put("baseDiscountAmount", catalogProductEntityDiscount.getString("discountAmount")); 
 			return resultObj.toString();
 		}
 	}
