@@ -259,15 +259,15 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 //				}
 			}else if("price".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by "+coutryIdsort+" m.discountAmount  desc ";
+					orderBy = " order by  m.discountAmount  desc ";
 				}else{
-					orderBy = " order by "+coutryIdsort+" m.discountAmount   asc ";
+					orderBy = " order by  m.discountAmount   asc ";
 				}
 			}else if("new".equalsIgnoreCase(orderObject.getString("order"))){
 				if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-					orderBy = " order by "+coutryIdsort+" m.sortDate  desc ";
+					orderBy = " order by  m.sortDate  desc ";
 				}else{
-					orderBy = " order by "+coutryIdsort+" m.sortDate  asc ";
+					orderBy = " order by  m.sortDate  asc ";
 				}
 			}else if("name".equalsIgnoreCase(orderObject.getString("order"))){
 					if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
