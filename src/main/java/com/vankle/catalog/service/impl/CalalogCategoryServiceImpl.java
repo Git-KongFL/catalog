@@ -168,6 +168,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 	 */
 	@Override
 	public String getCategoryProductInfoByParamJson(String paramJson) {
+		
+
+		logger.info("paramJson:"+paramJson);
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
@@ -322,6 +325,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		
 		resultObj.put("data",dataObj);
+		logger.info("resultObj:"+resultObj.toString());
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	}
 	
