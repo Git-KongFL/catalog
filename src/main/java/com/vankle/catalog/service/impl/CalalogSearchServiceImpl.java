@@ -72,14 +72,14 @@ public class CalalogSearchServiceImpl implements CalalogSearchService {
 		} 
 		String  q = paramObj.getString("q").trim().replace("'", "\\\'");
 		String  spu = paramObj.getString("q").trim().replace("'", "\\\'");;
-		String[] qArr = q.split(" ");
-		String  searchKeyword = "";
-		for(String keyword:qArr) {
-			if(!"".equals(keyword.trim())) {
-				searchKeyword +=  keyword;
-			}
-		}
-		q = searchKeyword; 
+//      String[] qArr = q.split(" ");
+//		String  searchKeyword = "";
+//		for(String keyword:qArr) {
+//			if(!"".equals(keyword.trim())) {
+//				searchKeyword +=  keyword;
+//			}
+//		}
+//		q = searchKeyword; 
 		
 		int storeId = paramObj.getInt("storeId");
 		int languageId = paramObj.getInt("languageId");
