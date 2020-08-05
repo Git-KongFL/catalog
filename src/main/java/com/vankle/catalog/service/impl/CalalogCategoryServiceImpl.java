@@ -107,7 +107,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		}
 		
 		
-		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityByIso2List(storeId,languageId,iso2);
+		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityByIso2List(storeId,languageId,iso2.toLowerCase());
 //		List<CatalogCategoryEntity>  catalogCategoryEntitysNew = new ArrayList<CatalogCategoryEntity>();
 //		for(CatalogCategoryEntity catalogCategoryEntity:catalogCategoryEntitys) {
 //			if(catalogCategoryEntity.getIso2()!=null&&catalogCategoryEntity.getIso2().indexOf(iso2)>=0) {
