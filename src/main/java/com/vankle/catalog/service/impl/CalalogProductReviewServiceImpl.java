@@ -163,6 +163,12 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 //			pMap.put("sortBy", paramObj.get("sortBy"));
 //		}
 		
+		
+		String orderBy = "order by create_time desc";
+		if(storeId == 3) {
+			orderBy = "order by res_type desc";
+		}
+		pMap.put("orderBy", orderBy);
 		//
 		List<CatalogProductReview> catalogCategoryProducts = catalogProductReviewMapper.listPage(pMap);
 		int total = catalogProductReviewMapper.rows(pMap);
