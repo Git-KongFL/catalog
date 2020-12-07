@@ -166,7 +166,7 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 		
 		String orderBy = "order by create_time desc";
 		if(storeId == 3) {
-			orderBy = "order by res_type desc";
+			orderBy = "order by res_type desc,create_time desc";
 		}
 		pMap.put("orderBy", orderBy);
 		//
