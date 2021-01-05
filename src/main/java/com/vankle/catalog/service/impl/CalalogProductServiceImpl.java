@@ -99,6 +99,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
 	
 	
+	@Override
+	public String getServerStatus() { 
+		return "sussess";
+	}
 	
 	public String getCatalogProductInfoByItemId(String paramJson) {
 		JSONObject resultObj = JsonUtils.createJSONObject();
