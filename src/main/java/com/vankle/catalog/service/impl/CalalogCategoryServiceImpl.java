@@ -309,6 +309,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		for(CatalogCategoryProduct catalogCategoryProduct:catalogCategoryProducts){
 			if(spuMap.get(catalogCategoryProduct.getSpu()+"")==null){
+				
+				
+				
 				adpProductList.add(catalogCategoryProduct);
 			}
 		}
