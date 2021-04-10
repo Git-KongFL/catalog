@@ -1,13 +1,13 @@
-dubbo :
-  protocol : 
-    prot : -1
-    name  : dubbo
-    port : 20889
-  application : 
-    name : vankle-dubbo-app
-  registry :
-    address : zookeeper://127.0.0.1:2181
-  packageName : com.vankle.catalog.service.impl
+#dubbo :
+#  protocol : 
+#    prot : -1
+#    name  : dubbo
+#    port : 20889
+#  application : 
+#    name : vankle-dubbo-app
+#  registry :
+#    address : zookeeper://127.0.0.1:2181
+#  packageName : com.vankle.catalog.service.impl
   
 server :
   port : 8086  
