@@ -2,6 +2,8 @@ package com.vankle.catalog.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -32,10 +34,14 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 	@Autowired
 	CatalogArticleMapper catalogArticleMapper;
    
-
+	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
+		
+		
 	@Override
 	public String getCategoryArticleListByParamJson(String paramJson) {
-
+		
+		logger.error(paramJson);
+		
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
