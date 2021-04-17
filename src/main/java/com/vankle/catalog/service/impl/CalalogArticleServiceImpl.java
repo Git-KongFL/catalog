@@ -50,11 +50,11 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 		if(paramObj.containsKey("pageSize")) {
 			pageIndex = paramObj.getInt("pageIndex"); 
 		}
-		
+		int storeId  = paramObj.getInt("storeId"); 
 		int offset = pageSize*(pageIndex-1);  
-		List<CatalogArticleEntity> catalogArticleEntitys  =  catalogArticleMapper.findCatalogArticleEntity(pageSize,offset);
+		List<CatalogArticleEntity> catalogArticleEntitys  =  catalogArticleMapper.findCatalogArticleEntity(storeId,pageSize,offset);
 		int total =  catalogArticleMapper.findCatalogArticleEntityCount(); 
-		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntity();
+		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntity(storeId);
 		
 		JSONObject dataObj = new JSONObject();
 		JsonConfig jsonConfig = new JsonConfig();  
