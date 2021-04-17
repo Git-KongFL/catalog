@@ -23,57 +23,71 @@ import net.sf.json.JsonConfig;
 /**
  * 
  * 投票信息
+ * 
  * @author denghaihui
  * @date 2017-06-26 09:47:03
  * 
  */
-@Service(group="calalogArticleService", version="1.0")
+@Service(group = "calalogArticleService", version = "1.0")
 public class CalalogArticleServiceImpl implements CalalogArticleService {
-	
 
 	@Autowired
-	CatalogArticleMapper catalogArticleMapper; 
-	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
-		 
+	CatalogArticleMapper catalogArticleMapper;
+	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class);
+
 	@Override
 	public String getCategoryArticleListByParamJson(String paramJson) {
-		 
+
 		JSONObject resultObj = JsonUtils.createJSONObject();
-		JSONObject paramObj = new  JSONObject();
+		JSONObject paramObj = new JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
-		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
+		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
 			return resultObj.toString();
-		}   
-		int pageIndex = 1; 
-		int pageSize =  VankleConstants.VANKLE_PAGE_SIZE;
-		if(paramObj.containsKey("pageSize")) {
-			pageSize = paramObj.getInt("pageSize"); 
 		}
-		if(paramObj.containsKey("pageSize")) {
-			pageIndex = paramObj.getInt("pageIndex"); 
+		int pageIndex = 1;
+		int pageSize = VankleConstants.VANKLE_PAGE_SIZE;
+		if (paramObj.containsKey("pageSize")) {
+			pageSize = paramObj.getInt("pageSize");
 		}
-		int storeId  = paramObj.getInt("storeId"); 
-		int offset = pageSize*(pageIndex-1);  
-		List<CatalogArticleEntity> catalogArticleEntitys  =  catalogArticleMapper.findCatalogArticleEntity(storeId,pageSize,offset);
-		int total =  catalogArticleMapper.findCatalogArticleEntityCount(); 
+		if (paramObj.containsKey("pageSize")) {
+			pageIndex = paramObj.getInt("pageIndex");
+		}
+		int storeId = paramObj.getInt("storeId");
+		int offset = pageSize * (pageIndex - 1);
+		List<CatalogArticleEntity> catalogArticleEntitys = catalogArticleMapper.findCatalogArticleEntity(storeId,
+				pageSize, offset);
+		int total = catalogArticleMapper.findCatalogArticleEntityCount(storeId);
 		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntity(storeId);
-		
+
 		JSONObject dataObj = new JSONObject();
-		JsonConfig jsonConfig = new JsonConfig();  
-		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
-		PagerUtil pagerUtil = new PagerUtil(pageIndex,total,pageSize);
-		dataObj.put("dataList", JSONArray.fromObject(  catalogArticleEntitys,jsonConfig));
+		JsonConfig jsonConfig = new JsonConfig();
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());
+		PagerUtil pagerUtil = new PagerUtil(pageIndex, total, pageSize);
+		dataObj.put("dataList", JSONArray.fromObject(catalogArticleEntitys, jsonConfig));
 		dataObj.put("prePageIndex", pagerUtil.previous());
 		dataObj.put("curPageIndex", pageIndex);
-		dataObj.put("nextPageIndex", pagerUtil.next()); 
+		dataObj.put("nextPageIndex", pagerUtil.next());
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
-		dataObj.put("pageCount", pagerUtil.pageCount); 
-		dataObj.put("catalogArticleEntity", catalogArticleEntity);   
-		resultObj.put("data",dataObj);
-		 
-		return  resultObj.toString(); 
+		dataObj.put("pageCount", pagerUtil.pageCount);
+		dataObj.put("catalogArticleEntity", catalogArticleEntity);
+		resultObj.put("data", dataObj);
+
+		return resultObj.toString();
 	}
-	 
-	
+
+	@Override
+	public String findOneCatalogArticleEntityByTitle(String paramJson) { 
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
+			return resultObj.toString();
+		}
+		String title = paramObj.getString("title"); 
+		int storeId = paramObj.getInt("storeId");
+		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntityByTitle(storeId, title);
+		resultObj.put("data", catalogArticleEntity);
+		return resultObj.toString();
+	} 
 }
