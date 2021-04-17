@@ -32,16 +32,12 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 	
 
 	@Autowired
-	CatalogArticleMapper catalogArticleMapper;
-   
+	CatalogArticleMapper catalogArticleMapper; 
 	private final static Logger logger = LoggerFactory.getLogger(CalalogProductServiceImpl.class); 
-		
-		
+		 
 	@Override
 	public String getCategoryArticleListByParamJson(String paramJson) {
-		
-		logger.error(paramJson);
-		
+		 
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
