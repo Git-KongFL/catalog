@@ -409,7 +409,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				obj.put("value", valueArr);
 				set_list.add(obj);
 			} 
-			jsonProduct.put("set_list", set_list); 
+			jsonProduct.put("setList", set_list); 
 	}
 	
 	
