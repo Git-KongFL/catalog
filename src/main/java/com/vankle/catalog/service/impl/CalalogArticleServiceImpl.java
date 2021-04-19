@@ -58,7 +58,7 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 				pageSize, offset);
 		int total = catalogArticleMapper.findCatalogArticleEntityCount(storeId);
 		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntity(storeId);
-
+		  
 		JSONObject dataObj = new JSONObject();
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());
@@ -70,9 +70,8 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount);
-		dataObj.put("catalogArticleEntity", catalogArticleEntity);
-		resultObj.put("data", dataObj);
-
+		dataObj.put("catalogArticleEntity", JSONObject.fromObject(catalogArticleEntity, jsonConfig) );
+		resultObj.put("data", dataObj); 
 		return resultObj.toString();
 	}
 
