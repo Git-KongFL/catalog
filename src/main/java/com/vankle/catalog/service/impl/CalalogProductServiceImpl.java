@@ -381,18 +381,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues); 
 			JSONArray set_list = new JSONArray();
 			
-			List<Map<String,String>> catalogProductCustomizedAttributeList  = 
+			List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
 					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getId());
 			
-			List<Map<String,String>> catalogProductCustomizedAttributeValueList  = 
+			List<Map<String,Object>> catalogProductCustomizedAttributeValueList  = 
 					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getStoreId());
 			Map<String,String> attributeValueNameMap = new HashMap<String, String>();
-			for(Map<String,String> attributeValueMap:catalogProductCustomizedAttributeValueList) {
-				String key = attributeValueMap.get("customized_attribute_id")+attributeValueMap.get("value");
+			for(Map<String,Object> attributeValueMap:catalogProductCustomizedAttributeValueList) {
+				String key = attributeValueMap.get("customized_attribute_id")+""+attributeValueMap.get("value");
 				attributeValueNameMap.put(key, attributeValueMap.get("name")+"");
 			}
 			
-			for(Map<String,String> customizedAttributeMap:catalogProductCustomizedAttributeList) {
+			for(Map<String,Object> customizedAttributeMap:catalogProductCustomizedAttributeList) {
 				logger.error(customizedAttributeMap.toString());
 				JSONObject obj = new JSONObject();
 				obj.put("key", customizedAttributeMap.get("short_name"));
