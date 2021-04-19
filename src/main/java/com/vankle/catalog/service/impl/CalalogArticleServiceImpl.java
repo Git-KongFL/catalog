@@ -83,10 +83,13 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
 			return resultObj.toString();
 		}
+
+		JsonConfig jsonConfig = new JsonConfig();
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());
 		String title = paramObj.getString("title"); 
 		int storeId = paramObj.getInt("storeId");
 		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntityByTitle(storeId, title);
-		resultObj.put("data", catalogArticleEntity);
+		resultObj.put("data",  JSONObject.fromObject(catalogArticleEntity, jsonConfig));
 		return resultObj.toString();
 	} 
 }

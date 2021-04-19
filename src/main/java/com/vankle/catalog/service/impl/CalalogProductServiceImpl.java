@@ -3,7 +3,9 @@ package com.vankle.catalog.service.impl;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
 import com.vankle.catalog.dao.CatalogCategoryProductMapper;
 import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
 import com.vankle.catalog.dao.CatalogProductBundledLinkMapper;
+import com.vankle.catalog.dao.CatalogProductCustomizedAttributeMapper;
 import com.vankle.catalog.dao.CatalogProductEntityDiscountMapper;
 import com.vankle.catalog.dao.CatalogProductEntityImageMapper;
 import com.vankle.catalog.dao.CatalogProductEntityLanguageMapper;
@@ -90,7 +93,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogCategoryProductMapper catalogCategoryProductMapper;
 	@Autowired
 	CatalogCategoryEntityMapper catalogCategoryEntityMapper;
-	
+	@Autowired
+	CatalogProductCustomizedAttributeMapper catalogProductCustomizedAttributeMapper;
 	
 	@Reference(group = "systemService", version = "1.0", timeout = 60000)
 	private SystemService systemService;
@@ -255,16 +259,16 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加捆绑销售资料
 		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		//添加商品推荐商品
-		this.addCatalogProductRecommended(jsonProduct,jsonConfig);
+		this.addCatalogProductRecommended(jsonProduct,jsonConfig); 
 		
+		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){
+			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig);
+		}
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
-		resultObj.put("data", jsonProduct);
-		
-		//logger.info("jsonProduct:"+jsonProduct.toString());
-		
+		resultObj.put("data", jsonProduct); 
 		if(languageId == 1){
 			return resultObj.toString();  
 		}else{
@@ -370,9 +374,55 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * 添加商品自定义属性
 	  * @param jsonProduct
 	  */
-	public void addCatalogProductAttributeValue(JSONObject jsonProduct,JsonConfig config) {
+	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity catalogProductEntity,JSONObject jsonProduct,JsonConfig config) {
+		
 			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
 			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
+			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues); 
+			JSONArray set_list = new JSONArray();
+			
+			List<Map<String,String>> catalogProductCustomizedAttributeList  = 
+					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getId());
+			
+			List<Map<String,String>> catalogProductCustomizedAttributeValueList  = 
+					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getStoreId());
+			Map<String,String> attributeValueNameMap = new HashMap<String, String>();
+			for(Map<String,String> attributeValueMap:catalogProductCustomizedAttributeValueList) {
+				String key = attributeValueMap.get("customized_attribute_id")+attributeValueMap.get("value");
+				attributeValueNameMap.put(key, attributeValueMap.get("name")+"");
+			}
+			
+			for(Map<String,String> customizedAttributeMap:catalogProductCustomizedAttributeList) {
+				JSONObject obj = new JSONObject();
+				obj.put("key", customizedAttributeMap.get("short_name"));
+				obj.put("name", customizedAttributeMap.get("name"));
+				obj.put("sort", customizedAttributeMap.get("sort_number"));
+				JSONArray valueArr = new JSONArray();
+				String[] values =  customizedAttributeMap.get("bvalue").toString().split(",");
+				
+				for(String value:values) {
+					String key = customizedAttributeMap.get("id") + value;
+					JSONObject valueObj = new JSONObject();
+					valueObj.put("key", value);
+					valueObj.put("name", attributeValueNameMap.get(key)); 
+					valueArr.add(valueObj);
+				}
+				obj.put("value", valueArr);
+				set_list.add(obj);
+			} 
+			jsonProduct.put("set_list", set_list); 
+	}
+	
+	
+	
+	/**
+	  * 添加商品自定义属性
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductAttributeValue(JSONObject jsonProduct,JsonConfig config) {
+			
+			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
+			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues); 
 			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues);
 	}
 	
