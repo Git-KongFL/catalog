@@ -391,7 +391,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				String key = attributeValueMap.get("customized_attribute_id")+""+attributeValueMap.get("value");
 				attributeValueNameMap.put(key, attributeValueMap.get("name")+"");
 			}
-			
+			logger.error(attributeValueNameMap.toString());
 			for(Map<String,Object> customizedAttributeMap:catalogProductCustomizedAttributeList) {
 				logger.error(customizedAttributeMap.toString());
 				JSONObject obj = new JSONObject();
@@ -403,6 +403,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				
 				for(String value:values) {
 					String key = customizedAttributeMap.get("id").toString() + value;
+					logger.error(key);
 					JSONObject valueObj = new JSONObject();
 					valueObj.put("key", value);
 					valueObj.put("name", attributeValueNameMap.get(key)); 
