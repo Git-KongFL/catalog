@@ -404,7 +404,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					String key = customizedAttributeMap.get("id").toString() + value; 
 					if(attributeValueNameMap.containsKey(key)) {
 						Map<String,Object> valueMap = (Map<String, Object>) attributeValueNameMap.get(key);
-						
+						logger.error(valueMap.toString());
 						JSONObject valueObj = new JSONObject();
 						valueObj.put("key", value);
 						valueObj.put("name", valueMap.get("name")); 
