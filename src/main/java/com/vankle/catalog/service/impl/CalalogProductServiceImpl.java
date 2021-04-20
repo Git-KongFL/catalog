@@ -409,6 +409,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 						valueObj.put("key", value);
 						valueObj.put("name", valueMap.get("name")); 
 						valueObj.put("price", valueMap.get("price")); 
+						valueObj.put("imageUrl", valueMap.get("image_url")); 
 						valueArr.add(valueObj);
 					}
 				}
