@@ -384,35 +384,35 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
 					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getId());
 			
-			List<Map<String,Object>> catalogProductCustomizedAttributeValueList  = 
-					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributVaueListByProductId(catalogProductEntity.getStoreId());
-			Map<String,Object> attributeValueNameMap = new HashMap<String, Object>();
-			for(Map<String,Object> attributeValueMap:catalogProductCustomizedAttributeValueList) {
-				String key = attributeValueMap.get("customized_attribute_id")+""+attributeValueMap.get("value");
-				attributeValueNameMap.put(key, attributeValueMap);
-			} 
+//			List<Map<String,Object>> catalogProductCustomizedAttributeValueList  = 
+//					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributVaueListByProductId(catalogProductEntity.getStoreId());
+//			Map<String,Object> attributeValueNameMap = new HashMap<String, Object>();
+//			for(Map<String,Object> attributeValueMap:catalogProductCustomizedAttributeValueList) {
+//				String key = attributeValueMap.get("customized_attribute_id")+""+attributeValueMap.get("value");
+//				attributeValueNameMap.put(key, attributeValueMap);
+//			} 
 			for(Map<String,Object> customizedAttributeMap:catalogProductCustomizedAttributeList) { 
 				JSONObject obj = new JSONObject();
 				obj.put("key", customizedAttributeMap.get("short_name"));
 				obj.put("name", customizedAttributeMap.get("name"));
 				obj.put("sort", customizedAttributeMap.get("sort_number"));
-				JSONArray valueArr = new JSONArray();
-				String[] values =  customizedAttributeMap.get("bvalue").toString().split(",");
-				
-				for(String value:values) {
-					 
-					String key = customizedAttributeMap.get("id").toString() + value; 
-					if(attributeValueNameMap.containsKey(key)) {
-						Map<String,Object> valueMap = (Map<String, Object>) attributeValueNameMap.get(key);
-						logger.error(valueMap.toString());
-						JSONObject valueObj = new JSONObject();
-						valueObj.put("key", value);
-						valueObj.put("name", valueMap.get("name")); 
-						valueObj.put("price", valueMap.get("price")); 
-						valueObj.put("imageUrl", valueMap.get("image_url")); 
-						valueArr.add(valueObj);
-					}
-				}
+				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string"));
+//				String[] values =  customizedAttributeMap.get("bvalue").toString().split(",");
+//				
+//				for(String value:values) {
+//					 
+//					String key = customizedAttributeMap.get("id").toString() + value; 
+//					if(attributeValueNameMap.containsKey(key)) {
+//						Map<String,Object> valueMap = (Map<String, Object>) attributeValueNameMap.get(key);
+//						logger.error(valueMap.toString());
+//						JSONObject valueObj = new JSONObject();
+//						valueObj.put("key", value);
+//						valueObj.put("name", valueMap.get("name")); 
+//						valueObj.put("price", valueMap.get("price")); 
+//						valueObj.put("imageUrl", valueMap.get("image_url")); 
+//						valueArr.add(valueObj);
+//					}
+//				}
 				obj.put("value", valueArr);
 				set_list.add(obj);
 			} 
