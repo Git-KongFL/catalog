@@ -291,24 +291,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonProduct.put("category", "");
 		String category = "";
 		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){
-			CatalogCategoryEntity categoryEntity =
-					catalogCategoryEntityMapper.findCatalogCategoryEntityById(catalogCategoryProduct.getCategoryId(), languageId);
-			if(categoryEntity!=null){
-				if(categoryEntity.getLevel()==2){
-					category = categoryEntity.getName();
-				}else if(categoryEntity.getLevel()==3){
-					CatalogCategoryEntity categoryEntity2 =
-							catalogCategoryEntityMapper.findCatalogCategoryEntityById(categoryEntity.getParentCategoryId(), languageId);
-					if(categoryEntity2!=null)
-						category = categoryEntity2.getName() + "/" + categoryEntity.getName();
-					else
-						category = categoryEntity.getName();
-				}
-
-				jsonProduct.put("category", category);
-			}
-			break;
-		}
+			category = catalogCategoryProduct.getCategoryId() + ",";
+		} 
+		jsonProduct.put("category", category);
 	}
 	 
 	
