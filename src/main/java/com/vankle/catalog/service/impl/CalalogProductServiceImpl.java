@@ -291,7 +291,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonProduct.put("category", "");
 		String category = "";
 		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){
-			category = catalogCategoryProduct.getCategoryId() + ",";
+			category += catalogCategoryProduct.getCategoryId() + ",";
 		} 
 		jsonProduct.put("category", category);
 	}
