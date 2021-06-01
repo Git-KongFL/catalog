@@ -300,6 +300,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			cartRuleEntitys.add(cartRuleEntity);
 			categoryIds += catalogCategoryProduct.getCategoryId() + ",";
 		} 
+		jsonProduct.put("cartRuleEntitys", cartRuleEntitys);
 		jsonProduct.put("categoryIds", categoryIds);
 		jsonProduct.put("category", "");
 		String category = ""; 
