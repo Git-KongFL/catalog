@@ -286,14 +286,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	public void addCatalogProductCategory(JSONObject jsonProduct,JsonConfig config,int languageId) {
 		
 		List<CatalogCategoryProduct> catalogProductList =
-				catalogCategoryProductMapper.findCatalogCategoryProductListByProduct(jsonProduct.getInt("id"));
-		//JSONArray catalogArray = new JSONArray();
-		jsonProduct.put("category", "");
-		String category = "";
+				catalogCategoryProductMapper.findCatalogCategoryProductListByProduct(jsonProduct.getInt("id")); 
+		jsonProduct.put("categoryIds", "");
+		String categoryIds = "";
 		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){
-			category += catalogCategoryProduct.getCategoryId() + ",";
+			categoryIds += catalogCategoryProduct.getCategoryId() + ",";
 		} 
-		jsonProduct.put("category", category);
+		jsonProduct.put("categoryIds", categoryIds);
 	}
 	 
 	
