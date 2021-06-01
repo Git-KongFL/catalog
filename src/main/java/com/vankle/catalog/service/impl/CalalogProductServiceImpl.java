@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.vankle.cart.dao.CartRuleEntityMapper;
+import com.vankle.cart.entity.CartRuleEntity;
 import com.vankle.catalog.dao.CatalogCategoryEntityMapper;
 import com.vankle.catalog.dao.CatalogCategoryProductMapper;
 import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
@@ -95,7 +97,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogCategoryEntityMapper catalogCategoryEntityMapper;
 	@Autowired
 	CatalogProductCustomizedAttributeMapper catalogProductCustomizedAttributeMapper;
-	
+
+	@Autowired
+	CartRuleEntityMapper cartRuleEntityMapper;
 	@Reference(group = "systemService", version = "1.0", timeout = 60000)
 	private SystemService systemService;
 	
@@ -290,7 +294,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		jsonProduct.put("categoryIds", "");
 		String categoryIds = "";
-		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){
+		JSONArray cartRuleEntitys = new JSONArray();
+		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){ 
+			CartRuleEntity  cartRuleEntity = cartRuleEntityMapper.findCartRuleEntityByStoreIdAndCategoryId(jsonProduct.getInt("storeId"), catalogCategoryProduct.getCategoryId());
+			cartRuleEntitys.add(cartRuleEntity);
 			categoryIds += catalogCategoryProduct.getCategoryId() + ",";
 		} 
 		jsonProduct.put("categoryIds", categoryIds);
