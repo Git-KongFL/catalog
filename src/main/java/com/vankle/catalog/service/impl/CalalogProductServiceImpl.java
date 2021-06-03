@@ -297,7 +297,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		JSONArray cartRuleEntitys = new JSONArray();
 		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){ 
 			CartRuleEntity  cartRuleEntity = cartRuleEntityMapper.findCartRuleEntityByStoreIdAndCategoryId(jsonProduct.getInt("storeId"), catalogCategoryProduct.getCategoryId());
-			cartRuleEntitys.add(cartRuleEntity);
+			if(cartRuleEntity != null) {
+				cartRuleEntitys.add(cartRuleEntity);
+			}
 			categoryIds += catalogCategoryProduct.getCategoryId() + ",";
 		} 
 		jsonProduct.put("cartRuleEntitys", cartRuleEntitys);
