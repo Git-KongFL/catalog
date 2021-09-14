@@ -296,10 +296,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String categoryIds = "";
 		JSONArray cartRuleEntitys = new JSONArray();
 		for(CatalogCategoryProduct catalogCategoryProduct :catalogProductList){ 
-			CartRuleEntity  cartRuleEntity = cartRuleEntityMapper.findCartRuleEntityByStoreIdAndCategoryId(jsonProduct.getInt("storeId"), catalogCategoryProduct.getCategoryId());
-			if(cartRuleEntity != null) {
+			List<CartRuleEntity>  cartRuleEntityList = cartRuleEntityMapper.findCartRuleEntityByStoreIdAndCategoryId(jsonProduct.getInt("storeId"), catalogCategoryProduct.getCategoryId());
+			for(CartRuleEntity cartRuleEntity:cartRuleEntityList) {  
 				cartRuleEntitys.add(cartRuleEntity);
-			}
+			} 
+//			if(cartRuleEntity != null) {
+//				cartRuleEntitys.add(cartRuleEntity);
+//			}
 			categoryIds += catalogCategoryProduct.getCategoryId() + ",";
 		} 
 		jsonProduct.put("cartRuleEntitys", cartRuleEntitys);
