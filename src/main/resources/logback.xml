@@ -144,7 +144,7 @@
         <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">  
             <dataSource class="org.apache.commons.dbcp.BasicDataSource">  
                 <driverClassName>com.mysql.jdbc.Driver</driverClassName>  
-                <url>jdbc:mysql://172.20.11.79:3306/vancaro?characterEncoding=UTF-8</url>  
+                <url>jdbc:mysql://172.20.11.79:3306/vankle_venus?characterEncoding=UTF-8</url>  
                 <username>root</username>  
                 <password>2UE1HmbhXmdo1C1</password>  
             </dataSource>  
