@@ -113,6 +113,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getCatalogProductInfoByItemId(String paramJson) {
+		
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
@@ -135,7 +136,23 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		paramObj.put("productId", productId);
 		logger.info("itemId:"+paramObj.toString());
 		 
-		return this.getCatalogProductInfoByParamJson(paramObj.toString());
+		String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
+		
+		if(catalogProductEntity.getProductCustomizedId() != null ) {
+			try {  
+				paramObj.put("productId",catalogProductEntity.getProductCustomizedId() );
+				logger.info("itemId:"+paramObj.toString()); 
+				String resultCustomizedStr = this.getCatalogProductInfoByParamJson(paramObj.toString()); 
+				JSONObject obj = JSONObject.fromObject(resultStr);
+				obj.put("productCustomizedEntity", JSONObject.fromObject(resultCustomizedStr)); 
+				return obj.toString(); 
+			}catch (Exception e) {
+				e.printStackTrace(); 
+			}
+		} 
+		return resultStr;
+		
+		
 		
 	}
 	
