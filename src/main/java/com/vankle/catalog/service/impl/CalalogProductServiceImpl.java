@@ -120,39 +120,43 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		} 
-		int productId = paramObj.getInt("productId");
-		int storeId = paramObj.getInt("storeId");
+		try {  
+			int productId = paramObj.getInt("productId");
+			int storeId = paramObj.getInt("storeId"); 
 		 
-		 
-		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
-		//判断商品是否存在
-		if(catalogProductEntity==null){
-			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
-			 return resultObj.toString();
-		}else{
-			productId = catalogProductEntity.getId();
-		}
-		 
-		paramObj.put("productId", productId);
-		logger.info("itemId:"+paramObj.toString());
-		 
-		String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
-		
-		if(catalogProductEntity.getProductCustomizedId() != null ) {
-			try {  
-				paramObj.put("productId",catalogProductEntity.getProductCustomizedId() );
-				logger.info("itemId:"+paramObj.toString()); 
-				String resultCustomizedStr = this.getCatalogProductInfoByParamJson(paramObj.toString()); 
-				JSONObject obj = JSONObject.fromObject(resultStr);
-				obj.put("productCustomizedEntity", JSONObject.fromObject(resultCustomizedStr)); 
-				return obj.toString(); 
-			}catch (Exception e) {
-				e.printStackTrace(); 
+			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
+			//判断商品是否存在
+			if(catalogProductEntity==null){
+				 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
+				 return resultObj.toString();
+			}else{
+				productId = catalogProductEntity.getId();
 			}
+			 
+			paramObj.put("productId", productId);
+			logger.info("itemId:"+paramObj.toString());
+			 
+			String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
+			
+			if(catalogProductEntity.getProductCustomizedId() != null ) {
+				try {  
+					paramObj.put("productId",catalogProductEntity.getProductCustomizedId() );
+					logger.info("itemId:"+paramObj.toString()); 
+					String resultCustomizedStr = this.getCatalogProductInfoByParamJson(paramObj.toString()); 
+					JSONObject obj = JSONObject.fromObject(resultStr);
+					obj.put("productCustomizedEntity", JSONObject.fromObject(resultCustomizedStr)); 
+					return obj.toString(); 
+				}catch (Exception e) {
+					e.printStackTrace(); 
+				}
+			} 
+
+			return resultStr;
+		}catch (Exception e) {
+			logger.error(paramJson);
+			e.printStackTrace(); 
 		} 
-		return resultStr;
-		
-		
+		return null;
 		
 	}
 	
