@@ -113,7 +113,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getCatalogProductInfoByItemId(String paramJson) {
-		
+
+		logger.error("itemId:"+paramJson);
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
