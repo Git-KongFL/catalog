@@ -252,6 +252,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			
 			try {
 				logger.error(productObj.toString());
+				
 				JSONArray setList =productObj.getJSONArray("setList");
 				if(setList.getJSONObject(0).containsKey("value")) {
 					JSONArray valueList =setList.getJSONObject(0).getJSONArray("value");
