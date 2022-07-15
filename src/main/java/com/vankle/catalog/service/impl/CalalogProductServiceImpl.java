@@ -251,6 +251,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
 			
 			try {
+				
+				
 				logger.error(productObj.toString());
 				
 				JSONArray setList =productObj.getJSONArray("setList");
