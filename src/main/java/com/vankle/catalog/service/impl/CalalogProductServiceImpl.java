@@ -249,6 +249,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			catalogProductEntityDiscount.put("baseDiscountAmount", catalogProductEntityDiscount.getString("discountAmount")); 
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
+			
+			logger.error(resultObj.toString());
 			return resultObj.toString();
 		}
 	}
