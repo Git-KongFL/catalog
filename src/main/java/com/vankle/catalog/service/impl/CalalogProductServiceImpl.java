@@ -250,6 +250,32 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
 			
+			try {
+				JSONArray setList =resultObj.getJSONArray("setList");
+				if(setList.getJSONObject(0).containsKey("value")) {
+					JSONArray valueList =setList.getJSONObject(0).getJSONArray("value");
+					for(int i =0 ; i<valueList.size() ; i++) {
+						JSONObject oneObj = valueList.getJSONObject(i); 
+						BigDecimal onePrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( oneObj.getString("price")), currencyId);
+						valueList.getJSONObject(i).put("price", onePrice);
+						
+						if(oneObj.containsKey("value")) {
+							JSONArray twoList =setList.getJSONObject(0).getJSONArray("value");
+							for(int m =0 ; i<twoList.size() ; m++) {
+								JSONObject towObj = twoList.getJSONObject(m); 
+								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
+								twoList.getJSONObject(i).put("price", towPrice); 
+							}
+						}
+					}
+				}
+				
+			}catch (Exception e) {
+				 
+				e.printStackTrace();
+				// TODO: handle exception
+			} 
+			
 			logger.error(resultObj.toString());
 			return resultObj.toString();
 		}
