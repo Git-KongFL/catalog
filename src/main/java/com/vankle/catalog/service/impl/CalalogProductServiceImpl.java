@@ -265,7 +265,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 							JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(0).getJSONArray("value");
 							logger.error(twoList.toString());
 							logger.error(twoList.size()+"");
-							for(int m =0 ; i< twoList.size() ; m++) { 
+							for(int m =0 ; m< twoList.size() ; m++) { 
 								logger.error(m+"");
 								JSONObject towObj = twoList.getJSONObject(m); 
 								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
