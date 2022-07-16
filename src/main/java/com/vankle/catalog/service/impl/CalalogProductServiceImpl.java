@@ -270,7 +270,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 								JSONObject towObj = twoList.getJSONObject(m); 
 								logger.error(""+towObj.getString("price"));
 								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
-								logger.error(""+towObj.getString("towPrice"));
+								logger.error(""+towPrice);
 								towObj.put("price", towPrice); 
 							}
 						}
