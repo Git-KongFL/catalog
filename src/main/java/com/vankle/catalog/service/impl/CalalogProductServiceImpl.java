@@ -251,8 +251,6 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
 			
 			try {
-				
-				
 				logger.error(productObj.toString());
 				
 				JSONArray setList =productObj.getJSONArray("setList");
@@ -264,7 +262,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 						valueList.getJSONObject(i).put("price", onePrice);
 						
 						if(oneObj.containsKey("value")) {
-							JSONArray twoList =oneObj.getJSONArray("value");
+							JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(0).getJSONArray("value");
 							for(int m =0 ; i<twoList.size() ; m++) {
 								JSONObject towObj = twoList.getJSONObject(m); 
 								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
