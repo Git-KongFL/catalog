@@ -632,7 +632,20 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 */
 	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config) {
 		List<CatalogProductRecommended> catalogProductRecommendeds =  catalogProductRecommendedMapper.findCatalogProductRecommendedList(jsonProduct.getInt("id"));
-		jsonProduct.put("catalogProductRecommendeds", JSONArray.fromObject(catalogProductRecommendeds,config));
+		JSONArray recommendArray = new JSONArray();
+		for(CatalogProductRecommended catalogProductRecommended:catalogProductRecommendeds) {
+			JSONObject obj = JSONObject.fromObject(catalogProductRecommended);
+			obj.put("spu", catalogProductRecommended.getSpu());
+			obj.put("recommendType", "sgtj");
+			obj.put("customizedType", catalogProductRecommended.getCustomizedType());
+			obj.put("spu_customized", catalogProductRecommended.getSpu().split("||")[0]);		
+			obj.put("item_id", catalogProductRecommended.getId());		
+			obj.put("remoteUrl", catalogProductRecommended.getSmallImage());		
+			recommendArray.add(obj);
+		}
+		
+		
+		jsonProduct.put("catalogProductRecommendeds", recommendArray);
 	}
 	
 	
