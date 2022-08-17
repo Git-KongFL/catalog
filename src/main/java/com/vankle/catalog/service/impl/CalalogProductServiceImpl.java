@@ -638,15 +638,22 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			obj.put("spu", catalogProductRecommended.getSpu());
 			obj.put("recommendType", "sgtj");
 			obj.put("customizedType", catalogProductRecommended.getCustomizedType());
-			obj.put("spu_customized", catalogProductRecommended.getSpu().split("||")[0]);		
+			if(catalogProductRecommended.getSpu().split("\\|\\|").length==2) {
+				obj.put("spu_customized", catalogProductRecommended.getSpu().split("\\|\\|")[1]);	
+			}else {
+				obj.put("spu_customized", catalogProductRecommended.getSpu().split("\\|\\|")[0]);	
+			}
 			obj.put("item_id", catalogProductRecommended.getId());		
 			obj.put("remoteUrl", catalogProductRecommended.getSmallImage());		
 			recommendArray.add(obj);
-		}
-		
+		} 
 		
 		jsonProduct.put("catalogProductRecommendeds", recommendArray);
 	}
-	
+    public static void main(String[] args) { 
+    	String spu = "cdd||MMC-bps_MSMC-moissanitewhite_SSMC-whitestone";
+    	String[] spuStrings = spu.split("\\|\\|");
+    	System.out.println(spuStrings[0]);
+    }
 	
 }
