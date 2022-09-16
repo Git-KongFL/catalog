@@ -271,7 +271,27 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 								logger.error(""+towObj.getString("price"));
 								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
 								logger.error(""+towPrice);
-								towObj.put("price", towPrice); 
+								towObj.put("price", towPrice);  
+								
+								try {
+									if(towObj.containsKey("value")) {
+										
+										JSONArray threeList =towObj.getJSONArray("value").getJSONObject(0).getJSONArray("value");
+										logger.error(threeList.toString());
+										logger.error(threeList.size()+"");
+										for(int m3 =0 ; m3< threeList.size() ; m3++) { 
+											logger.error(m3+"");
+											JSONObject threeObj = threeList.getJSONObject(m3); 
+											logger.error(""+threeObj.getString("price"));
+											BigDecimal threePrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( threeObj.getString("price")), currencyId);
+											logger.error(""+threePrice);
+											towObj.put("price", threePrice);   
+										} 
+									} 
+								}catch (Exception e) { 
+									e.printStackTrace();
+									// TODO: handle exception
+								} 
 							}
 						}
 					}
@@ -320,10 +340,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加捆绑销售资料
 		this.addCatalogProductGroupSell(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		//添加商品推荐商品
-		this.addCatalogProductRecommended(jsonProduct,jsonConfig); 
+		this.addCatalogProductRecommended(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		
 		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){
-			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig);
+			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId);
 		}
 		
 		//添加商品自定义属性
@@ -453,7 +473,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * 添加商品自定义属性
 	  * @param jsonProduct
 	  */
-	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity catalogProductEntity,JSONObject jsonProduct,JsonConfig config) {
+	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity catalogProductEntity,JSONObject jsonProduct,JsonConfig config,int languageId) {
 		
 			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
 			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
@@ -474,6 +494,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				JSONObject obj = new JSONObject();
 				obj.put("key", customizedAttributeMap.get("short_name"));
 				obj.put("name", customizedAttributeMap.get("name"));
+				obj.put("nameFr", customizedAttributeMap.get("name_fr"));
 				obj.put("sort", customizedAttributeMap.get("sort_number"));
 				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string"));
 //				String[] values =  customizedAttributeMap.get("bvalue").toString().split(",");
@@ -630,10 +651,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * 添加推荐商品
 	 * @param JSONObject
 	 */
-	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config) {
+	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId,String countryId ) {
 		List<CatalogProductRecommended> catalogProductRecommendeds =  catalogProductRecommendedMapper.findCatalogProductRecommendedList(jsonProduct.getInt("id"));
 		JSONArray recommendArray = new JSONArray();
 		for(CatalogProductRecommended catalogProductRecommended:catalogProductRecommendeds) {
+	 
+			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(catalogProductRecommended.getSellPrice(), currencyId);
+			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(catalogProductRecommended.getDiscountAmount(), currencyId);
 			JSONObject obj = JSONObject.fromObject(catalogProductRecommended);
 			obj.put("spu", catalogProductRecommended.getSpu());
 			obj.put("recommendType", "sgtj");
@@ -644,7 +668,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				obj.put("spu_customized", catalogProductRecommended.getSpu().split("\\|\\|")[0]);	
 			}
 			obj.put("item_id", catalogProductRecommended.getId());		
-			obj.put("remoteUrl", catalogProductRecommended.getSmallImage());		
+			obj.put("remoteUrl", catalogProductRecommended.getSmallImage());	
+			obj.put("sellPrice", sellPrice);	
+			obj.put("discountAmount", discountAmount );		
 			recommendArray.add(obj);
 		} 
 		
