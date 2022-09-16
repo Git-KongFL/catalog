@@ -263,37 +263,22 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 						valueList.getJSONObject(i).put("price", onePrice);
 						
 						if(oneObj.containsKey("value")) {
-							JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(0).getJSONArray("value");
-							logger.error(twoList.toString());
-							logger.error(twoList.size()+"");
-							for(int m =0 ; m< twoList.size() ; m++) { 
-								logger.error(m+"");
-								JSONObject towObj = twoList.getJSONObject(m); 
-								logger.error(""+towObj.getString("price"));
-								BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
-								logger.error(""+towPrice);
-								towObj.put("price", towPrice);  
-								
-								try {
-									if(towObj.containsKey("value")) {
-										
-										JSONArray threeList =towObj.getJSONArray("value").getJSONObject(0).getJSONArray("value");
-										logger.error(threeList.toString());
-										logger.error(threeList.size()+"");
-										for(int m3 =0 ; m3< threeList.size() ; m3++) { 
-											logger.error(m3+"");
-											JSONObject threeObj = threeList.getJSONObject(m3); 
-											logger.error(""+threeObj.getString("price"));
-											BigDecimal threePrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( threeObj.getString("price")), currencyId);
-											logger.error(""+threePrice);
-											threeObj.put("price", threePrice);   
-										} 
-									} 
-								}catch (Exception e) { 
-									e.printStackTrace();
-									// TODO: handle exception
-								} 
-							}
+
+							JSONArray valueOneList =oneObj.getJSONArray("value");
+							for(int n =0 ; n<valueOneList.size() ; n++) {
+								JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
+								logger.error(twoList.toString());
+								logger.error(twoList.size()+"");
+								for(int m =0 ; m< twoList.size() ; m++) { 
+									logger.error(m+"");
+									JSONObject towObj = twoList.getJSONObject(m); 
+									logger.error(""+towObj.getString("price"));
+									BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
+									logger.error(""+towPrice);
+									towObj.put("price", towPrice);  
+									  
+								}
+							} 
 						}
 					}
 				}
