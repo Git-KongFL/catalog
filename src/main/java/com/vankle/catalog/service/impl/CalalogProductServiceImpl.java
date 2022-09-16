@@ -215,6 +215,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
 			JSONObject productObj = resultObj.getJSONObject("data");
 			String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
+			logger.error(resultStr);
 			productObj.put("currency", JSONObject.fromObject(jsonCurrency));
 			//商品信息价格换算
 			BigDecimal originalPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("originalPrice")), currencyId);
@@ -285,7 +286,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 											logger.error(""+threeObj.getString("price"));
 											BigDecimal threePrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( threeObj.getString("price")), currencyId);
 											logger.error(""+threePrice);
-											towObj.put("price", threePrice);   
+											threeObj.put("price", threePrice);   
 										} 
 									} 
 								}catch (Exception e) { 
