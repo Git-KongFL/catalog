@@ -113,8 +113,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	public String getCatalogProductInfoByItemId(String paramJson) {
-
-		logger.error("itemId:"+paramJson);
+ 
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new  JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
@@ -214,8 +213,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}else{
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
 			JSONObject productObj = resultObj.getJSONObject("data");
-			String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
-			logger.error(resultStr);
+			String jsonCurrency =  systemService.getCurrencyEntity(currencyId); 
 			productObj.put("currency", JSONObject.fromObject(jsonCurrency));
 			//商品信息价格换算
 			BigDecimal originalPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("originalPrice")), currencyId);
@@ -267,14 +265,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 							JSONArray valueOneList =oneObj.getJSONArray("value");
 							for(int n =0 ; n<valueOneList.size() ; n++) {
 								JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
-								logger.error(twoList.toString());
-								logger.error(twoList.size()+"");
+								logger.info(twoList.toString());
+								logger.info(twoList.size()+"");
 								for(int m =0 ; m< twoList.size() ; m++) { 
-									logger.error(m+"");
+									logger.info(m+"");
 									JSONObject towObj = twoList.getJSONObject(m); 
-									logger.error(""+towObj.getString("price"));
+									logger.info(""+towObj.getString("price"));
 									BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
-									logger.error(""+towPrice);
+									logger.info(""+towPrice);
 									towObj.put("price", towPrice);  
 									  
 								}
@@ -289,7 +287,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				// TODO: handle exception
 			} 
 			
-			logger.error(resultObj.toString());
+			logger.info(resultObj.toString());
 			return resultObj.toString();
 		}
 	}
