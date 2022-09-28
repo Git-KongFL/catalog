@@ -307,7 +307,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
-		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);  
+		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);   
 		jsonProduct.put("requestType", resultObj.get("requestType"));
 		
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
