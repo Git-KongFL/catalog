@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -91,6 +92,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	CatalogProductRecommendedMapper catalogProductRecommendedMapper;
 	@Autowired
 	SystemCurrencyService systemCurrencyService;
+	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	
 	@Autowired
 	CatalogCategoryProductMapper catalogCategoryProductMapper;
 	@Autowired
@@ -326,9 +332,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加商品推荐商品
 		this.addCatalogProductRecommended(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		
-		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){
-			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId);
+		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){ 
+			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
 		}
+		
+		if( catalogProductEntity.getType() ==5 ){ 
+			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
+		}
+		
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
@@ -457,7 +468,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  * 添加商品自定义属性
 	  * @param jsonProduct
 	  */
-	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity catalogProductEntity,JSONObject jsonProduct,JsonConfig config,int languageId) {
+	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity productEntity,JSONObject jsonProduct,JsonConfig config,int languageId) {
+			
+			int productId = productEntity.getId();
+			if(productEntity.getType()==5) {
+				String[] spuStrings = productEntity.getSpu2().split("\\|\\|");
+				try {
+					productId = jdbcTemplate.queryForObject("select id from  catalog_product_entity where store_id = "+productEntity.getStoreId()
+					+" and spu = '"+spuStrings[0]+"'", Integer.class);
+				}catch (Exception e) {
+					e.printStackTrace(); 
+				}
+			}
 		
 			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
 			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
@@ -465,42 +487,25 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			JSONArray set_list = new JSONArray();
 			
 			List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
-					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(catalogProductEntity.getId());
-			
-//			List<Map<String,Object>> catalogProductCustomizedAttributeValueList  = 
-//					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributVaueListByProductId(catalogProductEntity.getStoreId());
-//			Map<String,Object> attributeValueNameMap = new HashMap<String, Object>();
-//			for(Map<String,Object> attributeValueMap:catalogProductCustomizedAttributeValueList) {
-//				String key = attributeValueMap.get("customized_attribute_id")+""+attributeValueMap.get("value");
-//				attributeValueNameMap.put(key, attributeValueMap);
-//			} 
+					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(productId);
+			 
 			for(Map<String,Object> customizedAttributeMap:catalogProductCustomizedAttributeList) { 
 				JSONObject obj = new JSONObject();
 				obj.put("key", customizedAttributeMap.get("short_name"));
 				obj.put("name", customizedAttributeMap.get("name"));
 				obj.put("nameFr", customizedAttributeMap.get("name_fr"));
 				obj.put("sort", customizedAttributeMap.get("sort_number"));
-				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string"));
-//				String[] values =  customizedAttributeMap.get("bvalue").toString().split(",");
-//				
-//				for(String value:values) {
-//					 
-//					String key = customizedAttributeMap.get("id").toString() + value; 
-//					if(attributeValueNameMap.containsKey(key)) {
-//						Map<String,Object> valueMap = (Map<String, Object>) attributeValueNameMap.get(key);
-//						logger.error(valueMap.toString());
-//						JSONObject valueObj = new JSONObject();
-//						valueObj.put("key", value);
-//						valueObj.put("name", valueMap.get("name")); 
-//						valueObj.put("price", valueMap.get("price")); 
-//						valueObj.put("imageUrl", valueMap.get("image_url")); 
-//						valueArr.add(valueObj);
-//					}
-//				}
+				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string")); 
 				obj.put("value", valueArr);
 				set_list.add(obj);
 			} 
 			jsonProduct.put("setList", set_list); 
+			String spu = productEntity.getSpu().split("_")[0];
+			
+			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from  catalog_product_entity where store_id = "+productEntity.getStoreId()+" and spu like  '"+spu+"_%'");
+			jsonProduct.put("setList", customizedList); 
+			
+			
 	}
 	
 	
