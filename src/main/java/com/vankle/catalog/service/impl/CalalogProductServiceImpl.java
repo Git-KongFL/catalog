@@ -506,7 +506,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			String spu = productEntity.getSpu().split("_")[0];
 			
 			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from  catalog_product_entity where store_id = "+productEntity.getStoreId()+" and spu like  '"+spu+"_%'");
-			jsonProduct.put("setList", customizedList); 
+			jsonProduct.put("setListKey", customizedList); 
 			
 			
 	}
