@@ -474,7 +474,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			int productId = productEntity.getId();
 			logger.error(":productEntity.getType()"+productEntity.getType());
 			if(productEntity.getType()==5) {
-				String[] spuStrings = productEntity.getSpu2().split("\\|\\|");
+				String[] spuStrings = productEntity.getSpu().split("_");
 				try {
 					productId = jdbcTemplate.queryForObject("select id from  catalog_product_entity where store_id = "+productEntity.getStoreId()
 					+" and spu = '"+spuStrings[0]+"'", Integer.class);
