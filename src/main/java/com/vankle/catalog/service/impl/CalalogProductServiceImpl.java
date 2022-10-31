@@ -472,6 +472,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	public void addCatalogProductCustomizeAttributeValue(CatalogProductEntity productEntity,JSONObject jsonProduct,JsonConfig config,int languageId) {
 			
 			int productId = productEntity.getId();
+			logger.error(":productEntity.getType()"+productEntity.getType());
 			if(productEntity.getType()==5) {
 				String[] spuStrings = productEntity.getSpu2().split("\\|\\|");
 				try {
