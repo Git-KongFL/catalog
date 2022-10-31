@@ -130,6 +130,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			int productId = paramObj.getInt("productId");
 			int storeId = paramObj.getInt("storeId"); 
 			logger.error("productId:"+productId);
+			logger.error("storeId:"+storeId);
 			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
 			//判断商品是否存在
 			if(catalogProductEntity==null){
