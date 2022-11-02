@@ -305,6 +305,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntity(productId);
 		//判断商品是否存在
 		if(catalogProductEntity==null){
+			 logger.error("productId"+productId);
 			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
 			 return resultObj.toString();
 		}
