@@ -320,10 +320,15 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
 		
-		//添加商品分类
-		this.addCatalogProductCategory(jsonProduct,jsonConfig,languageId);
 		//添加折扣信息
-		this.addCatalogProductDiscount(jsonProduct,jsonConfig);
+		this.addCatalogProductDiscount(jsonProduct,jsonConfig);	
+		if( catalogProductEntity.getType() ==5 ){ 
+			//添加折扣信息
+			this.addCatalogProductDiscount(jsonProduct,jsonConfig);
+		} 
+		
+		//添加商品分类
+		this.addCatalogProductCategory(jsonProduct,jsonConfig,languageId); 
 		//添加商品规格
 		this.addCatalogProductSpec(jsonProduct,jsonConfig,  countryId);
 		//添加商品图片
@@ -343,6 +348,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
 		}
 		
+
+		
+		
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
@@ -357,9 +365,20 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 	}
 
-
 	/**
 	  * 添加商品折扣
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductDiscountCustomized(CatalogProductEntity catalogProductEntity , JSONObject jsonProduct,JsonConfig config) {
+			String spu = catalogProductEntity.getSpu().split("_")[0];
+			CatalogProductEntityDiscount catalogProductEntityDiscount = 
+					catalogProductEntityDiscountMapper.findCatalogProductEntityDiscountCustomizedBySpu(spu,catalogProductEntity.getStoreId()); 
+			jsonProduct.put("catalogProductEntityDiscount", JSONObject.fromObject(  catalogProductEntityDiscount,config));
+	}
+
+
+	/**
+	  * 添加商 
 	  * @param jsonProduct
 	  */
 	public void addCatalogProductCategory(JSONObject jsonProduct,JsonConfig config,int languageId) {
@@ -417,7 +436,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	  */
 	public void addCatalogProductDiscount(JSONObject jsonProduct,JsonConfig config) {
 			CatalogProductEntityDiscount catalogProductEntityDiscount = 
-					catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(jsonProduct.getInt("id"));
+					catalogProductEntityDiscountMapper.findCatalogProductEntityDiscount(jsonProduct.getInt("id")); 
 			jsonProduct.put("catalogProductEntityDiscount", JSONObject.fromObject(  catalogProductEntityDiscount,config));
 	}
 	
