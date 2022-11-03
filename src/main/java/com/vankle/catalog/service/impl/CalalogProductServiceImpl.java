@@ -320,12 +320,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
 		
-		//添加折扣信息
-		this.addCatalogProductDiscount(jsonProduct,jsonConfig);	
 		if( catalogProductEntity.getType() ==5 ){ 
 			//添加折扣信息
-			this.addCatalogProductDiscount(jsonProduct,jsonConfig);
-		} 
+			this.addCatalogProductDiscountCustomized(catalogProductEntity,jsonProduct,jsonConfig);
+		}else { 
+			//添加折扣信息
+			this.addCatalogProductDiscount(jsonProduct,jsonConfig);	
+		}
 		
 		//添加商品分类
 		this.addCatalogProductCategory(jsonProduct,jsonConfig,languageId); 
