@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -356,16 +357,52 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
-		resultObj.put("data", jsonProduct); 
 		if(languageId == 1){
+
+			resultObj.put("data", jsonProduct); 
 			return resultObj.toString();  
 		}else{
-			String resultStrLanguage = this.getLanguageByJosnProduct(resultObj.toString(), productId, languageId);
-			return resultStrLanguage;
+		    this.getLanguageByJosnProduct(jsonProduct, productId, languageId); 
+			resultObj.put("data", jsonProduct); 
+			return resultObj.toString();  
 		}
 		
 	}
 
+	
+	/** 
+	  *  英语商品信息 翻译对应的语言
+	  * @param resultObj productId languageId
+	  */
+	public void getLanguageByJosnProduct(JSONObject productObj,int productId,int  languageId){  
+		
+		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(productId,languageId);
+		JSONObject obj = JSONObject.fromObject(catalogProductEntityLanguage); 
+		Iterator iterator = obj.keys(); 
+		while(iterator.hasNext()){ 
+			String key = (String) iterator.next(); 
+			String value = obj.getString(key);
+			productObj.put(key, value); 
+		}
+		
+//		if(catalogProductEntityLanguage!=null){
+//			JSONObject jsonProductLang = JSONObject.fromObject(catalogProductEntityLanguage);  
+//			Class<CatalogProductEntityLanguage> clz = CatalogProductEntityLanguage.class;
+//			Field[] fields = clz.getDeclaredFields();  
+//	        for(Field field : fields){  
+//	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
+//	            if(fieldHasAnno){  
+//	                //输出注解属性   
+//	            	//logger.info(field.getName());   
+//	            	if(!"".equals(jsonProductLang.getString(field.getName()))){
+//	            		productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
+//	            	}
+//	            }  
+//	        }  
+//		} 
+	}
+	
+	
 	/**
 	  * 添加商品折扣
 	  * @param jsonProduct
@@ -442,34 +479,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 	
 	
-	/** 
-	  *  英语商品信息 翻译对应的语言
-	  * @param resultObj productId languageId
-	  */
-	public String getLanguageByJosnProduct(String englishProductJson,int productId,int  languageId){
-		JSONObject resultObj = JSONObject.fromObject(englishProductJson);
-		JSONObject productObj = resultObj.getJSONObject("data");
-		String spu = productObj.getString("spu");
-		
-		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(spu,languageId);
-		if(catalogProductEntityLanguage!=null){
-			JSONObject jsonProductLang = JSONObject.fromObject(catalogProductEntityLanguage);  
-			Class<CatalogProductEntityLanguage> clz = CatalogProductEntityLanguage.class;
-			Field[] fields = clz.getDeclaredFields();  
-	        for(Field field : fields){  
-	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
-	            if(fieldHasAnno){  
-	                //输出注解属性   
-	            	//logger.info(field.getName());   
-	            	if(!"".equals(jsonProductLang.getString(field.getName()))){
-	            		productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
-	            	}
-	            }  
-	        }  
-		}
-		return resultObj.toString();
-	}
-	
+
 	
 	/**
 	 * 添加商品SKU
