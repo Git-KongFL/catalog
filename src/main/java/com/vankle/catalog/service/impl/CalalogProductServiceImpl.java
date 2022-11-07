@@ -389,6 +389,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		obj.remove("customizedNumber");  
 		obj.remove("customizedNumberDataDesc");  
 		obj.remove("customizedNumberFontDesc");   
+		obj.remove("customizedInfo");   
+		
 		
 		
 		String name = obj.getString("name").replaceAll("[\\t\\n\\r]", "");
