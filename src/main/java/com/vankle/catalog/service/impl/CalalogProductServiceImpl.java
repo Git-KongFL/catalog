@@ -377,7 +377,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	public void getLanguageByJosnProduct(JSONObject productObj,int productId,int  languageId){  
 		
 		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(productId,languageId);
-		JSONObject obj = JSONObject.fromObject(catalogProductEntityLanguage); 
+		JSONObject obj = JSONObject.fromObject(catalogProductEntityLanguage);  
 		Iterator iterator = obj.keys(); 
 		while(iterator.hasNext()){ 
 			String key = (String) iterator.next(); 
@@ -530,6 +530,15 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				obj.put("nameFr", customizedAttributeMap.get("name_fr"));
 				obj.put("sort", customizedAttributeMap.get("sort_number"));
 				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string")); 
+				
+				JSONArray filterArr = new JSONArray();
+				for(int i=0 ; i < valueArr.size() ; i++) {
+					JSONObject oneObj = valueArr.getJSONObject(i);
+					if(this.customizedAttributeExit(productEntity.getSpu2(), oneObj)) {
+						filterArr.add(oneObj);
+					}
+				}
+				
 				obj.put("value", valueArr);
 				set_list.add(obj);
 			} 
@@ -537,11 +546,76 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			String spu = productEntity.getSpu().split("_")[0];
 			
 			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from  catalog_product_entity where store_id = "+productEntity.getStoreId()+" and spu like  '"+spu+"_%'");
-			jsonProduct.put("setListKey", customizedList); 
-			
+			jsonProduct.put("setListKey", customizedList);  
 			
 	}
 	
+	
+	public boolean customizedAttributeExit(String spu2,JSONObject obj) {  
+		Boolean b = false; 
+    	String spu = spu2;
+    	String[] spuStrings = spu.split("\\|\\|"); 
+    	String arr = "";
+    	
+    	if(spuStrings.length == 2) {
+    		arr = spuStrings[1];
+    	}else {
+    		arr = spuStrings[0];
+    	}
+    	
+    	String[] attArr = arr.split("_");
+    	if(attArr.length == 1) {
+    		b = true;
+    	}
+    	
+    	if(attArr.length == 2) {
+    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+    		String towKey = twoArrObj.getString("key");  
+    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
+    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
+    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
+    			String towKeyValue = twoObjValue.getString("key");
+    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
+    				b = true;
+    				break;
+    			} 
+    		} 
+    	}
+    	
+    	if(attArr.length == 3) {
+    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+    		String towKey = twoArrObj.getString("key"); 
+    		Boolean b_twoKey = false;
+    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
+    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
+    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
+    			String towKeyValue = twoObjValue.getString("key");
+    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
+    				b_twoKey = true;
+    				break;
+    			} 
+    		} 
+    		
+    		JSONObject threeArrObj = obj.getJSONArray("value").getJSONObject(1);
+    		String threeKey = threeArrObj.getString("key"); 
+    		Boolean b_threeKey = false;
+    		JSONArray threeObjValueArr = twoArrObj.getJSONArray("value");
+    		for(int i = 0 ; i < threeObjValueArr.size(); i++) {
+    			JSONObject threeObjValue = threeObjValueArr.getJSONObject(i);
+    			String threeKeyValue = threeObjValue.getString("key");
+    			if(attArr[2].equals(threeKey+"-"+threeKeyValue)) {
+    				b_threeKey = true;
+    				break;
+    			} 
+    		}
+    		
+    		if(b_twoKey && b_threeKey) {
+    			b = true;
+    		}
+    	}
+		
+		return b;
+	}
 	
 	
 	/**
@@ -700,9 +774,155 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonProduct.put("catalogProductRecommendeds", recommendArray);
 	}
     public static void main(String[] args) { 
-    	String spu = "cdd||MMC-bps_MSMC-moissanitewhite_SSMC-whitestone";
-    	String[] spuStrings = spu.split("\\|\\|");
-    	System.out.println(spuStrings[0]);
+    	String jsonStr = " {\n"
+    			+ "                    \"nick\": \"14K White Gold\",\n"
+    			+ "                    \"nickFr\": \"Or Blanc 14 Carats\",\n"
+    			+ "                    \"price\": 650,\n"
+    			+ "                    \"imageUrl\": \"https://media.vancaro.com/customized/images/14k-white-gold-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                    \"sortNumber\": 5,\n"
+    			+ "                    \"name\": \"14K White Gold\",\n"
+    			+ "                    \"nameFr\": \"Or Blanc 14 Carats\",\n"
+    			+ "                    \"value\": [\n"
+    			+ "                        {\n"
+    			+ "                            \"name\": \"STONE 1\",\n"
+    			+ "                            \"nameFr\": \"PIERRE 1\",\n"
+    			+ "                            \"sort\": 6,\n"
+    			+ "                            \"value\": [\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"Moissanite\",\n"
+    			+ "                                    \"nickFr\": \"Moissanite\",\n"
+    			+ "                                    \"price\": 100,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/moissanite-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 1,\n"
+    			+ "                                    \"name\": \"Moissanite\",\n"
+    			+ "                                    \"nameFr\": \"Moissanite\",\n"
+    			+ "                                    \"key\": \"moissanitewhite\"\n"
+    			+ "                                },\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"VA White\",\n"
+    			+ "                                    \"nickFr\": \"VA Blanc\",\n"
+    			+ "                                    \"price\": 0,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/white-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 2,\n"
+    			+ "                                    \"name\": \"VA White\",\n"
+    			+ "                                    \"nameFr\": \"VA Blanc\",\n"
+    			+ "                                    \"key\": \"whitestone\"\n"
+    			+ "                                },\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"VA Amethyst\",\n"
+    			+ "                                    \"nickFr\": \"VA Améthyste\",\n"
+    			+ "                                    \"price\": 0,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/purple-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 4,\n"
+    			+ "                                    \"name\": \"VA Amethyst\",\n"
+    			+ "                                    \"nameFr\": \"VA Améthyste\",\n"
+    			+ "                                    \"key\": \"purplestone\"\n"
+    			+ "                                },\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"VA Sapphire\",\n"
+    			+ "                                    \"nickFr\": \"VA Saphir\",\n"
+    			+ "                                    \"price\": 0,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/blue-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 8,\n"
+    			+ "                                    \"name\": \"VA Sapphire\",\n"
+    			+ "                                    \"nameFr\": \"VA Saphir\",\n"
+    			+ "                                    \"key\": \"bluestone\"\n"
+    			+ "                                }\n"
+    			+ "                            ],\n"
+    			+ "                            \"key\": \"MSMC\"\n"
+    			+ "                        },\n"
+    			+ "                        {\n"
+    			+ "                            \"name\": \"STONE 2\",\n"
+    			+ "                            \"nameFr\": \"PIERRE 2\",\n"
+    			+ "                            \"sort\": 7,\n"
+    			+ "                            \"value\": [\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"Moissanite\",\n"
+    			+ "                                    \"nickFr\": \"Moissanite\",\n"
+    			+ "                                    \"price\": 50,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/moissanite-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 1,\n"
+    			+ "                                    \"name\": \"Moissanite\",\n"
+    			+ "                                    \"nameFr\": \"Moissanite\",\n"
+    			+ "                                    \"key\": \"moissanitewhite\"\n"
+    			+ "                                },\n"
+    			+ "                                {\n"
+    			+ "                                    \"nick\": \"VA White\",\n"
+    			+ "                                    \"nickFr\": \"VA Blanc\",\n"
+    			+ "                                    \"price\": 0,\n"
+    			+ "                                    \"imageUrl\": \"https://media.vancaro.com/customized/images/white-20210511.jpg?x-oss-process=image/format,webp\",\n"
+    			+ "                                    \"sortNumber\": 2,\n"
+    			+ "                                    \"name\": \"VA White\",\n"
+    			+ "                                    \"nameFr\": \"VA Blanc\",\n"
+    			+ "                                    \"key\": \"whitestone\"\n"
+    			+ "                                }\n"
+    			+ "                            ],\n"
+    			+ "                            \"key\": \"SSMC\"\n"
+    			+ "                        }\n"
+    			+ "                    ],\n"
+    			+ "                    \"key\": \"14kwhitegold\"\n"
+    			+ "                } ";
+    	
+    	JSONObject obj = JSONObject.fromObject(jsonStr);
+    	Boolean b = false;
+    	
+    	String spu = "CUS0001||MMC-14kwhitegold_MSMC-bluestone_SSMC-moissanitewhite";
+    	String[] spuStrings = spu.split("\\|\\|"); 
+    	String arr = "";
+    	
+    	if(spuStrings.length == 2) {
+    		arr = spuStrings[1];
+    	}else {
+    		arr = spuStrings[0];
+    	}
+    	
+    	String[] attArr = arr.split("_");
+    	if(attArr.length == 1) {
+    		b = true;
+    	}
+    	
+    	if(attArr.length == 2) {
+    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+    		String towKey = twoArrObj.getString("key");
+    		
+    		JSONObject threeObj = twoArrObj.getJSONArray("value").getJSONObject(0);
+    	}
+    	
+    	if(attArr.length == 3) {
+    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+    		String towKey = twoArrObj.getString("key"); 
+    		Boolean b_twoKey = false;
+    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
+    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
+    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
+    			String towKeyValue = twoObjValue.getString("key");
+    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
+    				b_twoKey = true;
+    				break;
+    			} 
+    		}
+    		
+    		
+    		JSONObject threeArrObj = obj.getJSONArray("value").getJSONObject(1);
+    		String threeKey = threeArrObj.getString("key"); 
+    		Boolean b_threeKey = false;
+    		JSONArray threeObjValueArr = twoArrObj.getJSONArray("value");
+    		for(int i = 0 ; i < threeObjValueArr.size(); i++) {
+    			JSONObject threeObjValue = threeObjValueArr.getJSONObject(i);
+    			String threeKeyValue = threeObjValue.getString("key");
+    			if(attArr[2].equals(threeKey+"-"+threeKeyValue)) {
+    				b_threeKey = true;
+    				break;
+    			} 
+    		}
+    		
+    		if(b_twoKey && b_threeKey) {
+    			b = true;
+    		}
+    	}
+
+    	System.out.println(b);
+    	System.out.println(arr);
     }
 	
 }
