@@ -359,6 +359,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		jsonProduct.put("id", jsonProduct.getInt("itemId"));
 		if(languageId == 1){
 
+			String name = jsonProduct.getString("name").replaceAll("[\\t\\n\\r]", "");
+			jsonProduct.put("name", name);
 			resultObj.put("data", jsonProduct); 
 			return resultObj.toString();  
 		}else{
@@ -384,6 +386,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		obj.remove("storeId");  
 		obj.remove("languageId");   
 		
+		String name = obj.getString("name").replaceAll("[\\t\\n\\r]", "");
+		obj.put("name", name);
 		Iterator iterator = obj.keys(); 
 		while(iterator.hasNext()){ 
 			String key = (String) iterator.next(); 
