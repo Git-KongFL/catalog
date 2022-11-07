@@ -378,28 +378,19 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		CatalogProductEntityLanguage catalogProductEntityLanguage = catalogProductEntityLanguageMapper.findCatalogProductEntityLanguage(productId,languageId);
 		JSONObject obj = JSONObject.fromObject(catalogProductEntityLanguage);  
+		obj.remove("id");
+		obj.remove("productId");
+		obj.remove("spu");
+		obj.remove("storeId");  
+		obj.remove("languageId");   
+		
 		Iterator iterator = obj.keys(); 
 		while(iterator.hasNext()){ 
 			String key = (String) iterator.next(); 
 			String value = obj.getString(key);
 			productObj.put(key, value); 
-		}
+		}  
 		
-//		if(catalogProductEntityLanguage!=null){
-//			JSONObject jsonProductLang = JSONObject.fromObject(catalogProductEntityLanguage);  
-//			Class<CatalogProductEntityLanguage> clz = CatalogProductEntityLanguage.class;
-//			Field[] fields = clz.getDeclaredFields();  
-//	        for(Field field : fields){  
-//	            boolean fieldHasAnno = field.isAnnotationPresent(LanguageAnnotation.class);  
-//	            if(fieldHasAnno){  
-//	                //输出注解属性   
-//	            	//logger.info(field.getName());   
-//	            	if(!"".equals(jsonProductLang.getString(field.getName()))){
-//	            		productObj.put(field.getName(), jsonProductLang.getString(field.getName()));
-//	            	}
-//	            }  
-//	        }  
-//		} 
 	}
 	
 	
