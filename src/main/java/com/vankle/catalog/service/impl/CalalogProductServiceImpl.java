@@ -385,7 +385,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		obj.remove("spu");
 		obj.remove("storeId");  
 		obj.remove("languageId");  
-		obj.remove("customizedType");   
+		obj.remove("customizedType");  
+		obj.remove("customizedNumber");  
+		obj.remove("customizedNumberDataDesc");  
+		obj.remove("customizedNumberFontDesc");   
+		
 		
 		String name = obj.getString("name").replaceAll("[\\t\\n\\r]", "");
 		obj.put("name", name);
