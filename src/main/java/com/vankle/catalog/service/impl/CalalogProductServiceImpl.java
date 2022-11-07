@@ -569,49 +569,59 @@ public class CalalogProductServiceImpl implements CalalogProductService {
     	}
     	
     	if(attArr.length == 2) {
-    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
-    		String towKey = twoArrObj.getString("key");  
-    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
-    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
-    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
-    			String towKeyValue = twoObjValue.getString("key");
-    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
-    				b = true;
-    				break;
-    			} 
-    		} 
+    		try {
+	    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+	    		String towKey = twoArrObj.getString("key");  
+	    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
+	    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
+	    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
+	    			String towKeyValue = twoObjValue.getString("key");
+	    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
+	    				b = true;
+	    				break;
+	    			} 
+	    		} 
+    		}catch (Exception e) {
+    			e.printStackTrace();
+				// TODO: handle exception
+			}
     	}
     	
     	if(attArr.length == 3) {
-    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
-    		String towKey = twoArrObj.getString("key"); 
-    		Boolean b_twoKey = false;
-    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
-    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
-    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
-    			String towKeyValue = twoObjValue.getString("key");
-    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
-    				b_twoKey = true;
-    				break;
-    			} 
-    		} 
-    		
-    		JSONObject threeArrObj = obj.getJSONArray("value").getJSONObject(1);
-    		String threeKey = threeArrObj.getString("key"); 
-    		Boolean b_threeKey = false;
-    		JSONArray threeObjValueArr = threeArrObj.getJSONArray("value");
-    		for(int i = 0 ; i < threeObjValueArr.size(); i++) {
-    			JSONObject threeObjValue = threeObjValueArr.getJSONObject(i);
-    			String threeKeyValue = threeObjValue.getString("key");
-    			if(attArr[2].equals(threeKey+"-"+threeKeyValue)) {
-    				b_threeKey = true;
-    				break;
-    			} 
-    		}
-    		
-    		if(b_twoKey && b_threeKey) {
-    			b = true;
-    		}
+    		try {
+	    		JSONObject twoArrObj = obj.getJSONArray("value").getJSONObject(0);
+	    		String towKey = twoArrObj.getString("key"); 
+	    		Boolean b_twoKey = false;
+	    		JSONArray twoObjValueArr = twoArrObj.getJSONArray("value");
+	    		for(int i = 0 ; i < twoObjValueArr.size(); i++) {
+	    			JSONObject twoObjValue = twoObjValueArr.getJSONObject(i);
+	    			String towKeyValue = twoObjValue.getString("key");
+	    			if(attArr[1].equals(towKey+"-"+towKeyValue)) {
+	    				b_twoKey = true;
+	    				break;
+	    			} 
+	    		} 
+	    		
+	    		JSONObject threeArrObj = obj.getJSONArray("value").getJSONObject(1);
+	    		String threeKey = threeArrObj.getString("key"); 
+	    		Boolean b_threeKey = false;
+	    		JSONArray threeObjValueArr = threeArrObj.getJSONArray("value");
+	    		for(int i = 0 ; i < threeObjValueArr.size(); i++) {
+	    			JSONObject threeObjValue = threeObjValueArr.getJSONObject(i);
+	    			String threeKeyValue = threeObjValue.getString("key");
+	    			if(attArr[2].equals(threeKey+"-"+threeKeyValue)) {
+	    				b_threeKey = true;
+	    				break;
+	    			} 
+	    		}
+	    		
+	    		if(b_twoKey && b_threeKey) {
+	    			b = true;
+	    		}
+    		}catch (Exception e) {
+    			e.printStackTrace();
+				// TODO: handle exception
+			}
     	}
 		
 		return b;
@@ -895,7 +905,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
     	JSONObject obj = JSONObject.fromObject(jsonStr);
     	Boolean b = false;
     	
-    	String spu = "CUS0011||ZSS-cushion_ZSCW-15ct_MMC-14kyellowgold";
+    	String spu = "CUS0105||MMC-14krosegold_MMCT-18kwhitegold_OSCS-whitestone";
     	String[] spuStrings = spu.split("\\|\\|"); 
     	String arr = "";
     	
