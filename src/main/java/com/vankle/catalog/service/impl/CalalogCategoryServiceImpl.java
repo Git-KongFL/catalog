@@ -409,6 +409,26 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		return  this.getCategoryProductByCurrencyId(resultObj.toString(), currencyId) ;
 	
 	}
+
+
+	@Override
+	public String getCategorySiteMap(String paramJson) {
+
+		JSONObject resultObj = JsonUtils.createJSONObject();
+		JSONObject paramObj = new  JSONObject();
+		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
+			return resultObj.toString();
+		}  
+		int languageId = paramObj.getInt("languageId");  
+		int storeId = paramObj.getInt("storeId");  
+		List<CatalogCategoryEntity> catalogCategoryEntityList = catalogCategoryEntityMapper.findCatalogCategorySetMap(storeId,languageId);
+	 
+		JSONObject dataObj = new JSONObject();
+		dataObj.put("dataList", catalogCategoryEntityList ); 
+		resultObj.put("data",dataObj);
+		return resultObj.toString();
+	}
 	
 	
 	
