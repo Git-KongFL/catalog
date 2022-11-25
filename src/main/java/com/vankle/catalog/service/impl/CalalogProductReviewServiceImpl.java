@@ -28,6 +28,7 @@ import com.vankle.code.util.PagerUtil;
 import com.vankle.code.util.VankleUtils;
 import com.vankle.sales.entity.SalesOrderEntity;
 
+import ch.qos.logback.classic.Logger;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -169,7 +170,7 @@ public class CalalogProductReviewServiceImpl implements CalalogProductReviewServ
 			orderBy = "order by res_type desc,create_time desc";
 		}
 		pMap.put("orderBy", orderBy);
-		//
+		System.out.println(pMap);
 		List<CatalogProductReview> catalogCategoryProducts = catalogProductReviewMapper.listPage(pMap);
 		int total = catalogProductReviewMapper.rows(pMap);
 		

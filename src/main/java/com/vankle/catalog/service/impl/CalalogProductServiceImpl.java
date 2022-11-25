@@ -342,9 +342,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//添加商品推荐商品
 		this.addCatalogProductRecommended(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		
-//		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){ 
-//			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
-//		}
+		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){ 
+			if(catalogProductEntity.getStoreId()!=1) {
+				this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
+			}
+		}
 		
 		if( catalogProductEntity.getType() ==5 ){ 
 			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
