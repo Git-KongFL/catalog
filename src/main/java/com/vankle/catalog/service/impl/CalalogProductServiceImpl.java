@@ -159,7 +159,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					e.printStackTrace(); 
 				}
 			} 
-
+			logger.info(resultStr);
 			return resultStr;
 		}catch (Exception e) {
 			logger.error(paramJson);
