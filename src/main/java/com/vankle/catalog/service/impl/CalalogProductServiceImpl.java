@@ -343,8 +343,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		this.addCatalogProductRecommended(jsonProduct,jsonConfig,languageId,currencyId,countryId);
 		
 		if(catalogProductEntity.getCustomizedType() != null && catalogProductEntity.getCustomizedType() ==5 ){ 
-			if(catalogProductEntity.getStoreId()!=1) {
-				this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
+			if(catalogProductEntity.getStoreId()==10) {
+				this.addCatalogProductCustomizeAttributeValueGP(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
 			}
 		}
 		
@@ -501,6 +501,36 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		//JSONArray jsonCatalogProductSkus = JSONArray.fromObject(catalogProductSkus);
 		jsonProduct.put("catalogProductSkus", jsonCatalogProductSkus);
 	}
+	
+	
+
+	/**
+	  * 添加商品自定义属性
+	  * @param jsonProduct
+	  */
+	public void addCatalogProductCustomizeAttributeValueGP(CatalogProductEntity productEntity,JSONObject jsonProduct,JsonConfig config,int languageId) {
+			
+
+		List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
+		JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
+		jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues); 
+		JSONArray set_list = new JSONArray();
+		
+		List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
+				catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(productEntity.getId()); 
+		for(Map<String,Object> customizedAttributeMap:catalogProductCustomizedAttributeList) { 
+			JSONObject obj = new JSONObject();
+			obj.put("key", customizedAttributeMap.get("short_name"));
+			obj.put("name", customizedAttributeMap.get("name"));
+			obj.put("nameFr", customizedAttributeMap.get("name_fr"));
+			obj.put("sort", customizedAttributeMap.get("sort_number"));
+			JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string")); 
+			obj.put("value", valueArr);
+			set_list.add(obj);
+		} 
+		jsonProduct.put("setList", set_list); 
+	}
+	
 	
 	/**
 	  * 添加商品自定义属性
