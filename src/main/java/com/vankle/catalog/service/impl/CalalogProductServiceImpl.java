@@ -22,6 +22,7 @@ import com.vankle.catalog.dao.CatalogCategoryProductMapper;
 import com.vankle.catalog.dao.CatalogProductAttributeValueMapper;
 import com.vankle.catalog.dao.CatalogProductBundledLinkMapper;
 import com.vankle.catalog.dao.CatalogProductCustomizedAttributeMapper;
+import com.vankle.catalog.dao.CatalogProductCustomizedPriceEntityMapper;
 import com.vankle.catalog.dao.CatalogProductEntityDiscountMapper;
 import com.vankle.catalog.dao.CatalogProductEntityImageMapper;
 import com.vankle.catalog.dao.CatalogProductEntityLanguageMapper;
@@ -36,6 +37,7 @@ import com.vankle.catalog.dao.CatalogProductSpecValueMapper;
 import com.vankle.catalog.entity.CatalogCategoryEntity;
 import com.vankle.catalog.entity.CatalogCategoryProduct;
 import com.vankle.catalog.entity.CatalogProductAttributeValue;
+import com.vankle.catalog.entity.CatalogProductCustomizedPriceEntity;
 import com.vankle.catalog.entity.CatalogProductEntity;
 import com.vankle.catalog.entity.CatalogProductEntityDiscount;
 import com.vankle.catalog.entity.CatalogProductEntityImage;
@@ -95,6 +97,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	SystemCurrencyService systemCurrencyService;
 	
 	@Autowired
+	CatalogProductCustomizedPriceEntityMapper catalogProductCustomizedPriceEntityMapper;
+	
+	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
 	
@@ -119,6 +124,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		return "sussess";
 	}
 	
+	@SuppressWarnings("unused")
 	public String getCatalogProductInfoByItemId(String paramJson) {
  
 		JSONObject resultObj = JsonUtils.createJSONObject();
@@ -143,6 +149,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			}
 			 
 			paramObj.put("productId", productId);
+			paramObj.put("type", catalogProductEntity.getType());
 			logger.info("itemId:"+paramObj.toString());
 			 
 			String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
@@ -182,7 +189,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 		int productId = paramObj.getInt("productId");
 		int languageId = paramObj.getInt("languageId");
-		int currencyId = paramObj.getInt("currencyId");
+		int currencyId = paramObj.getInt("currencyId"); 
 		String countryId = "us";
 		try{
 			if(paramObj.get("prefixion")!=null){
@@ -202,9 +209,12 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId,countryId);
 		//System.out.println(resultStr);
 		//logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
+		
+		
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
 		}else{
+			
 			return this.getCurrencyProduct(resultStr, currencyId );
 		}
 	}
@@ -346,15 +356,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			if(catalogProductEntity.getStoreId()==10) {
 				this.addCatalogProductCustomizeAttributeValueGP(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
 			}
-		}
-		
+		} 
 		if( catalogProductEntity.getType() ==5 ){ 
 			this.addCatalogProductCustomizeAttributeValue(catalogProductEntity,jsonProduct, jsonConfig,languageId); 
 		}
-		
-
-		
-		
+		 
 		
 		//添加商品自定义属性
 		//this.addCatalogProductAttributeValue(jsonProduct, jsonConfig);
@@ -577,12 +583,83 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				obj.put("value", filterArr);
 				set_list.add(obj);
 			} 
+			
+			
+			
+			
 			jsonProduct.put("setList", set_list); 
 			String spu = productEntity.getSpu().split("_")[0];
 			
-			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from  catalog_product_entity where store_id = "+productEntity.getStoreId()+" and status = 1 and spu like  '"+spu+"_%'");
+			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from "
+					+ " catalog_product_entity where store_id = "+productEntity.getStoreId()+" and status = 1 and spu like  '"+spu+"_%'");
 			jsonProduct.put("setListKey", customizedList);  
 			
+	}
+	 
+	
+	public void getCustomizedNewPriceObj(JSONObject newPriceObj,String jsonStr,String attriblueteShortName) {
+		try {
+			if(jsonStr != null &&!("".equals(jsonStr))) {
+				JSONObject jsonObject = JSONObject.fromObject(jsonStr);
+				newPriceObj.put(attriblueteShortName+"-"+jsonObject.getString("key"), jsonObject.getString("newPrice"));
+			}
+		}catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		 
+	}
+	
+	public void updateCustomizedPrice(JSONArray setList,CatalogProductEntity productEntity) { 
+		
+		String spu = productEntity.getSpu().split("_")[0];
+		List<CatalogProductCustomizedPriceEntity>  catalogProductCustomizedPriceList =
+				catalogProductCustomizedPriceEntityMapper.findCatalogProductCustomizedPriceEntityList(spu);
+		JSONObject newPriceObj = new JSONObject();
+		for(CatalogProductCustomizedPriceEntity catalogProductCustomizedPriceEntity:catalogProductCustomizedPriceList) { 
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getZss(),"ZSS");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getZscw(),"ZSCW");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getMmc(),"MMC");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getMmct(),"MMCT");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getOscs(),"OSCS");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getMsmc(),"MSMC");
+			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getSsmc(),"SSMC"); 
+		} 
+	 
+		if(setList.getJSONObject(0).containsKey("value")) {
+			
+			JSONArray valueList = setList.getJSONObject(0).getJSONArray("value");
+			String attriblueteShortName = setList.getJSONObject(0).getString("key");
+			for(int i =0 ; i<valueList.size() ; i++) {
+				JSONObject oneObj = valueList.getJSONObject(i); 
+				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
+				String valueName = setList.getJSONObject(0).getString("key");
+				
+				String newPriceKey = attriblueteShortName + "-" + valueName;
+				if(newPriceObj.containsKey(newPriceKey)) {
+					onePrice =  new BigDecimal( newPriceObj.getString(newPriceKey));
+				} 
+				
+				valueList.getJSONObject(i).put("price", onePrice); 
+				if(oneObj.containsKey("value")) {
+
+					JSONArray valueOneList =oneObj.getJSONArray("value");
+					for(int n =0 ; n<valueOneList.size() ; n++) {
+						JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
+						logger.info(twoList.toString());
+						logger.info(twoList.size()+"");
+						for(int m =0 ; m< twoList.size() ; m++) { 
+							logger.info(m+"");
+							JSONObject towObj = twoList.getJSONObject(m); 
+							logger.info(""+towObj.getString("price"));
+							BigDecimal towPrice =  new BigDecimal( oneObj.getString("price"));
+							logger.info(""+towPrice);
+							towObj.put("price", towPrice);  
+							  
+						}
+					} 
+				}
+			}
+		} 
 	}
 	
 	
