@@ -559,7 +559,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			List<CatalogProductAttributeValue> catalogProductAttributeValues = catalogProductAttributeValueMapper.findCatalogProductAttributeValue(jsonProduct.getInt("id"));
 			JSONArray jsonCatalogProductAttributeValues = JSONArray.fromObject(catalogProductAttributeValues);
 			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues); 
-			JSONArray set_list = new JSONArray();
+			JSONArray setList = new JSONArray();
 			
 			List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
 					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(productId);
@@ -581,13 +581,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				}
 				
 				obj.put("value", filterArr);
-				set_list.add(obj);
+				setList.add(obj);
 			} 
 			
 			
+			this.updateCustomizedPrice(setList, productEntity);
 			
-			
-			jsonProduct.put("setList", set_list); 
+			jsonProduct.put("setList", setList); 
 			String spu = productEntity.getSpu().split("_")[0];
 			
 			List<Map<String,Object>> customizedList = jdbcTemplate.queryForList("select item_id,spu2 from "
