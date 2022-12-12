@@ -625,7 +625,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getSsmc(),"SSMC"); 
 		} 
 		
-		System.out.println(newPriceObj.toString());
+		logger.error(newPriceObj.toString());
 		
 	 
 		if(setList.getJSONObject(0).containsKey("value")) {
@@ -635,7 +635,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			for(int i =0 ; i<valueList.size() ; i++) {
 				JSONObject oneObj = valueList.getJSONObject(i); 
 				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
-				String valueName = setList.getJSONObject(0).getString("key");
+				String valueName = setList.getJSONObject(i).getString("key");
 				
 				String newPriceKey = attriblueteShortName + "-" + valueName;
 				if(newPriceObj.containsKey(newPriceKey)) {
@@ -648,13 +648,21 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					JSONArray valueOneList =oneObj.getJSONArray("value");
 					for(int n =0 ; n<valueOneList.size() ; n++) {
 						JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
-						logger.info(twoList.toString());
-						logger.info(twoList.size()+"");
+						String attriblueteShortNameTwo = oneObj.getJSONArray("value").getJSONObject(n).getString("key");
+						logger.info(oneObj.getJSONArray("value").getJSONObject(n).toString());
+//						logger.info(twoList.toString());
+//						logger.info(twoList.size()+"");
 						for(int m =0 ; m< twoList.size() ; m++) { 
 							logger.info(m+"");
 							JSONObject towObj = twoList.getJSONObject(m); 
 							logger.info(""+towObj.getString("price"));
-							BigDecimal towPrice =  new BigDecimal( oneObj.getString("price"));
+							BigDecimal towPrice =  new BigDecimal( towObj.getString("price")); 
+							String valueNameTwo = towObj.getString("key"); 
+							String newPriceKeyTwo = attriblueteShortNameTwo + "-" + valueNameTwo;
+							if(newPriceObj.containsKey(newPriceKeyTwo)) {
+								towPrice =  new BigDecimal( newPriceObj.getString(newPriceKeyTwo));
+							} 
+							
 							logger.info(""+towPrice);
 							towObj.put("price", towPrice);  
 							  
