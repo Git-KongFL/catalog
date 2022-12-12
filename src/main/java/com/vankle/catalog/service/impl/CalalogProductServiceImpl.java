@@ -624,6 +624,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getMsmc(),"MSMC");
 			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getSsmc(),"SSMC"); 
 		} 
+		
+		System.out.println(newPriceObj.toString());
+		
 	 
 		if(setList.getJSONObject(0).containsKey("value")) {
 			
