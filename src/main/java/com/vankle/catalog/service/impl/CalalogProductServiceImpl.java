@@ -166,7 +166,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					e.printStackTrace(); 
 				}
 			} 
-			logger.info(resultStr);
+			//logger.info(resultStr);
 			return resultStr;
 		}catch (Exception e) {
 			logger.error(paramJson);
@@ -637,7 +637,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				JSONObject oneObj = valueList.getJSONObject(i); 
 				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
 				
-				String valueName = setList.getJSONObject(0).getString("key");
+				String valueName = oneObj.getString("key");
 				
 				String newPriceKey = attriblueteShortName + "-" + valueName;
 				logger.error(newPriceKey);
