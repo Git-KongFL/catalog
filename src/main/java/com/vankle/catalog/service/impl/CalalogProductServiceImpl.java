@@ -632,6 +632,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			
 			JSONArray valueList = setList.getJSONObject(0).getJSONArray("value");
 			String attriblueteShortName = setList.getJSONObject(0).getString("key");
+			
 			for(int i =0 ; i<valueList.size() ; i++) {
 				JSONObject oneObj = valueList.getJSONObject(i); 
 				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
@@ -639,6 +640,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				String valueName = setList.getJSONObject(0).getString("key");
 				
 				String newPriceKey = attriblueteShortName + "-" + valueName;
+				logger.error(newPriceKey);
 				if(newPriceObj.containsKey(newPriceKey)) {
 					onePrice =  new BigDecimal( newPriceObj.getString(newPriceKey));
 				} 
