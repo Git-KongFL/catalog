@@ -635,7 +635,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			for(int i =0 ; i<valueList.size() ; i++) {
 				JSONObject oneObj = valueList.getJSONObject(i); 
 				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
-				String valueName = setList.getJSONObject(i).getString("key");
+				
+				String valueName = setList.getJSONObject(0).getString("key");
 				
 				String newPriceKey = attriblueteShortName + "-" + valueName;
 				if(newPriceObj.containsKey(newPriceKey)) {
