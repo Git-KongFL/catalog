@@ -885,7 +885,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @param JSONObject
 	 */
 	public void addCatalogProductRecommended(JSONObject jsonProduct,JsonConfig config,int languageId,int currencyId,String countryId ) {
-		List<CatalogProductRecommended> catalogProductRecommendeds =  catalogProductRecommendedMapper.findCatalogProductRecommendedList(jsonProduct.getInt("id"));
+		List<CatalogProductRecommended> catalogProductRecommendeds =  catalogProductRecommendedMapper.findCatalogProductRecommendedList(jsonProduct.getInt("id"),languageId);
 		JSONArray recommendArray = new JSONArray();
 		for(CatalogProductRecommended catalogProductRecommended:catalogProductRecommendeds) {
 	 
@@ -900,8 +900,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			}else {
 				obj.put("spu_customized", catalogProductRecommended.getSpu().split("\\|\\|")[0]);	
 			}
+			
+			
 			obj.put("item_id", catalogProductRecommended.getId());		
 			obj.put("remoteUrl", catalogProductRecommended.getSmallImage());	
+			obj.put("listProductTitle", catalogProductRecommended.getListProductTitle());	
 			obj.put("sellPrice", sellPrice);	
 			obj.put("discountAmount", discountAmount );		
 			recommendArray.add(obj);
