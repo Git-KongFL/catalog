@@ -876,7 +876,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(catalogProductRecommended.getDiscountAmount(), currencyId);
 			JSONObject obj = JSONObject.fromObject(catalogProductRecommended);
 			obj.put("spu", catalogProductRecommended.getSpu());
-			obj.put("recommendType", "sgtj");
+			obj.put("recommendType", "manual");
 			obj.put("customizedType", catalogProductRecommended.getCustomizedType());
 			if(catalogProductRecommended.getSpu().split("\\|\\|").length==2) {
 				obj.put("spu_customized", catalogProductRecommended.getSpu().split("\\|\\|")[1]);	
