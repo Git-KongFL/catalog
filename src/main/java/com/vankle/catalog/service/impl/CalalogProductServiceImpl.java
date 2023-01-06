@@ -330,14 +330,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 		String jsonCurrency =  systemService.getCurrencyEntity(currencyId);
 		jsonProduct.put("currency", JSONObject.fromObject(jsonCurrency));
-		
-		if( catalogProductEntity.getType() ==5 ){ 
-			//添加折扣信息
-			this.addCatalogProductDiscountCustomized(catalogProductEntity,jsonProduct,jsonConfig);
-		}else { 
-			//添加折扣信息
-			this.addCatalogProductDiscount(jsonProduct,jsonConfig);	
-		}
+ 
+		//添加折扣信息
+		this.addCatalogProductDiscount(jsonProduct,jsonConfig);	 
 		
 		//添加商品分类
 		this.addCatalogProductCategory(jsonProduct,jsonConfig,languageId); 
@@ -413,18 +408,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		
 	}
 	
-	
-	/**
-	  * 添加商品折扣
-	  * @param jsonProduct
-	  */
-	public void addCatalogProductDiscountCustomized(CatalogProductEntity catalogProductEntity , JSONObject jsonProduct,JsonConfig config) {
-			String spu = catalogProductEntity.getSpu().split("_")[0];
-			CatalogProductEntityDiscount catalogProductEntityDiscount = 
-					catalogProductEntityDiscountMapper.findCatalogProductEntityDiscountCustomizedBySpu(spu,catalogProductEntity.getStoreId()); 
-			jsonProduct.put("catalogProductEntityDiscount", JSONObject.fromObject(  catalogProductEntityDiscount,config));
-	}
-
+ 
 
 	/**
 	  * 添加商 
