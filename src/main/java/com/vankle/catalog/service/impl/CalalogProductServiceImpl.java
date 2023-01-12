@@ -135,25 +135,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		} 
 		try {  
 			int productId = paramObj.getInt("productId");
-			int storeId = paramObj.getInt("storeId"); 
-			logger.info("productId:"+productId);
-			logger.info("storeId:"+storeId);
-			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId);
-			logger.info(catalogProductEntity.toString());
+			int storeId = paramObj.getInt("storeId");  
+			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper.findCatalogProductEntityByItemId(productId, storeId); 
 			//判断商品是否存在
 			if(catalogProductEntity==null){
 				 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
 				 return resultObj.toString();
 			}else{
 				productId = catalogProductEntity.getId();
-			}
-			 
+			} 
 			paramObj.put("productId", productId);
-			paramObj.put("type", catalogProductEntity.getType());
-			logger.info("itemId:"+paramObj.toString());
-			 
-			String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
-			
+			paramObj.put("type", catalogProductEntity.getType());  
+			String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString()); 
 			if(catalogProductEntity.getProductCustomizedId() != null ) {
 				try {  
 					paramObj.put("productId",catalogProductEntity.getProductCustomizedId() );
@@ -165,8 +158,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				}catch (Exception e) {
 					e.printStackTrace(); 
 				}
-			} 
-			//logger.info(resultStr);
+			}  
 			return resultStr;
 		}catch (Exception e) {
 			logger.error(paramJson);
@@ -174,8 +166,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		} 
 		return null;
 		
-	}
-	
+	} 
 	 
 	/*
 	 * @pram {productId:1,languageId:1,currencyId:1}
@@ -202,14 +193,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			logger.info(e.getMessage());
 			// TODO: handle exception
 		} 
-		Object requestType = paramObj.get("requestType");
-		
-		resultObj.put("requestType", requestType);
-		
+		Object requestType = paramObj.get("requestType"); 
+		resultObj.put("requestType", requestType); 
 		String resultStr = this.getProductLanguageInfo(resultObj,productId,languageId,currencyId,countryId);
-		//System.out.println(resultStr);
-		//logger.info("resultObj.getString(\"code\"):"+resultObj.getString("code"));
-		
+		 
 		
 		if(!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))){
 			return resultObj.toString();
@@ -240,6 +227,10 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			BigDecimal sellPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("sellPrice")), currencyId);
 			productObj.put("baseSellPrice",productObj.getString("sellPrice")); 
 			productObj.put("sellPrice", sellPrice);
+			//母商品折扣价格
+			BigDecimal parentDiscountPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(productObj.getString("parentDiscountPrice")), currencyId);
+			productObj.put("parentDiscountPrice", parentDiscountPrice);
+			
 			
 			String  customizedDesc = productObj.getString("customizedDesc");
 			if(customizedDesc.indexOf(",")>=0) {
@@ -259,18 +250,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					customizedDescCur = customizedDescCur.substring(0,customizedDescCur.length()-1);
 				}
 				productObj.put("customizedDesc_cur", customizedDescCur);
-			}
-			
-			
+			} 
 			//商品折扣信息价格换算
 			JSONObject catalogProductEntityDiscount = productObj.getJSONObject("catalogProductEntityDiscount");
 			catalogProductEntityDiscount.put("baseDiscountAmount", catalogProductEntityDiscount.getString("discountAmount")); 
 			BigDecimal discountAmount =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
-			catalogProductEntityDiscount.put("discountAmount", discountAmount);
-			
-			try {
-				logger.info(productObj.toString());
-				
+			catalogProductEntityDiscount.put("discountAmount", discountAmount); 
+			try { 
 				JSONArray setList =productObj.getJSONArray("setList");
 				if(setList.getJSONObject(0).containsKey("value")) {
 					JSONArray valueList =setList.getJSONObject(0).getJSONArray("value");
@@ -279,34 +265,24 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 						BigDecimal onePrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( oneObj.getString("price")), currencyId);
 						valueList.getJSONObject(i).put("price", onePrice);
 						
-						if(oneObj.containsKey("value")) {
-
+						if(oneObj.containsKey("value")) { 
 							JSONArray valueOneList =oneObj.getJSONArray("value");
 							for(int n =0 ; n<valueOneList.size() ; n++) {
-								JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
-								logger.info(twoList.toString());
-								logger.info(twoList.size()+"");
-								for(int m =0 ; m< twoList.size() ; m++) { 
-									logger.info(m+"");
-									JSONObject towObj = twoList.getJSONObject(m); 
-									logger.info(""+towObj.getString("price"));
+								JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value"); 
+								for(int m =0 ; m< twoList.size() ; m++) {  
+									JSONObject towObj = twoList.getJSONObject(m);  
 									BigDecimal towPrice =  systemCurrencyService.getAmountByCurrencyId(new BigDecimal( towObj.getString("price")), currencyId);
-									logger.info(""+towPrice);
 									towObj.put("price", towPrice);  
 									  
 								}
 							} 
 						}
 					}
-				}
-				
-			}catch (Exception e) {
-				 
+				} 
+			}catch (Exception e) { 
 				e.printStackTrace();
 				// TODO: handle exception
-			} 
-			
-			logger.info(resultObj.toString());
+			}   
 			return resultObj.toString();
 		}
 	}
@@ -319,10 +295,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			 logger.error("productId"+productId);
 			 JsonUtils.modifyJSONObject(resultObj,VankleConstants.VANKLE_CODE_FAIL_10002, VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
 			 return resultObj.toString();
-		}
-		
-		
-		
+		} 
 		JsonConfig jsonConfig = new JsonConfig();  
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());  
 		JSONObject jsonProduct = JSONObject.fromObject(catalogProductEntity, jsonConfig);   
