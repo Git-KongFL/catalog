@@ -280,8 +280,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					}
 				} 
 			}catch (Exception e) { 
-				e.printStackTrace();
-				// TODO: handle exception
+				e.printStackTrace(); 
 			}   
 			return resultObj.toString();
 		}
@@ -517,6 +516,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			jsonProduct.put("catalogProductAttributeValues", jsonCatalogProductAttributeValues); 
 			JSONArray setList = new JSONArray();
 			
+			
 			List<Map<String,Object>> catalogProductCustomizedAttributeList  = 
 					catalogProductCustomizedAttributeMapper.findCatalogProductcustomizedAttributListByProductId(productId);
 			 
@@ -527,20 +527,17 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				obj.put("nameFr", customizedAttributeMap.get("name_fr"));
 				obj.put("sort", customizedAttributeMap.get("sort_number"));
 				JSONArray valueArr = JSONArray.fromObject( customizedAttributeMap.get("json_service_string")); 
-				
+				logger.info(valueArr.toString());
 				JSONArray filterArr = new JSONArray();
 				for(int i=0 ; i < valueArr.size() ; i++) {
 					JSONObject oneObj = valueArr.getJSONObject(i);
 					if(this.customizedAttributeExit(productEntity.getSpu2(), oneObj)) {
 						filterArr.add(oneObj);
 					}
-				}
-				
+				} 
 				obj.put("value", filterArr);
 				setList.add(obj);
-			} 
-			
-			
+			}  
 			this.updateCustomizedPrice(setList, productEntity);
 			
 			jsonProduct.put("setList", setList); 
@@ -580,27 +577,18 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getMsmc(),"MSMC");
 			this.getCustomizedNewPriceObj(newPriceObj, catalogProductCustomizedPriceEntity.getSsmc(),"SSMC"); 
 		} 
-		
-		logger.error(newPriceObj.toString());
-		
-	 
-		if(setList.getJSONObject(0).containsKey("value")) {
-			
+		 
+		if(setList.getJSONObject(0).containsKey("value")) { 
 			JSONArray valueList = setList.getJSONObject(0).getJSONArray("value");
-			String attriblueteShortName = setList.getJSONObject(0).getString("key");
-			
+			String attriblueteShortName = setList.getJSONObject(0).getString("key"); 
 			for(int i =0 ; i<valueList.size() ; i++) {
 				JSONObject oneObj = valueList.getJSONObject(i); 
-				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price"));  
-				
-				String valueName = oneObj.getString("key");
-				
+				BigDecimal onePrice =  new BigDecimal( oneObj.getString("price")); 
+				String valueName = oneObj.getString("key"); 
 				String newPriceKey = attriblueteShortName + "-" + valueName;
-				logger.error(newPriceKey);
 				if(newPriceObj.containsKey(newPriceKey)) {
 					onePrice =  new BigDecimal( newPriceObj.getString(newPriceKey));
-				} 
-				
+				}  
 				valueList.getJSONObject(i).put("price", onePrice); 
 				if(oneObj.containsKey("value")) {
 
@@ -608,21 +596,14 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					for(int n =0 ; n<valueOneList.size() ; n++) {
 						JSONArray twoList =oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
 						String attriblueteShortNameTwo = oneObj.getJSONArray("value").getJSONObject(n).getString("key");
-						logger.info(oneObj.getJSONArray("value").getJSONObject(n).toString());
-//						logger.info(twoList.toString());
-//						logger.info(twoList.size()+"");
 						for(int m =0 ; m< twoList.size() ; m++) { 
-							logger.info(m+"");
 							JSONObject towObj = twoList.getJSONObject(m); 
-							logger.info(""+towObj.getString("price"));
 							BigDecimal towPrice =  new BigDecimal( towObj.getString("price")); 
 							String valueNameTwo = towObj.getString("key"); 
 							String newPriceKeyTwo = attriblueteShortNameTwo + "-" + valueNameTwo;
 							if(newPriceObj.containsKey(newPriceKeyTwo)) {
 								towPrice =  new BigDecimal( newPriceObj.getString(newPriceKeyTwo));
 							} 
-							
-							logger.info(""+towPrice);
 							towObj.put("price", towPrice);  
 							  
 						}
