@@ -615,6 +615,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	
 	
 	public boolean customizedAttributeExit(String spu2,JSONObject obj) {  
+		logger.info(spu2);
+		logger.info(obj.toString());
 		Boolean b = false; 
     	String spu = spu2;
     	String[] spuStrings = spu.split("\\|\\|"); 
