@@ -22,7 +22,7 @@ import net.sf.json.JsonConfig;
 
 /**
  * 
- * 投票信息
+ * 目录信息
  * 
  * @author denghaihui
  * @date 2017-06-26 09:47:03
@@ -58,7 +58,7 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 				pageSize, offset);
 		int total = catalogArticleMapper.findCatalogArticleEntityCount(storeId);
 		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntity(storeId);
-		  
+
 		JSONObject dataObj = new JSONObject();
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());
@@ -70,13 +70,13 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 		dataObj.put("pageSize", pageSize);
 		dataObj.put("rowsCount", total);
 		dataObj.put("pageCount", pagerUtil.pageCount);
-		dataObj.put("catalogArticleEntity", JSONObject.fromObject(catalogArticleEntity, jsonConfig) );
-		resultObj.put("data", dataObj); 
+		dataObj.put("catalogArticleEntity", JSONObject.fromObject(catalogArticleEntity, jsonConfig));
+		resultObj.put("data", dataObj);
 		return resultObj.toString();
 	}
 
 	@Override
-	public String findOneCatalogArticleEntityByTitle(String paramJson) { 
+	public String findOneCatalogArticleEntityByTitle(String paramJson) {
 		JSONObject resultObj = JsonUtils.createJSONObject();
 		JSONObject paramObj = new JSONObject();
 		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
@@ -86,10 +86,11 @@ public class CalalogArticleServiceImpl implements CalalogArticleService {
 
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new JsonDateValueProcessor());
-		String title = paramObj.getString("title"); 
+		String title = paramObj.getString("title");
 		int storeId = paramObj.getInt("storeId");
-		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntityByTitle(storeId, title);
-		resultObj.put("data",  JSONObject.fromObject(catalogArticleEntity, jsonConfig));
+		CatalogArticleEntity catalogArticleEntity = catalogArticleMapper.findOneCatalogArticleEntityByTitle(storeId,
+				title);
+		resultObj.put("data", JSONObject.fromObject(catalogArticleEntity, jsonConfig));
 		return resultObj.toString();
-	} 
+	}
 }

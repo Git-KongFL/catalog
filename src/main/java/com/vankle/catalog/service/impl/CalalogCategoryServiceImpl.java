@@ -88,7 +88,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		
 		String iso2 = "US";
 		try {
-			String prefixion = paramObj.getString("prefixion");
+			String prefixion = paramObj.getString("prefixion");// 指 https://www.vancaro.com/en-us/blog 中的 en-us
 			iso2 = prefixion.substring(3, 5).toUpperCase();
 			List<SystemCountryLanguage>  iso2List = systemCountryLanguageMapper.findSystemCountryList();
 			boolean isoBool = true;
@@ -99,6 +99,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 				}
 			}
 			if(isoBool) {
+				// 没有在数据库中找到对应的iso2，默认使用US
 				iso2 = "US";
 			}
 		}catch (Exception e) {
@@ -106,7 +107,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			// TODO: handle exception
 		}
 		
-		
+		// 根据店铺、语言、国家找到所有的目录
 		List<CatalogCategoryEntity>  catalogCategoryEntitys = catalogCategoryEntityMapper.findCatalogCategoryEntityByIso2List(storeId,languageId,iso2.toLowerCase());
 //		List<CatalogCategoryEntity>  catalogCategoryEntitysNew = new ArrayList<CatalogCategoryEntity>();
 //		for(CatalogCategoryEntity catalogCategoryEntity:catalogCategoryEntitys) {
