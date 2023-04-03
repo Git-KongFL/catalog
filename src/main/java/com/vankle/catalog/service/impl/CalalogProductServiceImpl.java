@@ -264,25 +264,29 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					new BigDecimal(catalogProductEntityDiscount.getString("discountAmount")), currencyId);
 			catalogProductEntityDiscount.put("discountAmount", discountAmount);
 			try {
-				JSONArray setList = productObj.getJSONArray("setList");
-				if (setList.getJSONObject(0).containsKey("value")) {
-					JSONArray valueList = setList.getJSONObject(0).getJSONArray("value");
-					for (int i = 0; i < valueList.size(); i++) {
-						JSONObject oneObj = valueList.getJSONObject(i);
-						BigDecimal onePrice = systemCurrencyService
-								.getAmountByCurrencyId(new BigDecimal(oneObj.getString("price")), currencyId);
-						valueList.getJSONObject(i).put("price", onePrice);
+//				JSONArray setList = productObj.getJSONArray("setList");
+				JSONArray setList = productObj.optJSONArray("setList");
+				if (setList != null && !setList.isEmpty()) {
+					if (setList.getJSONObject(0).containsKey("value")) {
+						JSONArray valueList = setList.getJSONObject(0).getJSONArray("value");
+						for (int i = 0; i < valueList.size(); i++) {
+							JSONObject oneObj = valueList.getJSONObject(i);
+							BigDecimal onePrice = systemCurrencyService
+									.getAmountByCurrencyId(new BigDecimal(oneObj.getString("price")), currencyId);
+							valueList.getJSONObject(i).put("price", onePrice);
 
-						if (oneObj.containsKey("value")) {
-							JSONArray valueOneList = oneObj.getJSONArray("value");
-							for (int n = 0; n < valueOneList.size(); n++) {
-								JSONArray twoList = oneObj.getJSONArray("value").getJSONObject(n).getJSONArray("value");
-								for (int m = 0; m < twoList.size(); m++) {
-									JSONObject towObj = twoList.getJSONObject(m);
-									BigDecimal towPrice = systemCurrencyService.getAmountByCurrencyId(
-											new BigDecimal(towObj.getString("price")), currencyId);
-									towObj.put("price", towPrice);
+							if (oneObj.containsKey("value")) {
+								JSONArray valueOneList = oneObj.getJSONArray("value");
+								for (int n = 0; n < valueOneList.size(); n++) {
+									JSONArray twoList = oneObj.getJSONArray("value").getJSONObject(n)
+											.getJSONArray("value");
+									for (int m = 0; m < twoList.size(); m++) {
+										JSONObject towObj = twoList.getJSONObject(m);
+										BigDecimal towPrice = systemCurrencyService.getAmountByCurrencyId(
+												new BigDecimal(towObj.getString("price")), currencyId);
+										towObj.put("price", towPrice);
 
+									}
 								}
 							}
 						}
