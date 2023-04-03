@@ -93,7 +93,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			if (prefixion.length() < 5) {
 				logger.info("---------------prefixion为：" + prefixion);
 			}
-			// prefixion长度小于6时会报错
+			// prefixion长度小于5时会报错
 			iso2 = prefixion.substring(3, 5).toUpperCase();
 			List<SystemCountryLanguage> iso2List = systemCountryLanguageMapper.findSystemCountryList();
 			boolean isoBool = true;
