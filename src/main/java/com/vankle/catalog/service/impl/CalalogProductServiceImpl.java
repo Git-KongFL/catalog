@@ -218,6 +218,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		} else {
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
 			JSONObject productObj = resultObj.getJSONObject("data");
+
+			logger.info("---------productObj的详细信息为：" + productObj.toString());
+
 			String jsonCurrency = systemService.getCurrencyEntity(currencyId);
 			productObj.put("currency", JSONObject.fromObject(jsonCurrency));
 			// 商品信息价格换算
@@ -543,7 +546,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			obj.put("value", filterArr);
 			setList.add(obj);
 		}
-		
+
 		// 如果虚拟商品调整了价格，则使用调整后的价格
 		this.updateCustomizedPrice(setList, productEntity);
 
@@ -663,7 +666,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 		}
 
 		// 无需判断第一个大属性，因为第一个大属性是必选的，肯定存在
-		
+
 		if (attArr.length == 3) {
 			// 存在三个大属性：TEST0013||MMC-bps_MSMC-whitestone_SDST-moissanitewhite
 			try {
