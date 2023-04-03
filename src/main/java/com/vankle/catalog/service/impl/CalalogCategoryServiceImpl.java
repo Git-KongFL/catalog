@@ -90,8 +90,8 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		String iso2 = "US";
 		try {
 			String prefixion = paramObj.getString("prefixion");// 指 https://www.vancaro.com/en-us/blog 中的 en-us
-			if (prefixion.length() < 6) {
-				logger.info("prefixion为：" + prefixion);
+			if (prefixion.length() < 5) {
+				logger.info("---------------prefixion为：" + prefixion);
 			}
 			// prefixion长度小于6时会报错
 			iso2 = prefixion.substring(3, 5).toUpperCase();
