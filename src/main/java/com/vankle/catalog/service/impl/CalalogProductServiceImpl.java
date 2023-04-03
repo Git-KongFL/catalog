@@ -539,7 +539,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			obj.put("nameFr", customizedAttributeMap.get("name_fr"));
 			obj.put("sort", customizedAttributeMap.get("sort_number"));
 			JSONArray valueArr = JSONArray.fromObject(customizedAttributeMap.get("json_service_string"));
-			logger.info(valueArr.toString());
+//			logger.info(valueArr.toString());
 			JSONArray filterArr = new JSONArray();
 			for (int i = 0; i < valueArr.size(); i++) {
 				JSONObject oneObj = valueArr.getJSONObject(i);
@@ -629,8 +629,8 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	}
 
 	public boolean customizedAttributeExit(String spu2, JSONObject obj) {
-		logger.info(spu2);
-		logger.info(obj.toString());
+//		logger.info(spu2);
+//		logger.info(obj.toString());
 		Boolean b = false;
 		String spu = spu2;
 		String[] spuStrings = spu.split("\\|\\|");// TEST0013||MMC-bps_MSMC-whitestone_SDST-moissanitewhite
