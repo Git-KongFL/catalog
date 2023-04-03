@@ -145,11 +145,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			int storeId = paramObj.getInt("storeId");
 			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper
 					.findCatalogProductEntityByItemId(productId, storeId);
-			
+
 			if (productId == 414849) {
 				logger.info("----------------catalogProductEntity----------------为:" + catalogProductEntity.getId());
 			}
-			
+
 			// 判断商品是否存在
 			if (catalogProductEntity == null) {
 				if (productId == 414849) {
@@ -161,7 +161,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			} else {
 				productId = catalogProductEntity.getId();
 			}
-			if (productId == 414849) {
+			if (productId == 405906) {
 				logger.info("----------------找到了商品----------------");
 			}
 			paramObj.put("productId", productId);
@@ -192,36 +192,37 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 	 * @pram {productId:1,languageId:1,currencyId:1}
 	 */
 	public String getCatalogProductInfoByParamJson(String paramJson) {
-		JSONObject resultObj = JsonUtils.createJSONObject();
-		JSONObject paramObj = new JSONObject();
-		paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
-		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
-			return resultObj.toString();
-		}
-		int productId = paramObj.getInt("productId");
-		int languageId = paramObj.getInt("languageId");
-		int currencyId = paramObj.getInt("currencyId");
-		String countryId = "us";
 		try {
+			JSONObject resultObj = JsonUtils.createJSONObject();
+			JSONObject paramObj = new JSONObject();
+			paramObj = VankleUtils.checkParamJsonString(resultObj, paramJson);
+			if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
+				return resultObj.toString();
+			}
+			int productId = paramObj.getInt("productId");
+			int languageId = paramObj.getInt("languageId");
+			int currencyId = paramObj.getInt("currencyId");
+			String countryId = "us";
 			if (paramObj.get("prefixion") != null) {
 				countryId = paramObj.getString("prefixion");
 				if (countryId.split("-").length == 2) {
 					countryId = countryId.split("-")[1];
 				}
 			}
+			Object requestType = paramObj.get("requestType");
+			resultObj.put("requestType", requestType);
+			String resultStr = this.getProductLanguageInfo(resultObj, productId, languageId, currencyId, countryId);
+
+			if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
+				return resultObj.toString();
+			} else {
+
+				return this.getCurrencyProduct(resultStr, currencyId);
+			}
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			return "";
 			// TODO: handle exception
-		}
-		Object requestType = paramObj.get("requestType");
-		resultObj.put("requestType", requestType);
-		String resultStr = this.getProductLanguageInfo(resultObj, productId, languageId, currencyId, countryId);
-
-		if (!VankleConstants.VANKLE_CODE_SUCCESS.equals(resultObj.getString("code"))) {
-			return resultObj.toString();
-		} else {
-
-			return this.getCurrencyProduct(resultStr, currencyId);
 		}
 	}
 
