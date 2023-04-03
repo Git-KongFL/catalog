@@ -130,7 +130,13 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			return resultObj.toString();
 		}
 		try {
-			int productId = paramObj.getInt("productId");
+//			int productId = paramObj.getInt("productId");
+			int productId = paramObj.optInt("productId", 0);
+			if (productId == 0) {
+				// 为了查看传入了哪些非数字类型的productId参数
+				String productIdStr = paramObj.getString("productId");
+				logger.info("-----------productId为:" + productIdStr);
+			}
 			int storeId = paramObj.getInt("storeId");
 			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper
 					.findCatalogProductEntityByItemId(productId, storeId);
