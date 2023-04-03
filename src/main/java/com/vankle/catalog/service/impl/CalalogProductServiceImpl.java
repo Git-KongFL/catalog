@@ -145,6 +145,11 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			int storeId = paramObj.getInt("storeId");
 			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper
 					.findCatalogProductEntityByItemId(productId, storeId);
+			
+			if (productId == 414849) {
+				logger.info("----------------catalogProductEntity----------------为:" + catalogProductEntity.getId());
+			}
+			
 			// 判断商品是否存在
 			if (catalogProductEntity == null) {
 				if (productId == 414849) {
