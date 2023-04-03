@@ -219,7 +219,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			JSONObject resultObj = JSONObject.fromObject(resultStr);
 			JSONObject productObj = resultObj.getJSONObject("data");
 
-			logger.info("---------productObj的详细信息为：" + productObj.toString());
+//			logger.info("---------productObj的详细信息为：" + productObj.toString());
 
 			String jsonCurrency = systemService.getCurrencyEntity(currencyId);
 			productObj.put("currency", JSONObject.fromObject(jsonCurrency));
