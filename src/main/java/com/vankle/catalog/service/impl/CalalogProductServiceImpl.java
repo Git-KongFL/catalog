@@ -147,7 +147,7 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 					.findCatalogProductEntityByItemId(productId, storeId);
 
 			if (productId == 414849) {
-				logger.info("----------------catalogProductEntity----------------为:" + catalogProductEntity.getId());
+				logger.info("----------------getProductCustomizedId----------------为:" + catalogProductEntity.getProductCustomizedId());
 			}
 
 			// 判断商品是否存在
@@ -167,6 +167,9 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 			paramObj.put("productId", productId);
 			paramObj.put("type", catalogProductEntity.getType());
 			String resultStr = this.getCatalogProductInfoByParamJson(paramObj.toString());
+			if (productId == 405906) {
+				logger.info("----------------resultStr----------------" + resultStr);
+			}
 			if (catalogProductEntity.getProductCustomizedId() != null) {
 				try {
 					paramObj.put("productId", catalogProductEntity.getProductCustomizedId());
