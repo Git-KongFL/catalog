@@ -91,10 +91,12 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		try {
 			String prefixion = paramObj.getString("prefixion");// 指 https://www.vancaro.com/en-us/blog 中的 en-us
 			if (prefixion.length() < 5) {
-				logger.info("---------------prefixion为：" + prefixion);
+//				logger.info("---------------prefixion为：" + prefixion);
+				iso2 = "US";
+			} else {
+				// prefixion长度小于5时会报错
+				iso2 = prefixion.substring(3, 5).toUpperCase();
 			}
-			// prefixion长度小于5时会报错
-			iso2 = prefixion.substring(3, 5).toUpperCase();
 			List<SystemCountryLanguage> iso2List = systemCountryLanguageMapper.findSystemCountryList();
 			boolean isoBool = true;
 			for (SystemCountryLanguage country : iso2List) {

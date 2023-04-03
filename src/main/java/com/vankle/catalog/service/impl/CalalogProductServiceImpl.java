@@ -137,16 +137,27 @@ public class CalalogProductServiceImpl implements CalalogProductService {
 				String productIdStr = paramObj.getString("productId");
 				logger.info("-----------productId为:" + productIdStr);
 			}
+
+			if (productId == 414849) {
+				logger.info("----------------productId----------------为:" + productId);
+			}
+
 			int storeId = paramObj.getInt("storeId");
 			CatalogProductEntity catalogProductEntity = catalogProductEntityMapper
 					.findCatalogProductEntityByItemId(productId, storeId);
 			// 判断商品是否存在
 			if (catalogProductEntity == null) {
+				if (productId == 414849) {
+					logger.info("----------------没有找到商品----------------");
+				}
 				JsonUtils.modifyJSONObject(resultObj, VankleConstants.VANKLE_CODE_FAIL_10002,
 						VankleConstants.VANKLE_CODE_FAIL_10002_MESSAGE).toString();
 				return resultObj.toString();
 			} else {
 				productId = catalogProductEntity.getId();
+			}
+			if (productId == 414849) {
+				logger.info("----------------找到了商品----------------");
 			}
 			paramObj.put("productId", productId);
 			paramObj.put("type", catalogProductEntity.getType());
