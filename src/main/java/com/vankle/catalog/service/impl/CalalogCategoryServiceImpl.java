@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -267,7 +268,11 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		String orderBy = "";
 		// 2023-08-02 KK网站的默认排序改成按新品排倒序
 		if (storeId == 4) {
-			orderBy = "order by m.createTime DESC, " + coutryIdsort;
+			if (StringUtils.isNotBlank(coutryIdsort)) {
+				orderBy = "order by m.createTime DESC, " + coutryIdsort;
+			} else {
+				orderBy = "order by m.createTime DESC ";
+			}
 		} else {
 			orderBy = "order by " + coutryIdsort + " m.score  desc ";
 		}
