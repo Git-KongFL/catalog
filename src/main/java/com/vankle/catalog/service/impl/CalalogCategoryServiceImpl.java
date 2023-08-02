@@ -264,8 +264,8 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 //		if(storeId!=1) {
 //			coutryIdsort = "";
 //		}
-
-		String orderBy = "order by " + coutryIdsort + " m.score  desc ";
+		// 2023-08-02 排序调整为：倒序排商品表的创建时间。
+		String orderBy = "order by m.createTime DESC " + coutryIdsort;
 
 		if (paramObj.get("orderBy") != null) {
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
