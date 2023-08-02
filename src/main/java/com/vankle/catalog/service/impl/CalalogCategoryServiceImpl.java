@@ -267,7 +267,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		String orderBy = "";
 		// 2023-08-02 KK网站的默认排序改成按新品排倒序
 		if (storeId == 4) {
-			orderBy = "order by m.createTime DESC " + coutryIdsort;
+			orderBy = "order by m.createTime DESC, " + coutryIdsort;
 		} else {
 			orderBy = "order by " + coutryIdsort + " m.score  desc ";
 		}
