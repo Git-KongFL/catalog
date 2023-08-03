@@ -281,10 +281,17 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if ("Recommend".equalsIgnoreCase(orderObject.getString("order"))) {
 				// if("desc".equalsIgnoreCase(orderObject.getString("dir"))){
-				orderBy = " order by " + coutryIdsort + " m.score  desc ";
+				// orderBy = " order by " + coutryIdsort + " m.score  desc ";
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
+				// 2023-08-02 KK网站的默认排序改成按新品排倒序
+				if (storeId == 4) {
+					orderBy = "order by m.createTime DESC, " + coutryIdsort + " m.score  desc ";
+				} else {
+					orderBy = " order by " + coutryIdsort + " m.score  desc ";
+				}
+
 			} else if ("price".equalsIgnoreCase(orderObject.getString("order"))) {
 				if ("desc".equalsIgnoreCase(orderObject.getString("dir"))) {
 					orderBy = " order by  m.discountAmount  desc ";
@@ -320,8 +327,8 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 		dataObj.put("catalogCategoryEntity", catalogCategoryEntity);
 		dataObj.put("sortBar", JSONArray.fromObject(catalogCategoryEntityBar.getOrderBy()));
 
-		String jsonCurrency = systemService.getCurrencyEntity(currencyId);
-		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
+//		String jsonCurrency = systemService.getCurrencyEntity(currencyId);
+//		dataObj.put("currency", JSONObject.fromObject(jsonCurrency));
 
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(storeId, categoryId);
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper
