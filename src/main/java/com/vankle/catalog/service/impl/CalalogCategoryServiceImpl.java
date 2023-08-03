@@ -265,18 +265,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 //		if(storeId!=1) {
 //			coutryIdsort = "";
 //		}
-		String orderBy = "";
-		// 2023-08-02 KK网站的默认排序改成按新品排倒序
-		if (storeId == 4) {
-			if (StringUtils.isNotBlank(coutryIdsort)) {
-				orderBy = "order by m.createTime DESC, " + coutryIdsort;
-			} else {
-				orderBy = "order by m.createTime DESC ";
-			}
-		} else {
-			orderBy = "order by " + coutryIdsort + " m.score  desc ";
-		}
+		String orderBy = "order by " + coutryIdsort + " m.score  desc ";
 
+		String operationLogSql = null;
 		if (paramObj.get("orderBy") != null) {
 			JSONObject orderObject = paramObj.getJSONObject("orderBy");
 			if ("Recommend".equalsIgnoreCase(orderObject.getString("order"))) {
@@ -285,9 +276,10 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
-				// 2023-08-02 KK网站的默认排序改成按新品排倒序
+				// 2023-08-02 KK网站的默认排序改成按首次上架时间排倒序
 				if (storeId == 4) {
-					orderBy = "order by m.createTime DESC, " + coutryIdsort + " m.score  desc ";
+					operationLogSql = "LEFT JOIN (SELECT spu, MIN(operation_time) operation_time FROM catalog_product_entity_operation_log WHERE status = 1 GROUP BY spu) log ON b.spu = log.spu";
+					orderBy = "ORDER BY m.operationTime DESC, " + coutryIdsort + " m.score  desc ";
 				} else {
 					orderBy = " order by " + coutryIdsort + " m.score  desc ";
 				}
@@ -332,7 +324,7 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 
 		int total = catalogCategoryProductMapper.findCatalogCategoryProductCount(storeId, categoryId);
 		List<CatalogCategoryProduct> catalogCategoryProducts = catalogCategoryProductMapper
-				.findCatalogCategoryProductList(storeId, categoryId, languageId, countryId, pageSize, offset, orderBy);
+				.findCatalogCategoryProductList(storeId, categoryId, languageId, countryId, pageSize, offset, orderBy, operationLogSql);
 
 		for (CatalogCategoryProduct catalogCategoryProduct : catalogCategoryProducts) {
 			if (spuMap.get(catalogCategoryProduct.getSpu() + "") == null) {
