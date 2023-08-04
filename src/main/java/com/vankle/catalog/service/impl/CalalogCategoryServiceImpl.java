@@ -276,9 +276,9 @@ public class CalalogCategoryServiceImpl implements CalalogCategoryService {
 //				}else{
 //					orderBy = " order by  m.name  asc ";
 //				}
-				// 2023-08-02 KK网站的默认排序改成按首次上架时间排倒序
+				// 2023-08-02 KK网站店铺ID为4的默认排序改成按首次上架时间排倒序
 				if (storeId == 4) {
-					operationLogSql = "LEFT JOIN (SELECT spu, MIN(operation_time) operation_time FROM catalog_product_entity_operation_log WHERE status = 1 GROUP BY spu) log ON b.spu = log.spu";
+					operationLogSql = "LEFT JOIN (SELECT spu, MIN(operation_time) operation_time FROM catalog_product_entity_operation_log WHERE status = 1 AND store_id = 4 GROUP BY spu) log ON b.spu = log.spu";
 					orderBy = "ORDER BY m.operationTime DESC, " + coutryIdsort + " m.score  desc ";
 				} else {
 					orderBy = " order by " + coutryIdsort + " m.score  desc ";
